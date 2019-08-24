@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!--全局布局页面  上方导航加下方内容页-->
+<html lang="en">
+<head>
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title>智慧管廊综合管理平台</title>
+    <link rel="stylesheet" href="__STATIC__/css/common.css">
+    <link rel="stylesheet" href="__STATIC__/css/equipment.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+</head>
+<style>
+
+    .shadow{
+    outline:1px solid #247998;
+    box-shadow: 0 0 6px #247998 inset;
+    }
+
+    a{
+    display:block;
+    }
+</style>
+<body class="backg" style='overflow:-Scroll;overflow-y:hidden'>
+<div class="wrap">
+    <!--一级标签-->
+    <div class="header">
+        <!--报警设置-->
+        <ul class="headerUl">
+            <li>
+                <a href="branch.html">
+                    <img src="__STATIC__/image/a1.png" alt="">
+                    设置
+                </a>
+            </li>
+            <span>|</span>
+            <li>
+                <img src="__STATIC__/image/a2.png" alt="">
+                报警
+            </li>
+        </ul>
+        <!--一级菜单-->
+        <ul class="headerNav">
+            <li>
+                <img src="__STATIC__/image/a3.png" alt="" class="img">
+                智慧管廊综合管理平台
+            </li>
+
+            {volist name="Navi" id="vo"}
+            <!-- {if condition="$vo['auth_isLink'] neq 1"}
+                <li>
+                    <a href="/index.php/index/{$vo.auth_c}/{$vo.auth_a}" target="contentFrame">{$vo['auth_name']}</a>
+                </li>
+            {/if} -->
+            {switch $vo['auth_isLink']}
+                {case 0 }
+                    <li>
+                        <a href="/index.php/index/{$vo.auth_c}/{$vo.auth_a}" target="contentFrame">{$vo['auth_name']}</a>
+                    </li>
+                {/case}
+                {case 1 }
+                    <li>
+                        <a href="{$vo['auth_url']}" target="contentFrame">{$vo['auth_name']}</a>
+                    </li>
+                {/case}
+            {/switch}
+
+                {if condition="$i neq count($Navi)"}
+                <span>|</span>
+                {/if}
+
+                {if condition="($i gt count($Navi)) AND ($i eq count($Navi))"}
+
+                <li>
+                    <img src="__STATIC__/image/aLeft.png" alt="" class="img1">&nbsp;
+                    <img src="__STATIC__/image/aRight.png" alt="" class="img1">
+                </li>
+                {/if}
+            
+
+            {/volist}
+
+
+        </ul>
+        <!--动画-->
+        <div class="anim">
+            <div class="wire" id="wire1"></div>
+            <div class="wire" id="wire2"></div>
+            <div class="wire" id="wire3"></div>
+        </div>
+    </div>
+    <!--内容-->
+    <iframe name="contentFrame" width="100%" height="100%" src="/index.php/index/visual/index"  frameborder="0">
+    </iframe>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+
+<script src="/static/js/jquery-1.7.1.min.js"></script>
+<script>
+    $(function () {
+        /* $(".headerNav li").click(function () {
+            $(this).siblings('span').css("color", "black");
+        });
+       .headerNav li:nth-child(n+2):nth-child(-n+18):hover{
+                outline:1px solid #247998;
+                box-shadow: 0 0 6px #247998 inset;
+            }*/
+
+       /* $(".headerNav li").hover(function(){
+            $(this).prev("span").css("color","#000");
+            $(this).next("span").css("color","#000");
+        },function(){
+            $(this).prev("span").css("color","#00ffff");
+            $(this).next("span").css("color","#00ffff");
+        });
+*/
+        
+        $(".headerNav li").mousemove(function(){
+            $("span").css("color","#00ffff");
+            $(this).prev("span").css("color","#000");
+            $(this).next("span").css("color","#000");
+        });
+        $(".headerNav li").mouseout(function(){
+            $("span").css("color","#00ffff");
+        });
+        $(".headerNav li").click(function(){
+            $("span").css("visibility","visible");
+            $(this).prev("span").css("visibility","hidden");
+            $(this).next("span").css("visibility","hidden");
+            $(".headerNav li").removeClass("shadow");
+            $(this).addClass("shadow");
+        });
+        $(".headerNav li:eq(1)").click();
+        /*$(".headerNav li").mouseout(function(){
+            $("span").css("visibility","visible");
+            $(this).prev("span").css("visibility","hidden");
+            $(this).next("span").css("visibility","hidden");
+        });*/
+
+    });
+</script>
+</body>
+
+</html>
