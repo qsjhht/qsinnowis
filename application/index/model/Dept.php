@@ -7,19 +7,25 @@ use think\Model;
 
 class Dept extends Model
 {
+    public static function init()
+    {
+        self::event('after_insert', function ($user) {
+            if (1 != $user->status) {
+                return false;
+            }
+        });
+    }
     public function get_dept_tree(){
         return json_encode($this->field('dept_id')->select());
         
     }
 
-    public function get_Tree($arr){
+    public function get_Tree($arr,$pk = 'id', $pid = 'pid',$label='label'){
         $array = [];
         foreach ($arr as $key => $value) {
-            $array[$key]['id'] = $value['dept_id'];
-            $array[$key]['pid'] = $value['dept_pid'];
-            $array[$key]['name'] = $value['dept_name'];
-            $array[$key]['open'] = false;
-            $array[$key]['checked'] =  false;
+            $array[$key]['id'] = $value[$pk];
+            $array[$key]['pid'] = $value[$pid];
+            $array[$key]['label'] = $value[$label];
         }
 
         return $this->quote_make_tree($array);
@@ -28,6 +34,7 @@ class Dept extends Model
     public static function quote_make_tree($list, $pk = 'id', $pid = 'pid',$child = 'children', $root = 0)
     {
         $tree = $packData = [];
+        $tree[] = array('id'=>'0','label'=>'作为顶级选项');
         foreach ($list as $data) {
             $packData[$data[$pk]] = $data;
         }
@@ -41,8 +48,7 @@ class Dept extends Model
               unset($packData[$key]['pid']);
             }
         }
-
-        return json_encode($tree);
+        return $tree;
     }
 
 }
