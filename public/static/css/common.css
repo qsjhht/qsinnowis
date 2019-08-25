@@ -18,12 +18,6 @@ body,html{
 .icon-rotate:before{
     content: '\e625';
 }
-.eletxea{
-    width: 500px;
-}
-.ele5 {
-    width: 500px;
-}
 .eleTree{
     position: absolute;
     z-index:10;
@@ -32,10 +26,13 @@ body,html{
 .eleTree-node-content:hover{
     background:#c9c9c9;
 }
-
-.layui-textarea{
-    width: 1000px;
+.operBtn{
+    background-color: transparent;
 }
+.w400{
+    width:400px!important;
+}
+
 .mainLeft a{
     text-decoration: none;
     display: inline-block;

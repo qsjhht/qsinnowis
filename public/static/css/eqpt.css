@@ -126,16 +126,7 @@ body{
 .layui-table-page{
     border-style: none;
 }
-.operBtn{
-    width: 80px;
-    background-color: transparent;
-}
-.operBtn:first-child{
-    color: #00FFFF;
-}
-.operBtn:last-child{
-    color: #00ee00;
-}
+
 .layui-layer-btn a{
     border-radius: 5px;
 }
