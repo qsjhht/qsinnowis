@@ -8,6 +8,34 @@ body,html{
     color:#00FFFF;
     font-weight:400;
 }
+.eleTree-node-content-label{
+    color: #000000;
+}
+.layui-icon-triangle-r{
+    color: #000000;
+    font-size: 20px;
+}
+.icon-rotate:before{
+    content: '\e625';
+}
+.eletxea{
+    width: 500px;
+}
+.ele5 {
+    width: 500px;
+}
+.eleTree{
+    position: absolute;
+    z-index:10;
+    background-color: #fff9ec;
+}
+.eleTree-node-content:hover{
+    background:#c9c9c9;
+}
+
+.layui-textarea{
+    width: 1000px;
+}
 .mainLeft a{
     text-decoration: none;
     display: inline-block;
