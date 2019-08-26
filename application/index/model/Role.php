@@ -4,7 +4,7 @@ namespace app\index\model;
 use think\Db;
 use think\Model;
 
-class Dept extends Model
+class Role extends Model
 {
     public static function init()
     {
@@ -26,14 +26,13 @@ class Dept extends Model
             $array[$key]['pid'] = $value[$pid];
             $array[$key]['label'] = $value[$label];
         }
-
         return $this->quote_make_tree($array);
     }
    
     public static function quote_make_tree($list, $pk = 'id', $pid = 'pid',$child = 'children', $root = 0)
     {
         $tree = $packData = [];
-        $tree[] = array('id'=>'0','label'=>'作为顶级选项');
+/*        $tree[] = array('id'=>'0','label'=>'作为顶级选项');*/
         foreach ($list as $data) {
             $packData[$data[$pk]] = $data;
         }

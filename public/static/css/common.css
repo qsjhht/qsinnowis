@@ -15,13 +15,11 @@ body,html{
     color: #000000;
     font-size: 20px;
 }
-.icon-rotate:before{
-    content: '\e625';
-}
 .eleTree{
     position: absolute;
     z-index:10;
-    background-color: #fff9ec;
+    background-color: #ffffff;
+    /*filter:alpha(Opacity=60);-moz-opacity:0.6;opacity: 0.6;*/
 }
 .eleTree-node-content:hover{
     background:#c9c9c9;
@@ -216,7 +214,7 @@ body,html{
     width:100%;
     height:100%;
     font-size:0;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 /*背景*/
 .mainBor{

@@ -13,10 +13,10 @@
     <!--标题-->
     <div class="middleNav">
         <i class="layui-icon">&#xe653;</i> &nbsp;
-        部门列表
+        角色列表
     </div>
     <div class="middleScreen layui-inline" style="right: 20px">
-        <button class="middleAdd" id="add_dept"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
+        <button class="middleAdd" id="add_role"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
     </div>
 
 
@@ -43,7 +43,7 @@
         table.render({
             elem: '#ledger' //指定原始表格元素选择器（推荐id选择器）
             ,height:  'full-170' //容器高度
-            ,url: '{:url("index/dept/index")}'
+            ,url: '{:url("index/role/index")}'
             ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                 //layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
                 //,curr: 5 //设定初始在第 5 页
@@ -56,11 +56,11 @@
             }
             ,cols: [[
                 //,{field:'floor_id',title:'分层ID', width:110, sort: true}
-                {field:'dept_id',title:'部门编号'}
-                ,{field:'dept_name',align:'center',title:'部门名称'}
-                ,{field:'location',align:'center',title:'部门位置'}
-                ,{field:'detail',align:'center',title:'部门介绍'}
-                ,{field:'detail',width:150,align:'center',title:'部门人数'}
+                {field:'role_id',title:'角色编号'}
+                ,{field:'role_name',align:'center',title:'角色名称'}
+                ,{field:'role_auth_names',align:'center',title:'角色权限'}
+                ,{field:'role_detail',align:'center',title:'角色描述'}
+                ,{field:'role_detail',width:150,align:'center',title:'角色人数'}
 
                 /*,{field:'eqpt_site',title:'设备位置'}*/
 
@@ -69,16 +69,6 @@
             ]
             ] //设置表头
             //,…… //更多参数参考右侧目录：基本参数选项
-            ,done:function(res,curr,count){
-                var img_show = null; // tips提示
-                $("td span p").hover(function(){
-                    img_show = layer.tips('点击修改设备状态！', this,{
-                        tips:[1, 'rgba(41,41,41,.8)']
-                    });
-                },function(){
-                    layer.close(img_show);
-                });
-            }
         });
         table.on('tool(eqpt_show)', function(obj) {
             var data = obj.data;
@@ -207,17 +197,18 @@
 
             }
         });
-        $('#add_dept').on('click', function() {
+        $('#add_role').on('click', function() {
             layer.open({
                 title:"添加设备",
-                title:false,
+                title :'角色添加',
                 type: 2,
                 offset: ['100px', '130px'],
                 area: ['1070px', '655px'],
                 fixed: true, //不固定
-                maxmin: false,
-                content: ['{:url("dept/dept_add")}', 'no'],
-                shade: [0.8, '#393D49'],
+                maxmin: true,
+                closeBtn:1,
+                content: ['{:url("role/role_add")}'],
+                shade: [0.8, '#393D49']
                 /*cancel: function(){
                     //右上角关闭回调  刷新父页面
                     window.parent.location.reload();

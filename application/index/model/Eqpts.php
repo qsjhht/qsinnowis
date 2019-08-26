@@ -1,7 +1,6 @@
 <?php
 namespace app\index\model;
 
-use app\index\controller\Eqpt;
 use think\Db;
 use think\Model;
 
