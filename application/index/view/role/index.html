@@ -1,14 +1,15 @@
 {extend name="eqpt_layout"/}
-<style type="text/css">
-    .my-skin .layui-layer-btn a {
-        background-color: #84c101;
-        border: 1px solid #84c101;
-        color: #FFF;
-    }
-</style>
 {block name="main"}
 <link rel="stylesheet" href="/static/css/eqpt.css">
+<style type="text/css">
+    .layui-table-cell{
+        height:auto;
+        overflow:visible;
+        text-overflow:inherit;
+        white-space:normal;
+    }
 
+</style>
 <div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
     <!--标题-->
     <div class="middleNav">
@@ -22,7 +23,7 @@
 
     <div class="mainTable scrollber">
 
-        <table class="layui-table" id="ledger" lay-filter="eqpt_show"></table>
+        <table class="mytable layui-table" id="ledger" lay-filter="eqpt_show"></table>
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
             <a class="layui-btn layui-btn-xs operBtn" lay-event="edit">编辑</a>
@@ -127,17 +128,16 @@
              window.open('{:url("eqpt_management/add")}' + "?id=" + data.id, '_self')
              } *!/*/
             if (obj.event === 'edit') {
-                console.dir(data);
+                console.dir(data.role_id);
                 //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
                 layer.open({
-                    title:"设备详情",
-                    title:false,
+                    title:"编辑角色",
                     type: 2,
                     offset: ['100px', '130px'],
                     area: ['1070px', '655px'],
                     fixed: true, //不固定
-                    maxmin: false,
-                    content: ['{:url("dept/dept_edit")}' + "?dept_id=" + data.dept_id, 'no'],
+                    maxmin: true,
+                    content: ['{:url("role/role_edit")}' + "?role_id=" + data.role_id],
                     shade: [0.8, '#393D49'],
                     /*cancel: function(){
                         //右上角关闭回调  刷新父页面
@@ -146,19 +146,18 @@
                     }*/
                 });
             }else if (obj.event === 'details') {
-                console.dir(data.dept_id);
+                console.dir(data.role_id);
                 /*window.open('{:url("eqpt_management/details")}' + "?id=" + data.id, '_self');*/
                 //iframe层-父子操作
                 //alert(data.id);
                 layer.open({
-                    title:"设备详情",
-                    title:false,
+                    title:"角色详情",
                     type: 2,
                     offset: ['100px', '130px'],
                     area: ['1070px', '655px'],
                     fixed: true, //不固定
-                    maxmin: false,
-                    content: ['{:url("dept/dept_details")}' + "?dept_id=" + data.dept_id, 'no'],
+                    maxmin: true,
+                    content: ['{:url("role/role_details")}' + "?role_id=" + data.role_id],
                     shade: [0.8, '#393D49'],
                     /* cancel: function(){
                      //右上角关闭回调  刷新父页面
@@ -168,9 +167,9 @@
                 });
 
             }else if(obj.event === 'del'){
-                layer.confirm('确定删除该部门？', { icon: 3, title: '提示' }, function(index) {
-                console.dir(data.dept_id);
-                    $.post('{:url("dept/dept_del")}', { 'dept_id': data.dept_id }, function(data) {
+                layer.confirm('确定删除该角色？', { icon: 3, title: '提示' }, function(index) {
+                console.dir(data.role_id);
+                    $.post('{:url("role/role_del")}', { 'role_id': data.role_id }, function(data) {
                         //layer.msg(data.msg);
                         if (data.code == 1) {
                             if (data.url) {

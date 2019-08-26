@@ -26,8 +26,8 @@
 
             <div class="layui-form-item">
                 <div class="layui-input-inline w400" >
-                <input type="text" name="dept_auth_ids" id="dept_auth_ids" class="layui-input" style="display: none">
-                <input type="text" name="dept_auth_names" id="dept_auth_names" class="layui-input" style="display: none">
+                <input type="text" name="role_auth_ids" id="role_auth_ids" class="layui-input" style="display: none">
+                <input type="text" name="role_auth_names" id="role_auth_names" class="layui-input" style="display: none">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -71,7 +71,7 @@
                     // url: "../eleTree/tree.json",
                     showCheckbox: true,
                     defaultExpandAll: true,
-                    defaultCheckedKeys: [101,102],
+                    //defaultCheckedKeys: [101,102],
                     done: function() {
                         // el2.remove(24);
                     }
@@ -122,8 +122,8 @@
             ids = ids + arr[index].id + ',';
             names = names + arr[index].label + ',';
         }
-        $('#dept_auth_names').val(names);
-        $('#dept_auth_ids').val(ids);
+        $('#role_auth_names').val(names);
+        $('#role_auth_ids').val(ids);
         console.log(ids);
         console.log(names);
 

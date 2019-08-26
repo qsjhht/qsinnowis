@@ -46,16 +46,11 @@ class Role extends Controller
             Db::transaction(function () {
                 $data['role_name'] = $this->request->param('role_name');
                 $data['role_detail'] = $this->request->param('role_detail');
-                $data['dept_auth_ids'] = $this->request->param('dept_auth_ids');
-                $data['dept_auth_names'] = $this->request->param('dept_auth_names');
-                dump($data);die;
-                $role_path = Db('role')->insertGetId($data);
-                if(!$data['role_pid']){
-                    $update['role_level'] = Db('role')->field('role_level')->where('role_id',$data['role_pid'])->find()['role_level'] + 1;
-                }
-                $update['role_level'] = '0';
-                $update['role_path'] = $role_path;
-                Db('role')->where('role_id',$role_path)->update($update);
+                $data['role_auth_ids'] = $this->request->param('role_auth_ids');
+                $data['role_auth_names'] = $this->request->param('role_auth_names');
+
+                $data['role_auth_ac'] = $this -> saveAuthAC($data['role_auth_ids']);
+                Db('role')->insertGetId($data);
                 $this->success('新增角色成功！');
             });
             $this->error('新增角色失败！');
@@ -65,8 +60,8 @@ class Role extends Controller
     }
     public function role_details()
     {
-        $dept_id = $this->request->param('dept_id');
-        $details = $this->RoleModel->where('dept_id',$dept_id)->find();
+        $role_id = $this->request->param('role_id');
+        $details = $this->RoleModel->where('role_id',$role_id)->find();
         /*if(!$details['dept_pid']){
             $details['dept_p'] = '该角色为顶级';
         }else{
@@ -76,49 +71,37 @@ class Role extends Controller
         $this->assign('details',$details);
         return $this->fetch();
     }
-    public function dept_edit()
+    public function role_edit()
     {
 
         if ($this->request->isPost()) {
             Db::transaction(function () {
-                $dept_id = $this->request->param('dept_id');
-                $data['dept_name'] = $this->request->param('dept_name');
-                $data['dept_pid'] = $this->request->param('dept_pid');
-                $data['location'] = $this->request->param('location');
-                $data['detail'] = $this->request->param('detail');
-                $data['remarks'] = $this->request->param('remarks');
-                Db('dept')->where('dept_id',$dept_id)->update($data);
-                if($data['dept_pid']){
-                    $update['dept_level'] = Db('dept')->field('dept_level')->where('dept_id',$data['dept_pid'])->find()['dept_level'] + 1;
-                }else{
-                    $update['dept_level'] = 0;
-                }
-                Db('dept')->where('dept_id',$dept_id)->update($update);
+                $role_id = $this->request->param('role_id');
+                $data['role_name'] = $this->request->param('role_name');
+                $data['role_detail'] = $this->request->param('role_detail');
+                $data['role_auth_ids'] = $this->request->param('role_auth_ids');
+                $data['role_auth_names'] = $this->request->param('role_auth_names');
+                $data['role_auth_ac'] = $this -> saveAuthAC($data['role_auth_ids']);
+                Db('role')->where('role_id',$role_id)->update($data);
                 $this->success('编辑角色成功！');
             });
             $this->error('编辑角色失败！');
         }
-        $dept_id = $this->request->param('dept_id');
-        $details = $this->RoleModel->where('dept_id',$dept_id)->find();
-        if(!$details['dept_pid']){
-            $details['dept_p'] = '该角色为顶级';
-        }else{
-            $dept_name = $this->RoleModel->where('dept_id',$details['dept_pid'])->field('dept_name')->find();
-            $details['dept_p'] = $dept_name['dept_name'];
-        }
+        $role_id = $this->request->param('role_id');
+        $details = $this->RoleModel->where('role_id',$role_id)->find();
         $this->assign('details',$details);
         return $this->fetch();
     }
-    public function dept_del(){
-        $dept_id = (int)$this->request->param('dept_id/d');
-        if (empty($dept_id)) {
+    public function role_del(){
+        $role_id = (int)$this->request->param('role_id/d');
+        if (empty($role_id)) {
             $this->error('ID错误');
         }
         /*$result = Db::name('eqpt_management')->where(["parentid" => $id])->find();
         if ($result) {
             $this->error("含有子菜单，无法删除！");
         }*/
-        if ($this->RoleModel->where('dept_id', $dept_id)->delete()) {
+        if ($this->RoleModel->where('role_id', $role_id)->delete()) {
             $this->success("删除角色成功！");
         } else {
             $this->error("删除角色失败！");
@@ -129,5 +112,20 @@ class Role extends Controller
         $auths = Db('auth')->field('auth_id,auth_pid,auth_name')->select();
         $auths = $this->RoleModel->get_Tree($auths,'auth_id','auth_pid','auth_name');
         return $auths;
+    }
+    //根据$auth_ids的字符串获得对应权限的"控制器-操作方法"字符串
+    private function saveAuthAC($auth_ids){
+        //根据$auth_ids获得权限信息
+        //select() 全部数据
+        //select(数字) 单个记录信息(id=数字)
+        //select("数字,数字,数字。。")多个记录信息(id in 数字,数字,数字。。)
+        $authinfo = Db('auth')->select($auth_ids);
+        $s = "";
+        foreach($authinfo as $k => $v){
+            if(!empty($v['auth_c']) && !empty($v['auth_a']))
+                $s .= $v['auth_c'].'-'.$v['auth_a'].",";
+        }
+        $s = rtrim($s,',');
+        return $s;
     }
 }

@@ -1,13 +1,16 @@
 {extend name="eqpt_layout"/}
-<style type="text/css">
-    .my-skin .layui-layer-btn a {
-        background-color: #84c101;
-        border: 1px solid #84c101;
-        color: #FFF;
-    }
-</style>
+
 {block name="main"}
 <link rel="stylesheet" href="/static/css/eqpt.css">
+<style type="text/css">
+     .layui-table-cell{
+        height:auto;
+        overflow:visible;
+        text-overflow:inherit;
+        white-space:normal;
+    }
+
+</style>
 
 <div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
     <!--标题-->
@@ -22,7 +25,7 @@
 
     <div class="mainTable scrollber">
 
-        <table class="layui-table" id="ledger" lay-filter="eqpt_show"></table>
+        <table class="mytable layui-table" id="ledger" lay-filter="eqpt_show"></table>
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
             <a class="layui-btn layui-btn-xs operBtn" lay-event="edit">编辑</a>
@@ -60,7 +63,7 @@
                 ,{field:'dept_name',align:'center',title:'部门名称'}
                 ,{field:'location',align:'center',title:'部门位置'}
                 ,{field:'detail',align:'center',title:'部门介绍'}
-                ,{field:'detail',width:150,align:'center',title:'部门人数'}
+                ,{field:'dept_name',width:150,align:'center',title:'部门人数'}
 
                 /*,{field:'eqpt_site',title:'设备位置'}*/
 
