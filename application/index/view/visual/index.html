@@ -3,7 +3,7 @@
 <head>
      <meta charset="UTF-8">
      <title>Document</title>
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta http-equiv="X-UA-Compatible" content="IE=9">
      <script src="__STATIC__/new/echarts.js"></script>
      <link rel="stylesheet" href="__STATIC__/new/inde.css">
 </head>
@@ -41,7 +41,7 @@
                          <iframe  width="100%" height="100%" src="http://192.168.5.101/JsApi/demo/livePlay.php?ip=192.168.5.101&user=a&pass=21232f297a57a5a743894a0e4a801fc3&camcode=192_168_5_108!192_168_5_108!192_168_5_108!192_168_5_108"></iframe>
                     </div>
                     <div class="contentTop mainBor marginTop">
-                         <p class="robot">入廊企业</p>	
+                         <p class="robot">入廊企业</p>
                          <div class="firmContent">
                               <!-- 左边  -->
                               <div class="firmLeft">
@@ -128,7 +128,7 @@
           <div class="mainBottom">
                <div class='bottomLeft '>
                     <div class="contentTop2 mainBor">
-                         <div class="robotHide" style="display:"><iframe src="http://192.168.5.101/JsApi/demo/livePlay.php?ip=192.168.5.101&user=a&pass=21232f297a57a5a743894a0e4a801fc3&camcode=192_168_5_108" frameborder="0" style="height: 100%;width: 100%"></iframe></div>
+                         <div class="robotHide" style="display:inline-block"><iframe src="http://192.168.5.101/JsApi/demo/livePlay.php?ip=192.168.5.101&user=a&pass=21232f297a57a5a743894a0e4a801fc3&camcode=192_168_5_108" frameborder="0" style="height: 100%;width: 100%"></iframe></div>
                          <p class="robot">机器人</p>
                          <div class="robotTob scrollber">
                               <table class="robotToble">
@@ -138,7 +138,7 @@
                                         <th>管廊一号线巡检</th>
                                         <th>挂轨机器人</th>
                                         <th >
-                                             <!--<img src="__STATIC__/new/image/vidicon-fill.png" width="18" height="20" alt="/">-->
+                                             <!--<img src="../image/vidicon-fill.png" width="18" height="20" alt="/">-->
                                         </th>
                                    </tr>
                                    <tr>
@@ -172,51 +172,103 @@
                          <div class="callTab scrollber">
                               <table class="callTable">
                                    <tbody>
-                                   <tr>
-                                        <th>时间</th>
-                                        <th>级别</th>
-                                        <th>名称</th>
-                                        <th>位置</th>
-                                   </tr>
+                                        <tr>
+                                             <th>时间</th>
+                                             <th>级别</th>
+                                             <th>名称</th>
+                                             <th>位置</th>
+                                        </tr>
                                    </tbody>
                                    <tbody>
                                    <tr>
-                                        <th>2019-08-12 20:33</th>
-                                        <th>严重</th>
-                                        <th>消防报警</th>
-                                        <th>YBY-001防火分区</th>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>水泵报警</th>
+                                        <th>YBY01-YBY21</th>
                                    </tr>
                                    <tr>
-                                        <th>2019-08-12 18:08</th>
-                                        <th>紧急</th>
-                                        <th>人员入侵</th>
-                                        <th>YBY-003防火分区</th>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>开启水泵</th>
+                                        <th>YBY01-YBY21</th>
                                    </tr>
                                    <tr>
-                                        <th>2019-08-12 16:45</th>
-                                        <th>突发</th>
-                                        <th>门禁报警</th>
-                                        <th>YBY-007防火分区</th>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>关闭水泵</th>
+                                        <th>YBY01-YBY21</th>
+                                   </tr>
+
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>风机报警</th>
+                                        <th>XC01-XC21</th>
                                    </tr>
                                    <tr>
-                                        <th>2019-08-12 14:52</th>
-                                        <th>普通</th>
-                                        <th>湿度报警</th>
-                                        <th>YBY-004防火分区</th>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>开启风机</th>
+                                        <th>XC01-XC21</th>
                                    </tr>
                                    <tr>
-                                        <th>2019-08-12 14:52</th>
-                                        <th>普通</th>
-                                        <th>湿度报警</th>
-                                        <th>YBY-004防火分区</th>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>关闭风机</th>
+                                        <th>XC01-XC21</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>风机报警</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>开启风机</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>关闭风机</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>风机报警</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>开启风机</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>关闭风机</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">设备</th>
+                                        <th>设备离线</th>
+                                        <th>YBYB01-YBYB07</th>
                                    </tr>
                                    </tbody>
                               </table>
                          </div>
                     </div>
                </div>
+
                <div class='bottomDle mainBor'>
-                    <div class="borTitle">
+                    <div class="borTitle" style="font-size:16px">
                          环境监测
                          <select onchange="select(this.value)">
                               <option value="1">温度</option>
