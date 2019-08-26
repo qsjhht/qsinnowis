@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-08-24 17:42:52
+Date: 2019-08-26 18:50:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -70,18 +70,18 @@ CREATE TABLE `qs_auth` (
   `auth_isLink` tinyint(1) DEFAULT NULL,
   `auth_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`auth_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=130 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qs_auth
 -- ----------------------------
 INSERT INTO `qs_auth` VALUES ('101', '大数据', '0', 'Visual', 'index', '101', '0', '0', null);
-INSERT INTO `qs_auth` VALUES ('102', 'bim', '0', 'Visual', 'bim', '102', '0', '1', 'http://192.168.5.105/');
+INSERT INTO `qs_auth` VALUES ('102', 'bim', '0', 'Visual', 'bim', '102', '0', '1', 'http://192.168.5.105');
 INSERT INTO `qs_auth` VALUES ('104', '设备管理', '0', 'Eqpt', 'index', '104', '0', '0', null);
 INSERT INTO `qs_auth` VALUES ('103', '巡查巡检', '0', 'Patrol', 'index', '103', '0', '1', 'http://www.baidu.com');
 INSERT INTO `qs_auth` VALUES ('106', '教育培训', '0', 'Enterprise', 'index', '106', '0', '1', 'http://www.baidu.com');
 INSERT INTO `qs_auth` VALUES ('107', '基本信息管理', '0', 'basic', 'index', '107', '0', '0', null);
-INSERT INTO `qs_auth` VALUES ('127', '人员管理', '107', 'People', 'index', '127', '1', '0', null);
+INSERT INTO `qs_auth` VALUES ('129', '人员管理', '107', 'User', 'index', '129', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('105', '机器人巡查巡检', '0', 'Robot', 'index', '105', '0', '1', 'http://www.baidu.com');
 INSERT INTO `qs_auth` VALUES ('110', '设备台账', '104', 'Eqpt', 'ledger', '110', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('111', '销账处理', '104', 'Eqpt', 'cancel', '111', '1', '0', null);
@@ -94,13 +94,11 @@ INSERT INTO `qs_auth` VALUES ('117', '巡查巡检实况', '103', 'Patrol', 'liv
 INSERT INTO `qs_auth` VALUES ('118', '路线规划', '103', 'Patrol', 'setting', '118', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('119', '任务管理', '103', 'Patrol', 'manage', '119', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('120', '任务日志', '103', 'Patrol', 'log', '120', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('121', '入廊企业', '111', 'Enterprise', 'firm', '121', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('122', '入廊缴费', '111', 'Enterprise', 'pay', '122', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('126', '组织机构管理', '107', 'dept', 'index', '126', '1', '0', null);
+INSERT INTO `qs_auth` VALUES ('126', '部门管理', '107', 'dept', 'index', '126', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('109', '视频监控', '0', 'Video', 'index', '109', '0', '0', null);
-INSERT INTO `qs_auth` VALUES ('123', '培训考试', '111', null, null, null, '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('124', '实时视频', '109', 'Video', 'liveplay', '124', '1', '1', 'http://192.168.5.101/JsApi/demo/livePlay.php?ip=192.168.5.101&user=a&pass=21232f297a57a5a743894a0e4a801fc3&camcode=192_168_5_108!192_168_5_108!192_168_5_108!192_168_5_108');
 INSERT INTO `qs_auth` VALUES ('125', '视频回放', '109', 'Video', 'replay', '125', '1', '1', 'http://www.baidu.com');
+INSERT INTO `qs_auth` VALUES ('128', '角色管理', '107', 'Role', 'index', '128', '1', '0', null);
 
 -- ----------------------------
 -- Table structure for qs_category
@@ -173,12 +171,12 @@ CREATE TABLE `qs_dept` (
   `dept_level` tinyint(1) DEFAULT NULL,
   `dept_path` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`dept_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=119 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qs_dept
 -- ----------------------------
-INSERT INTO `qs_dept` VALUES ('101', '0', '安防部', '大厅一层 103', '安防的', '搞安防的', 'asdf', '0', '101');
+INSERT INTO `qs_dept` VALUES ('101', '0', '安防部', '大厅一层 103', '安防的', '搞安防的asf', 'asdf', '0', '101');
 INSERT INTO `qs_dept` VALUES ('102', '0', '消防部', '大厅二层 206', 'adsgasfdsadfsda', '搞消防的', '', '0', '102');
 INSERT INTO `qs_dept` VALUES ('103', '0', '自控部', '大厅一层 110', 'fddddddddddd', '搞自控的', '', '0', '103');
 INSERT INTO `qs_dept` VALUES ('104', '0', '巡查部', '大厅二层 201', 'adfgfdag', '巡查巡检的', '', '0', '104');
@@ -187,6 +185,7 @@ INSERT INTO `qs_dept` VALUES ('106', '0', '档案部', '大厅二层 210', 'afdd
 INSERT INTO `qs_dept` VALUES ('107', '0', '入廊企业部', '大厅二层 201', 'aaaaaaaaaaaaa', '入廊企业管理的', '', '0', '107');
 INSERT INTO `qs_dept` VALUES ('108', '0', '人员管理部', '大厅一层 102', 'tsghfnherttr', '人员管理的', '', '0', '108');
 INSERT INTO `qs_dept` VALUES ('109', '101', '发噶', '大厅一层 102', 'ads', 'afssdaf', null, '1', '109');
+INSERT INTO `qs_dept` VALUES ('118', '104', '修水管', '啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊', null, '啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊', '啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊', '0', '118');
 
 -- ----------------------------
 -- Table structure for qs_eqpts
@@ -323,16 +322,22 @@ INSERT INTO `qs_replaces` VALUES ('4', '16', null, 'GH-190426-0016-0015', '一�
 DROP TABLE IF EXISTS `qs_role`;
 CREATE TABLE `qs_role` (
   `role_id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(20) NOT NULL,
-  `role_auth_ids` varchar(255) NOT NULL,
+  `role_name` varchar(32) DEFAULT NULL,
   `role_auth_ac` text,
+  `role_auth_ids` varchar(255) DEFAULT NULL,
+  `role_auth_names` varchar(255) DEFAULT NULL,
+  `role_detail` tinytext,
   PRIMARY KEY (`role_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qs_role
 -- ----------------------------
-INSERT INTO `qs_role` VALUES ('100', '主管', '101,102,103,104', 'Index-indexEqpt-index');
+INSERT INTO `qs_role` VALUES ('1', '职工', '#-#,people-index,#-#,enterprise-index,patrol-index', '108,106,107,105,104', '3D漫游,人员管理,应急指挥,入廊企业,巡查巡检', '职工');
+INSERT INTO `qs_role` VALUES ('3', '主管', 'patrol-index,enterprise-index,people-index,#-#', '104,105,106,107', '巡查巡检,入廊企业,人员管理,应急指挥', '主管');
+INSERT INTO `qs_role` VALUES ('4', '精英', 'run-index,eqpt-index,warning-index', '101,102,103', '运行管理,设备管理,报警信息', 'asdf');
+INSERT INTO `qs_role` VALUES ('5', '荟萃', 'run-index,patrol-index,enterprise-index,people-index', '101,104,105,106', '运行管理,巡查巡检,入廊企业,人员管理', 'asdfasdfasd');
+INSERT INTO `qs_role` VALUES ('6', '阿斯蒂芬', 'run-index,eqpt-index,warning-index', '101,102,103', '运行管理,设备管理,报警信息', 'sdf阿萨德发射点发');
 
 -- ----------------------------
 -- Table structure for qs_services
@@ -418,26 +423,3 @@ INSERT INTO `qs_site` VALUES ('41', '7', 'YBY-002-001');
 INSERT INTO `qs_site` VALUES ('42', '7', 'YBY-002-002');
 INSERT INTO `qs_site` VALUES ('43', '8', 'YBY-003-001');
 INSERT INTO `qs_site` VALUES ('999', '0', '未安装定位');
-
--- ----------------------------
--- Table structure for role
--- ----------------------------
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE `role` (
-  `role_id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(32) DEFAULT NULL,
-  `role_auth_ac` text,
-  `role_auth_ids` varchar(255) DEFAULT NULL,
-  `role_auth_names` varchar(255) DEFAULT NULL,
-  `role_detail` tinytext,
-  PRIMARY KEY (`role_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of role
--- ----------------------------
-INSERT INTO `role` VALUES ('1', '职工', '#-#,people-index,#-#,enterprise-index,patrol-index', '108,106,107,105,104', '3D漫游,人员管理,应急指挥,入廊企业,巡查巡检', '职工');
-INSERT INTO `role` VALUES ('3', '主管', 'patrol-index,enterprise-index,people-index,#-#', '104,105,106,107', '巡查巡检,入廊企业,人员管理,应急指挥', '主管');
-INSERT INTO `role` VALUES ('4', '精英', 'run-index,eqpt-index,warning-index', '101,102,103', '运行管理,设备管理,报警信息', 'asdf');
-INSERT INTO `role` VALUES ('5', '荟萃', 'run-index,patrol-index,enterprise-index,people-index', '101,104,105,106', '运行管理,巡查巡检,入廊企业,人员管理', 'asdfasdfasd');
-INSERT INTO `role` VALUES ('6', '阿斯蒂芬', 'run-index,eqpt-index,warning-index', '101,102,103', '运行管理,设备管理,报警信息', 'sdf阿萨德发射点发');
