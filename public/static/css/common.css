@@ -16,7 +16,7 @@ body,html{
     font-size: 20px;
 }
 .eleTree{
-    position: absolute;
+    position: absolute!important;
     z-index:10;
     background-color: #ffffff;
     /*filter:alpha(Opacity=60);-moz-opacity:0.6;opacity: 0.6;*/
