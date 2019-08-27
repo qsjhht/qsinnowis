@@ -1,7 +1,12 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-     <title>H5STREAM VIDEO</title>
+     <meta charset="UTF-8">
+     <title>Document</title>
+     <meta http-equiv="X-UA-Compatible" content="IE=9">
+     <script src="__STATIC__/new/echarts.js"></script>
+     <link rel="stylesheet" href="__STATIC__/new/inde.css">
+
      <script src="__STATIC__/h5splayer/bootstrap.js"></script>
      <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
      <script src="__STATIC__/h5splayer/bootstrap.js"></script>
@@ -9,24 +14,356 @@
      <script src="__STATIC__/h5splayer/h5splayer.js"></script>
      <script src="__STATIC__/h5splayer/h5splayerhelper.js"></script>
 
-     <link rel = "stylesheet" type = "text/css" href = "css/h5splayer.css" />
-
+     <link rel = "stylesheet" type = "text/css" href = "__STATIC__/h5splayer/css/h5splayer.css" />
 </head>
+<body class="backg">
+<div class="wrap">
+     <!--一级标签-->
+     <div class='main'>
+          <div class="mainMiddle">
+               <div class='middleLeft'>
+                    <div class="contentTop mainBor">
+                         <div class="infoDate" id="infoDate"></div>
+                         <div class="infoRun">
+                              <ul class="infoRunUl">
+                                   <li class="infoRunLi">安全运行</li>
+                                   <li class="infoRunNum">0</li>
+                                   <li class="infoRunNum">0</li>
+                                   <li class="infoRunNum">3</li>
+                                   <li class="infoRunNum">6</li>
+                                   <li class="infoRunLi">天</li>
+                              </ul>
+                         </div>
+                         <div class="infoDate" id="infoDty" style="font-size:1.3rem"></div>
+                    </div>
+                    <div class="contentBottom mainBor marginTop" id="contentEle">
+                         <!--动力配电-->
+                    </div>
+               </div>
+               <div class='middleMid mainBor'>
+                    <!--地图-->
+                    <iframe name="mapFrame" width="100%" scrolling="no" height="100%" src="/index/visual/map"  frameborder="0"></iframe>
+               </div>
+               <div class='middleRight'>
+                    <div class="contentBottom mainBor">
+                         <!--摄像头-->
+                         <iframe  width="100%" height="100%" src="http://192.168.5.101/JsApi/demo/livePlay.php?ip=192.168.5.101&user=a&pass=21232f297a57a5a743894a0e4a801fc3&camcode=192_168_5_108!192_168_5_108!192_168_5_108!192_168_5_108"></iframe>
+                    </div>
+                    <div class="contentTop mainBor marginTop">
+                         <p class="robot">入廊企业</p>
+                         <div class="firmContent">
+                              <!-- 左边  -->
+                              <div class="firmLeft">
+                                   <div class="firmConLeft" style="margin-top:1.7vh;">
+                                        <div class='firmConText'>
+                                             <span>75(km)</span>
+                                             <span class="absonlute">中国移动有限公司</span>
+                                        </div>
+                                        <div class='firmConMain'>
+                                             <div class="firmConBack"></div>
+                                             <div class="firmConNum absonlute" style="width:50%"></div>
+                                        </div>
+                                   </div>
+                                   <div class="firmConLeft">
+                                        <div class='firmConText'>
+                                             <span>103(km)</span>
+                                             <span class="absonlute">中国联通有限公司</span>
+                                        </div>
+                                        <div class='firmConMain'>
+                                             <div class="firmConBack"></div>
+                                             <div class="firmConNum absonlute" style="width:68.6%"></div>
+                                        </div>
+                                   </div>
+                                   <div class="firmConLeft">
+                                        <div class='firmConText'>
+                                             <span>85(km)</span>
+                                             <span class="absonlute">中国电信有限公司</span>
+                                        </div>
+                                        <div class='firmConMain'>
+                                             <div class="firmConBack"></div>
+                                             <div class="firmConNum absonlute" style="width:56.6%"></div>
+                                        </div>
+                                   </div>
+                              </div>
+                              <!-- 分界线 -->
+                              <div class="firmMiddle"></div>
+                              <!-- 右边 -->
+                              <div class="firmRight">
+                                   <div class="firmConLeft">
+                                        <div class='firmConText'>
+                                             <span>河北中水有限公司</span>
+                                             <span class="absonlute">88(km)</span>
+                                        </div>
+                                        <div class='firmConMain'>
+                                             <div class="firmConBack"></div>
+                                             <div class="firmConNum abson" style="width:58.6%"></div>
+                                        </div>
+                                   </div>
+                                   <div class="firmConLeft">
+                                        <div class='firmConText'>
+                                             <span>中国燃气控股有限公司</span>
+                                             <span class="absonlute">121(km)</span>
+                                        </div>
+                                        <div class='firmConMain'>
+                                             <div class="firmConBack"></div>
+                                             <div class="firmConNum abson" style="width:80.6%"></div>
+                                        </div>
+                                   </div>
+                                   <div class="firmConLeft">
+                                        <div class='firmConText'>
+                                             <span>国家电网有限公司</span>
+                                             <span class="absonlute">110(km)</span>
+                                        </div>
+                                        <div class='firmConMain'>
+                                             <div class="firmConBack"></div>
+                                             <div class="firmConNum abson" style="width:73.3%"></div>
+                                        </div>
+                                   </div>
+                                   <div class="firmConLeft">
+                                        <div class='firmConText'>
+                                             <span>石家庄华电供热集团有限公司</span>
+                                             <span class="absonlute">107(km)</span>
+                                        </div>
+                                        <div class='firmConMain'>
+                                             <div class="firmConBack"></div>
+                                             <div class="firmConNum abson" style="width:71.3%"></div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <div class="mainBottom">
+               <div class='bottomLeft '>
+                    <div class="contentTop2 mainBor">
+                         <div class="robotHide" style="display:inline-block">
+                              <div class="h5videodiv">
+                                   <div class="h5videodiv">
+                                        <video class="h5video" id="h5sVideo1"  autoplay webkit-playsinline playsinline>
 
-<body>
+                                        </video>
+                                        <div class="playpause" id="playpause1" ></div>
+                                   </div>
 
-<div class="h5videodiv1">
-     <video class="h5video1" id="h5sVideo1"  autoplay webkit-playsinline playsinline>
+                                   <div class="h5videodiv">
+                                        <video class="h5video" id="h5sVideo2"  autoplay webkit-playsinline playsinline>
 
-     </video>
-     <div class="playpause" id="playpause1" ></div>
+                                        </video>
+                                        <div class="playpause" id="playpause2" ></div>
+                                   </div>
+
+                                   <div class="h5videodiv">
+                                        <video class="h5video" id="h5sVideo3" autoplay webkit-playsinline playsinline>
+
+                                        </video>
+                                        <div class="playpause"></div>
+                                   </div>
+
+                                   <div class="h5videodiv">
+                                        <video class="h5video" id="h5sVideo4" autoplay webkit-playsinline playsinline>
+
+                                        </video>
+                                        <div class="playpause"></div>
+                                   </div>
+                              </div>
+                         </div>
+                         <p class="robot">机器人</p>
+                         <div class="robotTob scrollber">
+                              <table class="robotToble">
+                                   <tr>
+                                        <th class="robotClass">已完成</th>
+                                        <th>09:30 —— 11:30</th>
+                                        <th>管廊一号线巡检</th>
+                                        <th>挂轨机器人</th>
+                                        <th >
+                                             <!--<img src="../image/vidicon-fill.png" width="18" height="20" alt="/">-->
+                                        </th>
+                                   </tr>
+                                   <tr>
+                                        <th class="robotClass">进行中</th>
+                                        <th>13:30 —— 15:30</th>
+                                        <th>管廊一号线巡检</th>
+                                        <th>挂轨机器人</th>
+                                        <th onclick="aaa()" class="vidicon">
+                                             <img src="__STATIC__/new/image/vidicon-fill.png" width="18" height="20" alt="/">
+                                        </th>
+                                   </tr>
+                                   <tr>
+                                        <th class="robotClass">待执行</th>
+                                        <th>15:30 —— 15:30</th>
+                                        <th>管廊一号线巡检</th>
+                                        <th>挂轨机器人</th>
+                                        <th>
+                                             <!--<img src="../image/vidicon-fill.png" width="18" height="20" alt="/">-->
+                                        </th>
+                                   </tr>
+                              </table>
+                         </div>
+                    </div>
+                    <div class="contentBottom2 mainBor marginTop" id="contentFirm">
+
+                    </div>
+               </div>
+               <div class='bottomMid mainBor'>
+                    <div class="callIcon" id="callIcon"></div>
+                    <div class="callUl">
+                         <div class="callTab scrollber">
+                              <table class="callTable">
+                                   <tbody>
+                                   <tr>
+                                        <th>时间</th>
+                                        <th>级别</th>
+                                        <th>名称</th>
+                                        <th>位置</th>
+                                   </tr>
+                                   </tbody>
+                                   <tbody>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>水泵报警</th>
+                                        <th>YBY01-YBY21</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>开启水泵</th>
+                                        <th>YBY01-YBY21</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>关闭水泵</th>
+                                        <th>YBY01-YBY21</th>
+                                   </tr>
+
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>风机报警</th>
+                                        <th>XC01-XC21</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>开启风机</th>
+                                        <th>XC01-XC21</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>关闭风机</th>
+                                        <th>XC01-XC21</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>风机报警</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>开启风机</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>关闭风机</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>风机报警</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>开启风机</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">普通</th>
+                                        <th>关闭风机</th>
+                                        <th>SP01-SP16</th>
+                                   </tr>
+
+                                   <tr>
+                                        <th class="callTime"></th>
+                                        <th class="callGrade">设备</th>
+                                        <th>设备离线</th>
+                                        <th>YBYB01-YBYB07</th>
+                                   </tr>
+                                   </tbody>
+                              </table>
+                         </div>
+                    </div>
+               </div>
+
+               <div class='bottomDle mainBor'>
+                    <div class="borTitle" style="font-size:16px">
+                         环境监测
+                         <select onchange="select(this.value)">
+                              <option value="1">温度</option>
+                              <option value="2">湿度</option>
+                              <option value="3">氧气</option>
+                              <option value="4">硫化氢</option>
+                              <option value="5">甲烷</option>
+                         </select>
+                    </div>
+                    <div class="borCont" id="borCont"></div>
+               </div>
+               <div class='bottomRight'>
+                    <div class="contentTop2 mainBor">
+                         <div class="robot">
+                              巡查巡检
+                              <ul class="borUl">
+                                   <li class="borPatrol borUlClass" onclick="stocks()">已完成</li>
+                                   <li class="borPatrol" onclick="underway()">进行中</li>
+                                   <li class="borPatrol" onclick="contract()">待执行</li>
+                              </ul>
+                         </div>
+                         <div class="robotTob scrollber">
+                              <table class="robotToble">
+                                   <tr>
+                                        <th>2019-08-13 09:30</th>
+                                        <th>管廊一号线巡检</th>
+                                        <th>李建国</th>
+                                   </tr>
+                                   <tr>
+                                        <th>2019-08-13 10:48</th>
+                                        <th>管廊二号线巡检</th>
+                                        <th>侯钟年</th>
+                                   </tr>
+                                   <tr>
+                                        <th>2019-08-14 7:30</th>
+                                        <th>管廊四号线巡检</th>
+                                        <th>催泪下</th>
+                                   </tr>
+                                   <tr>
+                                        <th>2019-08-15 7:30</th>
+                                        <th>管廊三号线巡检</th>
+                                        <th>房地产</th>
+                                   </tr>
+                              </table>
+                         </div>
+                    </div>
+                    <div class="contentBottom2 mainBor marginTop" id="botUse">
+
+                    </div>
+               </div>
+          </div>
+     </div>
 </div>
-
 </body>
-
+<script src="__STATIC__/new/itemJS/index.js"></script>
 <script>
-
-
 
     var strToken;
     strToken = GetURLParameter("token");
@@ -73,9 +410,160 @@
         }
     });
 
+</script>
+<script>
 
+    if (H5siOS() === true
+        || H5sSafariBrowser() === true)
+    {
+        $('#h5sVideo1').prop("controls", true);
+        $('#h5sVideo2').prop("controls", true);
+        $('#h5sVideo3').prop("controls", true);
+        $('#h5sVideo4').prop("controls", true);
+    }
+
+    var conf1 = {
+        videoid:'h5sVideo1',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: 'localhost:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:'token1',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+
+    var conf2 = {
+        videoid:'h5sVideo2',
+        //videodom: h5svideodom2,
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: 'localhost:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:'token1',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+
+    //If there has no videoid, the videodom can be the videodom. if there has videoid, just use the videoid
+    var h5svideodom3 = document.getElementById('h5sVideo3');
+    var conf3 = {
+        //videoid:'h5sVideo3',
+        videodom: h5svideodom3,
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: 'localhost:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:'token2',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var conf4 = {
+        videoid:'h5sVideo4',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: 'localhost:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:'token2',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var v1 = H5sPlayerCreate(conf1);
+    var v2 = new H5sPlayerRTC(conf2);
+    var v3 = H5sPlayerCreate(conf3);
+    var v4 = H5sPlayerCreate(conf4);
+
+
+    $('#h5sVideo1').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v1 != null)
+            {
+                v1.disconnect();
+                delete v1;
+                v1 = null;
+            }
+
+            v1 = H5sPlayerCreate(conf1);
+
+            console.log(v1);
+            v1.connect();
+
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v1.disconnect();
+            delete v1;
+            v1 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+
+    $('#h5sVideo2').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v2 != null)
+            {
+                v2.disconnect();
+                delete v2;
+                v2 = null;
+            }
+
+            v2 = new H5sPlayerRTC(conf2);
+
+            console.log(v2);
+            v2.connect();
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v2.disconnect();
+            delete v2;
+            v2 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+
+    $('#h5sVideo3').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v3 != null)
+            {
+                v3.disconnect();
+                delete v3;
+                v3 = null;
+            }
+
+            v3 = H5sPlayerCreate(conf3);
+
+            console.log(v1);
+            v3.connect();
+
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v3.disconnect();
+            delete v3;
+            v3 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+
+    $('#h5sVideo4').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v4 != null)
+            {
+                v4.disconnect();
+                delete v4;
+                v4 = null;
+            }
+
+            v4 = H5sPlayerCreate(conf4);
+
+            console.log(v4);
+            v4.connect();
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v4.disconnect();
+            delete v4;
+            v4 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
 
 
 </script>
-
 </html>
