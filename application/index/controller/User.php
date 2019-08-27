@@ -20,15 +20,16 @@ class User extends Controller
     }
     public function index()
     {
-        if ($this->request->isAjax()) {
+        //if ($this->request->isAjax()) {
             $limit = $this->request->param('limit/d', 10);
             $page = $this->request->param('page/d', 1);
-            $total = $this->DeptModel->count();
-            $data = $this->DeptModel->page($page, $limit)->select();
+            $total = $this->UserModel->count();
+            $data = $this->UserModel->page($page, $limit)->select();
             $data=json_decode($data,false);
+            dump();die;
             $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $data);
             return json($result);
-        }
+       // }
         /*$depts = $this->DeptModel->get_Tree($depts);
         //dump($depts);die;
         $this->assign('depts',$depts);*/
