@@ -17,6 +17,8 @@ class User extends Controller
     {
         parent::initialize();
         $this->UserModel = new UserModel;
+        $this->default_icon = '/photo/default/usericon.jpeg';
+        $this->default_pwd = '123456';
     }
     public function index()
     {
@@ -46,6 +48,9 @@ class User extends Controller
                 $data['user_sex'] = $this->request->param('user_sex');
                 $data['user_dept_id'] = $this->request->param('user_dept_id');
                 $data['user_role_id'] = $this->request->param('user_role_id');
+                $data['user_icon'] = $this->default_icon;
+                $data['user_pwd'] = md5($this->default_pwd);
+
                 Db('user')->insert($data);
                 $this->success('新增用户成功！');
             });
