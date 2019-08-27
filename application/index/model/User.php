@@ -33,7 +33,6 @@ class User extends Model
     public static function quote_make_tree($list, $pk = 'id', $pid = 'pid',$child = 'children', $root = 0)
     {
         $tree = $packData = [];
-        $tree[] = array('id'=>'0','label'=>'作为顶级选项');
         foreach ($list as $data) {
             $packData[$data[$pk]] = $data;
         }
