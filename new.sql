@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-08-27 22:10:42
+Date: 2019-08-28 21:04:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -97,8 +97,8 @@ INSERT INTO `qs_auth` VALUES ('120', '任务日志', '103', 'Patrol', 'log', '12
 INSERT INTO `qs_auth` VALUES ('130', '分区管理', '107', 'Zone', 'index', '130', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('131', '分类管理', '107', 'Category', 'index', '131', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('126', '部门管理', '107', 'dept', 'index', '126', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('109', '视频监控', '0', 'Video', 'index', '109', '0', '0', null);
-INSERT INTO `qs_auth` VALUES ('124', '实时视频', '109', 'Video', 'liveplay', '124', '1', '1', 'http://192.168.5.101/JsApi/demo/livePlay.php?ip=192.168.5.101&user=a&pass=21232f297a57a5a743894a0e4a801fc3&camcode=192_168_5_108!192_168_5_108!192_168_5_108!192_168_5_108');
+INSERT INTO `qs_auth` VALUES ('109', '视频监控', '0', 'Video', 'index', '109', '0', '1', 'http://localhost:8080/#/app/dashboard');
+INSERT INTO `qs_auth` VALUES ('124', '实时视频', '109', 'Video', 'liveplay', '124', '1', '0', '');
 INSERT INTO `qs_auth` VALUES ('125', '视频回放', '109', 'Video', 'replay', '125', '1', '1', 'http://www.baidu.com');
 INSERT INTO `qs_auth` VALUES ('128', '角色管理', '107', 'Role', 'index', '128', '1', '0', null);
 
@@ -109,125 +109,132 @@ DROP TABLE IF EXISTS `qs_category`;
 CREATE TABLE `qs_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '种类id',
   `parentid` int(11) DEFAULT NULL COMMENT '当前种类的上级id',
-  `cate_name` varchar(255) DEFAULT NULL COMMENT '当前种类名称',
-  `cate_remark` varchar(255) DEFAULT NULL,
-  `cate_num` varchar(10) DEFAULT NULL COMMENT '设备种类对应设备编号内容',
+  `cate_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '当前种类名称',
+  `cate_remark` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `cate_num` varchar(45) CHARACTER SET utf8 DEFAULT NULL COMMENT '设备种类对应设备编号内容',
+  `isShow` int(11) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of qs_category
 -- ----------------------------
-INSERT INTO `qs_category` VALUES ('1', '0', '视频监控系统', null, null);
-INSERT INTO `qs_category` VALUES ('2', '1', '全功能宽动态摄像机、支架', null, null);
-INSERT INTO `qs_category` VALUES ('3', '1', '夹层用动态摄像机、支架', null, null);
-INSERT INTO `qs_category` VALUES ('4', '1', '高速球型摄像机、支架', null, null);
-INSERT INTO `qs_category` VALUES ('5', '1', '枪机综合电源', null, null);
-INSERT INTO `qs_category` VALUES ('6', '1', '球机综合电源', null, null);
-INSERT INTO `qs_category` VALUES ('7', '0', '入侵报警系统', null, null);
-INSERT INTO `qs_category` VALUES ('8', '7', '三鉴探测器', null, null);
-INSERT INTO `qs_category` VALUES ('9', '7', '红外光栅探测器', null, null);
-INSERT INTO `qs_category` VALUES ('10', '7', '入侵报警主机', null, null);
-INSERT INTO `qs_category` VALUES ('11', '0', '出入口控制系统', null, null);
-INSERT INTO `qs_category` VALUES ('12', '11', '防火门', null, null);
-INSERT INTO `qs_category` VALUES ('13', '11', '门禁控制器', null, null);
-INSERT INTO `qs_category` VALUES ('14', '11', '刷卡器', null, null);
-INSERT INTO `qs_category` VALUES ('15', '11', '闭门器', null, null);
-INSERT INTO `qs_category` VALUES ('16', '11', '电磁锁', null, null);
-INSERT INTO `qs_category` VALUES ('17', '11', '模块门禁控制箱', null, null);
-INSERT INTO `qs_category` VALUES ('18', '11', '门禁锁电源', null, null);
-INSERT INTO `qs_category` VALUES ('19', '11', '智能发卡器', null, null);
-INSERT INTO `qs_category` VALUES ('20', '11', '智能卡', null, null);
-INSERT INTO `qs_category` VALUES ('21', '0', '机器人系统', null, null);
-INSERT INTO `qs_category` VALUES ('22', '21', '巡检机器人(挂轨式)', null, null);
-INSERT INTO `qs_category` VALUES ('23', '21', '分布式充电桩', null, null);
-INSERT INTO `qs_category` VALUES ('24', '21', '异形防火门', null, null);
-INSERT INTO `qs_category` VALUES ('25', '21', '投放轮滑式机器人', null, null);
-INSERT INTO `qs_category` VALUES ('26', '0', '环境监控与报警系统', null, null);
-INSERT INTO `qs_category` VALUES ('27', '26', '温湿度检测仪', null, null);
-INSERT INTO `qs_category` VALUES ('28', '26', '甲烷检测仪', null, null);
-INSERT INTO `qs_category` VALUES ('29', '26', '硫化氢检测仪', null, null);
-INSERT INTO `qs_category` VALUES ('30', '26', '氧气检测仪', null, null);
-INSERT INTO `qs_category` VALUES ('31', '26', '超声波液位传感器', null, null);
-INSERT INTO `qs_category` VALUES ('32', '26', 'ACU箱', null, null);
-INSERT INTO `qs_category` VALUES ('33', '26', '电源 AC120/230V', null, null);
-INSERT INTO `qs_category` VALUES ('34', '26', '马达保护器(水泵)', null, null);
-INSERT INTO `qs_category` VALUES ('35', '26', '马达保护器(风机)', null, null);
-INSERT INTO `qs_category` VALUES ('36', '0', 'PLC自控系统', null, null);
-INSERT INTO `qs_category` VALUES ('37', '36', '继电器 R7-K1~6', null, null);
-INSERT INTO `qs_category` VALUES ('38', '36', '继电器 R8-K1~6', null, null);
-INSERT INTO `qs_category` VALUES ('39', '36', 'ACU 远程IO箱', null, null);
-INSERT INTO `qs_category` VALUES ('40', '36', '柜内日光灯管', null, null);
-INSERT INTO `qs_category` VALUES ('41', '0', '应急指挥系统', null, null);
-INSERT INTO `qs_category` VALUES ('42', '41', 'IP电话分机以及支架', null, null);
-INSERT INTO `qs_category` VALUES ('43', '0', '通风系统', null, null);
-INSERT INTO `qs_category` VALUES ('44', '43', '离心式屋顶风机', null, null);
-INSERT INTO `qs_category` VALUES ('45', '43', '离心式屋顶风机#2', null, null);
-INSERT INTO `qs_category` VALUES ('46', '43', '电动排烟防火调节阀', null, null);
-INSERT INTO `qs_category` VALUES ('47', '43', '电动防火调节阀', null, null);
-INSERT INTO `qs_category` VALUES ('48', '43', '空调', null, null);
-INSERT INTO `qs_category` VALUES ('49', '43', '圆形防火调节阀', null, null);
-INSERT INTO `qs_category` VALUES ('50', '43', '圆形防火止回阀', null, null);
-INSERT INTO `qs_category` VALUES ('51', '43', '排烟混流风机', null, null);
-INSERT INTO `qs_category` VALUES ('52', '43', '混流风机', null, null);
-INSERT INTO `qs_category` VALUES ('53', '43', '矩形防火防烟调节阀', null, null);
-INSERT INTO `qs_category` VALUES ('54', '43', '风冷柜式空调机', null, null);
-INSERT INTO `qs_category` VALUES ('55', '43', '矩形防烟防火调节阀', null, null);
-INSERT INTO `qs_category` VALUES ('56', '0', '动力配电系统', null, null);
-INSERT INTO `qs_category` VALUES ('57', '56', '动力照明配电箱 56kW', null, null);
-INSERT INTO `qs_category` VALUES ('58', '56', '动力照明配电箱 18kW', null, null);
-INSERT INTO `qs_category` VALUES ('59', '56', '风机控制箱', null, null);
-INSERT INTO `qs_category` VALUES ('60', '56', '风机按钮盒', null, null);
-INSERT INTO `qs_category` VALUES ('61', '56', '照明配电箱', null, null);
-INSERT INTO `qs_category` VALUES ('62', '56', '等位端子箱', null, null);
-INSERT INTO `qs_category` VALUES ('63', '56', '检修配电箱', null, null);
-INSERT INTO `qs_category` VALUES ('64', '56', 'UPS电源', null, null);
-INSERT INTO `qs_category` VALUES ('65', '56', '消防配电箱 3kw', null, null);
-INSERT INTO `qs_category` VALUES ('66', '56', '防火门及防火封堵', null, null);
-INSERT INTO `qs_category` VALUES ('67', '0', '电子巡更系统', null, null);
-INSERT INTO `qs_category` VALUES ('68', '67', '无线AP', null, null);
-INSERT INTO `qs_category` VALUES ('69', '0', '人员定位系统', null, null);
-INSERT INTO `qs_category` VALUES ('70', '69', '手持移动端', null, null);
-INSERT INTO `qs_category` VALUES ('71', '0', '智能照明系统', null, null);
-INSERT INTO `qs_category` VALUES ('72', '71', '单管 LED灯 AC220V18W', null, null);
-INSERT INTO `qs_category` VALUES ('73', '71', 'LED灯(应急) 18W,AC220V', null, null);
-INSERT INTO `qs_category` VALUES ('74', '71', 'LED灯 2x18W,AC220V', null, null);
-INSERT INTO `qs_category` VALUES ('75', '71', 'LED灯(应急) 2x18W,AC220V', null, null);
-INSERT INTO `qs_category` VALUES ('76', '71', '单管LED灯(应急)AC220V,1x18W', null, null);
-INSERT INTO `qs_category` VALUES ('77', '71', '单管LED灯', null, null);
-INSERT INTO `qs_category` VALUES ('78', '71', '安全出口指示灯', null, null);
-INSERT INTO `qs_category` VALUES ('79', '0', '沉降系统', null, null);
-INSERT INTO `qs_category` VALUES ('80', '79', '拉线式位移传感器', null, null);
-INSERT INTO `qs_category` VALUES ('81', '79', '数据采集仪', null, null);
-INSERT INTO `qs_category` VALUES ('82', '79', '倾角传感器及支架', null, null);
-INSERT INTO `qs_category` VALUES ('83', '79', '压差式静力水准仪及支架', null, null);
-INSERT INTO `qs_category` VALUES ('84', '79', '储液罐及支架', null, null);
-INSERT INTO `qs_category` VALUES ('85', '0', '消防系统', null, null);
-INSERT INTO `qs_category` VALUES ('86', '85', '光电式感烟探测器', null, null);
-INSERT INTO `qs_category` VALUES ('87', '85', '声光报警器', null, null);
-INSERT INTO `qs_category` VALUES ('88', '85', '线型光纤感温火灾探测器', null, null);
-INSERT INTO `qs_category` VALUES ('89', '85', '剩余电流式电气火灾监控探测器', null, null);
-INSERT INTO `qs_category` VALUES ('90', '85', '测温式电气火灾监控探测器', null, null);
-INSERT INTO `qs_category` VALUES ('91', '85', '壁挂式安全出口标志灯具', null, null);
-INSERT INTO `qs_category` VALUES ('92', '85', '壁挂式单向指示标志灯具左/右向', null, null);
-INSERT INTO `qs_category` VALUES ('93', '85', '应急照明分配电装置', null, null);
-INSERT INTO `qs_category` VALUES ('94', '85', '应急照明集中电源', null, null);
-INSERT INTO `qs_category` VALUES ('95', '85', '消防电话', null, null);
-INSERT INTO `qs_category` VALUES ('96', '85', '自动灭火装置(超细干粉)', null, null);
-INSERT INTO `qs_category` VALUES ('97', '0', '电子标签', null, null);
-INSERT INTO `qs_category` VALUES ('98', '97', '电子标签', null, null);
-INSERT INTO `qs_category` VALUES ('99', '97', '普通电子标签', null, null);
-INSERT INTO `qs_category` VALUES ('100', '0', '排水系统', null, null);
-INSERT INTO `qs_category` VALUES ('101', '100', '潜水排污泵 2.2-15', null, null);
-INSERT INTO `qs_category` VALUES ('102', '100', '球形止回阀', null, null);
-INSERT INTO `qs_category` VALUES ('103', '100', '潜水排污泵 4-10', null, null);
-INSERT INTO `qs_category` VALUES ('104', '100', '潜水排污泵 2.2-10', null, null);
-INSERT INTO `qs_category` VALUES ('105', '100', '手动蝶阀', null, null);
-INSERT INTO `qs_category` VALUES ('106', '100', 'A型潜污排污泵', null, null);
-INSERT INTO `qs_category` VALUES ('107', '100', 'B型潜污排污泵', null, null);
-INSERT INTO `qs_category` VALUES ('108', '100', 'C型潜污排污泵', null, null);
-INSERT INTO `qs_category` VALUES ('109', '100', '旋启式止回阀', null, null);
-INSERT INTO `qs_category` VALUES ('110', '100', '潜水排污泵', null, null);
+INSERT INTO `qs_category` VALUES ('1', '0', '视频监控系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('2', '1', '全功能宽动态摄像机、支架', null, null, '1');
+INSERT INTO `qs_category` VALUES ('3', '1', '夹层用动态摄像机、支架', null, null, '1');
+INSERT INTO `qs_category` VALUES ('4', '1', '高速球型摄像机、支架', null, null, '1');
+INSERT INTO `qs_category` VALUES ('5', '1', '枪机综合电源', null, null, '1');
+INSERT INTO `qs_category` VALUES ('6', '1', '球机综合电源', null, null, '1');
+INSERT INTO `qs_category` VALUES ('7', '0', '入侵报警系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('8', '7', '三鉴探测器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('9', '7', '红外光栅探测器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('10', '7', '入侵报警主机', null, null, '1');
+INSERT INTO `qs_category` VALUES ('11', '0', '出入口控制系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('12', '11', '防火门', null, null, '1');
+INSERT INTO `qs_category` VALUES ('13', '11', '门禁控制器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('14', '11', '刷卡器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('15', '11', '闭门器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('16', '11', '电磁锁', null, null, '1');
+INSERT INTO `qs_category` VALUES ('17', '11', '模块门禁控制箱', null, null, '1');
+INSERT INTO `qs_category` VALUES ('18', '11', '门禁锁电源', null, null, '1');
+INSERT INTO `qs_category` VALUES ('19', '11', '智能发卡器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('20', '11', '智能卡', null, null, '1');
+INSERT INTO `qs_category` VALUES ('21', '0', '机器人系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('22', '21', '巡检机器人(挂轨式)', null, null, '1');
+INSERT INTO `qs_category` VALUES ('23', '21', '分布式充电桩', null, null, '1');
+INSERT INTO `qs_category` VALUES ('24', '21', '异形防火门', null, null, '1');
+INSERT INTO `qs_category` VALUES ('25', '21', '投放轮滑式机器人', null, null, '1');
+INSERT INTO `qs_category` VALUES ('26', '0', '环境监控与报警系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('27', '26', '温湿度检测仪', null, null, '1');
+INSERT INTO `qs_category` VALUES ('28', '26', '甲烷检测仪', null, null, '1');
+INSERT INTO `qs_category` VALUES ('29', '26', '硫化氢检测仪', null, null, '1');
+INSERT INTO `qs_category` VALUES ('30', '26', '氧气检测仪', null, null, '1');
+INSERT INTO `qs_category` VALUES ('31', '26', '超声波液位传感器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('32', '26', 'ACU箱', null, null, '1');
+INSERT INTO `qs_category` VALUES ('33', '26', '电源 AC120/230V', null, null, '1');
+INSERT INTO `qs_category` VALUES ('34', '26', '马达保护器(水泵)', null, null, '1');
+INSERT INTO `qs_category` VALUES ('35', '26', '马达保护器(风机)', null, null, '1');
+INSERT INTO `qs_category` VALUES ('36', '0', 'PLC自控系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('37', '36', '继电器 R7-K1~6', null, null, '1');
+INSERT INTO `qs_category` VALUES ('38', '36', '继电器 R8-K1~6', null, null, '1');
+INSERT INTO `qs_category` VALUES ('39', '36', 'ACU 远程IO箱', null, null, '1');
+INSERT INTO `qs_category` VALUES ('40', '36', '柜内日光灯管', null, null, '1');
+INSERT INTO `qs_category` VALUES ('41', '0', '应急指挥系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('42', '41', 'IP电话分机以及支架', null, null, '1');
+INSERT INTO `qs_category` VALUES ('43', '0', '通风系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('44', '43', '离心式屋顶风机', null, null, '1');
+INSERT INTO `qs_category` VALUES ('45', '43', '离心式屋顶风机#2', null, null, '1');
+INSERT INTO `qs_category` VALUES ('46', '43', '电动排烟防火调节阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('47', '43', '电动防火调节阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('48', '43', '空调', null, null, '1');
+INSERT INTO `qs_category` VALUES ('49', '43', '圆形防火调节阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('50', '43', '圆形防火止回阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('51', '43', '排烟混流风机', null, null, '1');
+INSERT INTO `qs_category` VALUES ('52', '43', '混流风机', null, null, '1');
+INSERT INTO `qs_category` VALUES ('53', '43', '矩形防火防烟调节阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('54', '43', '风冷柜式空调机', null, null, '1');
+INSERT INTO `qs_category` VALUES ('55', '43', '矩形防烟防火调节阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('56', '0', '动力配电系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('57', '56', '动力照明配电箱 56kW', null, null, '1');
+INSERT INTO `qs_category` VALUES ('58', '56', '动力照明配电箱 18kW', null, null, '1');
+INSERT INTO `qs_category` VALUES ('59', '56', '风机控制箱', null, null, '1');
+INSERT INTO `qs_category` VALUES ('60', '56', '风机按钮盒', null, null, '1');
+INSERT INTO `qs_category` VALUES ('61', '56', '照明配电箱', null, null, '1');
+INSERT INTO `qs_category` VALUES ('62', '56', '等位端子箱', null, null, '1');
+INSERT INTO `qs_category` VALUES ('63', '56', '检修配电箱', null, null, '1');
+INSERT INTO `qs_category` VALUES ('64', '56', 'UPS电源', null, null, '1');
+INSERT INTO `qs_category` VALUES ('65', '56', '消防配电箱 3kw', null, null, '1');
+INSERT INTO `qs_category` VALUES ('66', '56', '防火门及防火封堵', null, null, '1');
+INSERT INTO `qs_category` VALUES ('67', '0', '电子巡更系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('68', '67', '无线AP', null, null, '1');
+INSERT INTO `qs_category` VALUES ('69', '0', '人员定位系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('70', '69', '手持移动端', null, null, '1');
+INSERT INTO `qs_category` VALUES ('71', '0', '智能照明系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('72', '71', '单管 LED灯 AC220V18W', null, null, '1');
+INSERT INTO `qs_category` VALUES ('73', '71', 'LED灯(应急) 18W,AC220V', null, null, '1');
+INSERT INTO `qs_category` VALUES ('74', '71', 'LED灯 2x18W,AC220V', null, null, '1');
+INSERT INTO `qs_category` VALUES ('75', '71', 'LED灯(应急) 2x18W,AC220V', null, null, '1');
+INSERT INTO `qs_category` VALUES ('76', '71', '单管LED灯(应急)AC220V,1x18W', null, null, '1');
+INSERT INTO `qs_category` VALUES ('77', '71', '单管LED灯', null, null, '1');
+INSERT INTO `qs_category` VALUES ('78', '71', '安全出口指示灯', null, null, '1');
+INSERT INTO `qs_category` VALUES ('79', '0', '沉降系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('80', '79', '拉线式位移传感器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('81', '79', '数据采集仪', null, null, '1');
+INSERT INTO `qs_category` VALUES ('82', '79', '倾角传感器及支架', null, null, '1');
+INSERT INTO `qs_category` VALUES ('83', '79', '压差式静力水准仪及支架', null, null, '1');
+INSERT INTO `qs_category` VALUES ('84', '79', '储液罐及支架', null, null, '1');
+INSERT INTO `qs_category` VALUES ('85', '0', '消防系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('86', '85', '光电式感烟探测器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('87', '85', '声光报警器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('88', '85', '线型光纤感温火灾探测器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('89', '85', '剩余电流式电气火灾监控探测器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('90', '85', '测温式电气火灾监控探测器', null, null, '1');
+INSERT INTO `qs_category` VALUES ('91', '85', '壁挂式安全出口标志灯具', null, null, '1');
+INSERT INTO `qs_category` VALUES ('92', '85', '壁挂式单向指示标志灯具左/右向', null, null, '1');
+INSERT INTO `qs_category` VALUES ('93', '85', '应急照明分配电装置', null, null, '1');
+INSERT INTO `qs_category` VALUES ('94', '85', '应急照明集中电源', null, null, '1');
+INSERT INTO `qs_category` VALUES ('95', '85', '消防电话', null, null, '1');
+INSERT INTO `qs_category` VALUES ('96', '85', '自动灭火装置(超细干粉)', null, null, '1');
+INSERT INTO `qs_category` VALUES ('97', '0', '电子标签', null, null, '1');
+INSERT INTO `qs_category` VALUES ('98', '97', '电子标签', null, null, '1');
+INSERT INTO `qs_category` VALUES ('99', '97', '普通电子标签', null, null, '1');
+INSERT INTO `qs_category` VALUES ('100', '0', '排水系统', null, null, '1');
+INSERT INTO `qs_category` VALUES ('101', '100', '潜水排污泵 2.2-15', null, null, '1');
+INSERT INTO `qs_category` VALUES ('102', '100', '球形止回阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('103', '100', '潜水排污泵 4-10', null, null, '1');
+INSERT INTO `qs_category` VALUES ('104', '100', '潜水排污泵 2.2-10', null, null, '1');
+INSERT INTO `qs_category` VALUES ('105', '100', '手动蝶阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('106', '100', 'A型潜污排污泵', null, null, '1');
+INSERT INTO `qs_category` VALUES ('107', '100', 'B型潜污排污泵', null, null, '1');
+INSERT INTO `qs_category` VALUES ('108', '100', 'C型潜污排污泵', null, null, '1');
+INSERT INTO `qs_category` VALUES ('109', '100', '旋启式止回阀', null, null, '1');
+INSERT INTO `qs_category` VALUES ('110', '100', '潜水排污泵', null, null, '1');
+INSERT INTO `qs_category` VALUES ('111', '0', '入廊管线', null, null, '1');
+INSERT INTO `qs_category` VALUES ('112', '111', '电力电缆', null, null, '1');
+INSERT INTO `qs_category` VALUES ('113', '111', '电信电缆', null, null, '1');
+INSERT INTO `qs_category` VALUES ('114', '111', '热力管线', null, null, '1');
+INSERT INTO `qs_category` VALUES ('115', '111', '给水管线', null, null, '1');
+INSERT INTO `qs_category` VALUES ('116', '111', '中水管线', null, null, '1');
 
 -- ----------------------------
 -- Table structure for qs_dept
@@ -276,7 +283,7 @@ CREATE TABLE `qs_eqpts` (
   `eqpt_ins_time` int(11) DEFAULT NULL COMMENT '设备安装时间',
   `eqpt_had_model` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有模型',
   PRIMARY KEY (`eqpt_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qs_eqpts
@@ -303,6 +310,7 @@ INSERT INTO `qs_eqpts` VALUES ('19', 'aaaaaa', '190425-BE0302-00019', 'aaa', '29
 INSERT INTO `qs_eqpts` VALUES ('20', '超高清网络摄像机', '190425-CE0302-00020', 'dahua', '38', 'SIC335D-VIR', '43', null, '故障', '1556008046', '0');
 INSERT INTO `qs_eqpts` VALUES ('21', '1111111111', '190425-BE0300-00021', '12312', '9', '1111', '43', null, '正常', '1556008046', '0');
 INSERT INTO `qs_eqpts` VALUES ('22', 'sadfsdafasf', '190426-CE0300-00022', 'asdfsafasdfdas', '12', 'asdfasdfasdf', '43', null, '故障', '1556007777', '0');
+INSERT INTO `qs_eqpts` VALUES ('23', 'LED三防灯', '01190204001', 'unview', '72', 'aaa', '6', '太行大街', '正常', '1556007777', '1');
 
 -- ----------------------------
 -- Table structure for qs_eqpt_details
@@ -450,106 +458,65 @@ CREATE TABLE `qs_site` (
 -- ----------------------------
 -- Records of qs_site
 -- ----------------------------
-INSERT INTO `qs_site` VALUES ('1', '0', '园博园大街');
-INSERT INTO `qs_site` VALUES ('2', '0', '新城大道');
-INSERT INTO `qs_site` VALUES ('3', '0', '太行大街');
-INSERT INTO `qs_site` VALUES ('4', '0', '隆兴路');
-INSERT INTO `qs_site` VALUES ('5', '0', '迎旭路');
-INSERT INTO `qs_site` VALUES ('6', '1', 'YBY01');
-INSERT INTO `qs_site` VALUES ('7', '1', 'YBY02');
-INSERT INTO `qs_site` VALUES ('8', '1', 'YBY03');
-INSERT INTO `qs_site` VALUES ('9', '1', 'YBY04');
-INSERT INTO `qs_site` VALUES ('10', '1', 'YBY05');
-INSERT INTO `qs_site` VALUES ('11', '1', 'YBY06');
-INSERT INTO `qs_site` VALUES ('12', '1', 'YBY07');
-INSERT INTO `qs_site` VALUES ('13', '1', 'YBY08');
-INSERT INTO `qs_site` VALUES ('14', '1', 'YBY09');
-INSERT INTO `qs_site` VALUES ('15', '1', 'YBY10');
-INSERT INTO `qs_site` VALUES ('16', '1', 'YBY11');
-INSERT INTO `qs_site` VALUES ('17', '1', 'YBY12');
-INSERT INTO `qs_site` VALUES ('18', '1', 'YBY13');
-INSERT INTO `qs_site` VALUES ('19', '1', 'YBY14');
-INSERT INTO `qs_site` VALUES ('20', '1', 'YBY15');
-INSERT INTO `qs_site` VALUES ('21', '1', 'YBY16');
-INSERT INTO `qs_site` VALUES ('22', '1', 'YBY17');
-INSERT INTO `qs_site` VALUES ('23', '1', 'YBY18');
-INSERT INTO `qs_site` VALUES ('24', '1', 'YBY19');
-INSERT INTO `qs_site` VALUES ('25', '1', 'YBY20');
-INSERT INTO `qs_site` VALUES ('26', '1', 'YBY21');
-INSERT INTO `qs_site` VALUES ('27', '2', 'XC01');
-INSERT INTO `qs_site` VALUES ('28', '2', 'XC02');
-INSERT INTO `qs_site` VALUES ('29', '2', 'XC03');
-INSERT INTO `qs_site` VALUES ('30', '2', 'XC04');
-INSERT INTO `qs_site` VALUES ('31', '2', 'XC05');
-INSERT INTO `qs_site` VALUES ('32', '2', 'XC06');
-INSERT INTO `qs_site` VALUES ('33', '2', 'XC07');
-INSERT INTO `qs_site` VALUES ('34', '2', 'XC08');
-INSERT INTO `qs_site` VALUES ('35', '2', 'XC09');
-INSERT INTO `qs_site` VALUES ('36', '2', 'XC10');
-INSERT INTO `qs_site` VALUES ('37', '2', 'XC11');
-INSERT INTO `qs_site` VALUES ('38', '2', 'XC12');
-INSERT INTO `qs_site` VALUES ('39', '2', 'XC13');
-INSERT INTO `qs_site` VALUES ('40', '2', 'XC14');
-INSERT INTO `qs_site` VALUES ('41', '2', 'XC15');
-INSERT INTO `qs_site` VALUES ('42', '2', 'XC16');
-INSERT INTO `qs_site` VALUES ('43', '2', 'XC17');
-INSERT INTO `qs_site` VALUES ('44', '2', 'XC18');
-INSERT INTO `qs_site` VALUES ('45', '2', 'XC19');
-INSERT INTO `qs_site` VALUES ('46', '2', 'XC20');
-INSERT INTO `qs_site` VALUES ('47', '2', 'XC21');
-INSERT INTO `qs_site` VALUES ('48', '3', 'TH01');
-INSERT INTO `qs_site` VALUES ('49', '3', 'TH02');
-INSERT INTO `qs_site` VALUES ('50', '3', 'TH03');
-INSERT INTO `qs_site` VALUES ('51', '3', 'TH04');
-INSERT INTO `qs_site` VALUES ('52', '3', 'TH05');
-INSERT INTO `qs_site` VALUES ('53', '3', 'TH06');
-INSERT INTO `qs_site` VALUES ('54', '3', 'TH07');
-INSERT INTO `qs_site` VALUES ('55', '3', 'TH08');
-INSERT INTO `qs_site` VALUES ('56', '3', 'TH09');
-INSERT INTO `qs_site` VALUES ('57', '3', 'TH10');
-INSERT INTO `qs_site` VALUES ('58', '3', 'TH11');
-INSERT INTO `qs_site` VALUES ('59', '3', 'TH12');
-INSERT INTO `qs_site` VALUES ('60', '3', 'TH13');
-INSERT INTO `qs_site` VALUES ('61', '3', 'TH14');
-INSERT INTO `qs_site` VALUES ('62', '3', 'TH15');
-INSERT INTO `qs_site` VALUES ('63', '3', 'TH16');
-INSERT INTO `qs_site` VALUES ('64', '3', 'TH17');
-INSERT INTO `qs_site` VALUES ('65', '3', 'TH18');
-INSERT INTO `qs_site` VALUES ('66', '3', 'TH19');
-INSERT INTO `qs_site` VALUES ('67', '3', 'TH20');
-INSERT INTO `qs_site` VALUES ('68', '3', 'TH21');
-INSERT INTO `qs_site` VALUES ('69', '4', 'LX01');
-INSERT INTO `qs_site` VALUES ('70', '4', 'LX02');
-INSERT INTO `qs_site` VALUES ('71', '4', 'LX03');
-INSERT INTO `qs_site` VALUES ('72', '4', 'LX04');
-INSERT INTO `qs_site` VALUES ('73', '4', 'LX05');
-INSERT INTO `qs_site` VALUES ('74', '4', 'LX06');
-INSERT INTO `qs_site` VALUES ('75', '4', 'LX07');
-INSERT INTO `qs_site` VALUES ('76', '4', 'LX08');
-INSERT INTO `qs_site` VALUES ('77', '4', 'LX09');
-INSERT INTO `qs_site` VALUES ('78', '4', 'LX10');
-INSERT INTO `qs_site` VALUES ('79', '4', 'LX11');
-INSERT INTO `qs_site` VALUES ('80', '5', 'YX01');
-INSERT INTO `qs_site` VALUES ('81', '5', 'YX02');
-INSERT INTO `qs_site` VALUES ('82', '5', 'YX03');
-INSERT INTO `qs_site` VALUES ('83', '5', 'YX04');
-INSERT INTO `qs_site` VALUES ('84', '5', 'YX05');
-INSERT INTO `qs_site` VALUES ('85', '5', 'YX06');
-INSERT INTO `qs_site` VALUES ('86', '5', 'YX07');
-INSERT INTO `qs_site` VALUES ('87', '5', 'YX08');
-INSERT INTO `qs_site` VALUES ('88', '5', 'YX09');
-INSERT INTO `qs_site` VALUES ('89', '5', 'YX10');
-INSERT INTO `qs_site` VALUES ('90', '5', 'YX11');
-INSERT INTO `qs_site` VALUES ('91', '5', 'YX12');
-INSERT INTO `qs_site` VALUES ('92', '5', 'YX13');
-INSERT INTO `qs_site` VALUES ('93', '5', 'YX14');
-INSERT INTO `qs_site` VALUES ('94', '5', 'YX15');
-INSERT INTO `qs_site` VALUES ('95', '5', 'YX16');
-INSERT INTO `qs_site` VALUES ('96', '5', 'YX17');
-INSERT INTO `qs_site` VALUES ('97', '5', 'YX18');
-INSERT INTO `qs_site` VALUES ('98', '5', 'YX19');
-INSERT INTO `qs_site` VALUES ('99', '5', 'YX20');
-INSERT INTO `qs_site` VALUES ('100', '5', 'YX21');
+INSERT INTO `qs_site` VALUES ('1', '0', '太行大街');
+INSERT INTO `qs_site` VALUES ('2', '0', '迎旭路');
+INSERT INTO `qs_site` VALUES ('3', '0', '隆兴路');
+INSERT INTO `qs_site` VALUES ('4', '0', '园博园大街');
+INSERT INTO `qs_site` VALUES ('5', '0', '新城大道');
+INSERT INTO `qs_site` VALUES ('6', '1', 'TH01');
+INSERT INTO `qs_site` VALUES ('7', '1', 'TH02');
+INSERT INTO `qs_site` VALUES ('8', '1', 'TH03');
+INSERT INTO `qs_site` VALUES ('9', '1', 'TH04');
+INSERT INTO `qs_site` VALUES ('10', '1', 'TH05');
+INSERT INTO `qs_site` VALUES ('11', '1', 'TH06');
+INSERT INTO `qs_site` VALUES ('12', '1', 'TH07');
+INSERT INTO `qs_site` VALUES ('13', '1', 'TH08');
+INSERT INTO `qs_site` VALUES ('14', '1', 'TH09');
+INSERT INTO `qs_site` VALUES ('15', '1', 'TH10');
+INSERT INTO `qs_site` VALUES ('16', '1', 'TH11');
+INSERT INTO `qs_site` VALUES ('17', '1', 'TH12');
+INSERT INTO `qs_site` VALUES ('18', '1', 'TH13');
+INSERT INTO `qs_site` VALUES ('19', '1', 'TH14');
+INSERT INTO `qs_site` VALUES ('20', '1', 'TH15');
+INSERT INTO `qs_site` VALUES ('21', '1', 'TH16');
+INSERT INTO `qs_site` VALUES ('22', '1', 'TH17');
+INSERT INTO `qs_site` VALUES ('23', '1', 'TH18');
+INSERT INTO `qs_site` VALUES ('24', '1', 'TH19');
+INSERT INTO `qs_site` VALUES ('25', '2', 'YX01');
+INSERT INTO `qs_site` VALUES ('26', '2', 'YX02');
+INSERT INTO `qs_site` VALUES ('27', '2', 'YX03');
+INSERT INTO `qs_site` VALUES ('28', '2', 'YX04');
+INSERT INTO `qs_site` VALUES ('29', '2', 'YX05');
+INSERT INTO `qs_site` VALUES ('30', '2', 'YX06');
+INSERT INTO `qs_site` VALUES ('31', '2', 'YX07');
+INSERT INTO `qs_site` VALUES ('32', '2', 'YX08');
+INSERT INTO `qs_site` VALUES ('33', '2', 'YX09');
+INSERT INTO `qs_site` VALUES ('34', '2', 'YX10');
+INSERT INTO `qs_site` VALUES ('35', '2', 'YX11');
+INSERT INTO `qs_site` VALUES ('36', '2', 'YX12');
+INSERT INTO `qs_site` VALUES ('37', '2', 'YX13');
+INSERT INTO `qs_site` VALUES ('38', '2', 'YX14');
+INSERT INTO `qs_site` VALUES ('39', '2', 'YX15');
+INSERT INTO `qs_site` VALUES ('40', '2', 'YX16');
+INSERT INTO `qs_site` VALUES ('41', '2', 'YX17');
+INSERT INTO `qs_site` VALUES ('42', '2', 'YX18');
+INSERT INTO `qs_site` VALUES ('43', '2', 'YX19');
+INSERT INTO `qs_site` VALUES ('44', '2', 'YX20');
+INSERT INTO `qs_site` VALUES ('45', '2', 'YX21');
+INSERT INTO `qs_site` VALUES ('46', '2', 'YX22');
+INSERT INTO `qs_site` VALUES ('47', '3', 'LX01');
+INSERT INTO `qs_site` VALUES ('48', '3', 'LX02');
+INSERT INTO `qs_site` VALUES ('49', '3', 'LX03');
+INSERT INTO `qs_site` VALUES ('50', '3', 'LX04');
+INSERT INTO `qs_site` VALUES ('51', '3', 'LX05');
+INSERT INTO `qs_site` VALUES ('52', '3', 'LX06');
+INSERT INTO `qs_site` VALUES ('53', '3', 'LX07');
+INSERT INTO `qs_site` VALUES ('54', '3', 'LX08');
+INSERT INTO `qs_site` VALUES ('55', '3', 'LX09');
+INSERT INTO `qs_site` VALUES ('56', '3', 'LX10');
+INSERT INTO `qs_site` VALUES ('57', '3', 'LX11');
+INSERT INTO `qs_site` VALUES ('58', '3', 'LX12');
+INSERT INTO `qs_site` VALUES ('59', '3', 'LX13');
 
 -- ----------------------------
 -- Table structure for qs_sitefrash
@@ -1218,14 +1185,14 @@ DROP TABLE IF EXISTS `qs_user`;
 CREATE TABLE `qs_user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(11) NOT NULL,
-  `password` char(32) NOT NULL,
+  `user_pwd` char(32) NOT NULL,
   `user_phone` char(11) NOT NULL,
   `user_icon` varchar(255) DEFAULT NULL,
   `user_dept_id` tinyint(4) NOT NULL,
   `user_role_id` tinyint(4) NOT NULL,
   `user_sex` tinyint(1) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qs_user
@@ -1238,3 +1205,7 @@ INSERT INTO `qs_user` VALUES ('5', 'asdfasdf', '', 'sdafasdf', null, '105', '2',
 INSERT INTO `qs_user` VALUES ('6', 'adf', '', 'adf', null, '105', '2', '1');
 INSERT INTO `qs_user` VALUES ('9', 'vccc', '', 'ccc', null, '102', '2', '0');
 INSERT INTO `qs_user` VALUES ('10', 'dfasadsf', '', 'asdfdsaf', null, '102', '3', '1');
+INSERT INTO `qs_user` VALUES ('11', '李加快递费', 'e10adc3949ba59abbe56e057f20f883e', '17310230333', '/photo/default/usericon.jpeg', '102', '12', '0');
+INSERT INTO `qs_user` VALUES ('12', '李加快递费', 'e10adc3949ba59abbe56e057f20f883e', '17310230333', '/photo/default/usericon.jpeg', '102', '12', '0');
+INSERT INTO `qs_user` VALUES ('13', '李加快递费', 'e10adc3949ba59abbe56e057f20f883e', '17310230333', '/photo/default/usericon.jpeg', '102', '12', '0');
+INSERT INTO `qs_user` VALUES ('14', '熬熬', 'e10adc3949ba59abbe56e057f20f883e', '13646464643', '/photo/default/usericon.jpeg', '103', '2', '0');
