@@ -13,9 +13,12 @@ use app\index\model\User as UserModel;
 
 class User extends Controller
 {
+    private $host;
     protected function initialize()
     {
         parent::initialize();
+        $this->host = 'http://192.168.7.107:8080';
+        $this->url = $this->host .= "/RMD_PipeGallery/rmdBaseEquipmentController.do?addOrUpdateUser&params=";
         $this->UserModel = new UserModel;
         $this->default_icon = '/photo/default/usericon.jpeg';
         $this->default_pwd = '123456';
@@ -50,9 +53,17 @@ class User extends Controller
                 $data['user_role_id'] = $this->request->param('user_role_id');
                 $data['user_icon'] = $this->default_icon;
                 $data['user_pwd'] = md5($this->default_pwd);
+                $user_id = Db('user')->insertGetId($data);
+                //拼接url 发送get请求
+                $arr['userName'] = $data['user_name'];
+                $arr['userId'] = $user_id;
+                $arr['type'] = 'add';
+                $url = $this->url .= json_encode($arr);
 
-                Db('user')->insert($data);
-                $this->success('新增用户成功！');
+                $res = $this->get_url($url);
+                if($res['flag']){
+                    $this->success('新增用户成功！');
+                }
             });
             $this->error('新增用户失败！');
         }else{
@@ -81,7 +92,15 @@ class User extends Controller
                 $data['user_dept_id'] = $this->request->param('user_dept_id');
                 $data['user_role_id'] = $this->request->param('user_role_id');
                 Db('user')->where('user_id',$user_id)->update($data);
-                $this->success('编辑用户成功！');
+                $arr['userName'] = $data['user_name'];
+                $arr['userId'] = $user_id;
+                $arr['type'] = 'update';
+                $url = $this->url .= json_encode($arr);
+
+                $res = $this->get_url($url);
+                if($res['flag']){
+                    $this->success('编辑用户成功！');
+                }
             });
             $this->error('编辑用户失败！');
         }
@@ -107,9 +126,15 @@ class User extends Controller
             $this->error("含有子菜单，无法删除！");
         }*/
         if ($this->UserModel->where('user_id', $user_id)->delete()) {
-            $this->success("删除部门成功！");
+            $arr['userId'] = $user_id;
+            $arr['type'] = 'delete';
+            $url = $this->url .= json_encode($arr);
+            $res = $this->get_url($url);
+            if($res['flag']){
+                $this->success('删除用户成功！');
+            }
         } else {
-            $this->error("删除部门失败！");
+            $this->error("删除用户失败！");
         }
     }
     public function get_tree_data()
@@ -117,5 +142,19 @@ class User extends Controller
         $depts = Db('dept')->field('dept_id,dept_pid,dept_name')->select();
         $depts = $this->UserModel->get_Tree($depts,'dept_id','dept_pid','dept_name');
         return $depts;
+    }
+    public function get_url($url){
+        $headerArray =array("Content-type:application/json;","Accept:application/json");
+        $ch = curl_init();
+
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,FALSE);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,FALSE);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch,CURLOPT_HTTPHEADER,$headerArray);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $output = json_decode($output,true);
+        return $output;
     }
 }

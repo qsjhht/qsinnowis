@@ -47,7 +47,7 @@
             <div class='middleRight'>
                 <div class="contentBottom mainBor">
                     <!--摄像头-->
-                    <iframe  width="100%" height="100%" src="http://192.168.5.101/JsApi/demo/livePlay.php?ip=192.168.5.101&user=a&pass=21232f297a57a5a743894a0e4a801fc3&camcode=192_168_5_108!192_168_5_108!192_168_5_108!192_168_5_108"></iframe>
+
                 </div>
                 <div class="contentTop mainBor marginTop">
                     <p class="robot">入廊企业</p>
@@ -142,8 +142,9 @@
                             <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo1"  autoplay webkit-playsinline playsinline>
 
                             </video>
-                            <div class="playpause" id="playpause1" ></div>
+
                         </div>
+
                     </div>
                     <p class="robot">机器人</p>
                     <div class="robotTob scrollber">
@@ -357,34 +358,23 @@
         hlsver:'v1', //v1 is for ts, v2 is for fmp4
         session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
     };
+    var conf2 = {
+        videoid:'h5sVideo2',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: 'localhost:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:'d7ab',
+        hlsver:'v2', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
 
     var v1 = H5sPlayerCreate(conf1);
+    v1.connect();
+    var v2 = H5sPlayerCreate(conf2);
+    v2.connect();
 
 
 
-    $('#h5sVideo1').parent().click(function () {
-        if($(this).children(".h5video").get(0).paused){
-            if(v1 != null)
-            {
-                v1.disconnect();
-                delete v1;
-                v1 = null;
-            }
-
-            v1 = H5sPlayerCreate(conf1);
-
-            console.log(v1);
-            v1.connect();
-
-            $(this).children(".playpause").fadeOut();
-        }else{
-            v1.disconnect();
-            delete v1;
-            v1 = null;
-            $(this).children(".h5video").get(0).pause();
-            $(this).children(".playpause").fadeIn();
-        }
-    });
 
 
 
