@@ -9,12 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-Route::get('think', function () {
-    return 'hello,ThinkPHP5!';
-});
+// 用户注册
+Route::post('patrol/data', 'api/patrol/data')->allowCrossDomain();
 
-Route::get('hello/:name', 'index/hello');
-
-return [
-
-];
+Route::get('patrol/eqpt_data', 'api/patrol/eqpt_data')->allowCrossDomain();

@@ -15,6 +15,39 @@
     <script src="__STATIC__/h5splayer/h5splayerhelper.js"></script>
 
     <link rel = "stylesheet" type = "text/css" href = "__STATIC__/h5splayer/css/h5splayer.css" />
+    <style>
+
+        .content1 {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        .chart {
+            display: inline-block;
+            width: 49%;
+            height: 50%;
+            margin: 0 0;
+            padding: 0;
+            border: 1px solid #000;
+        }
+        .blue{
+            background-color: #5BC0DE;
+        }
+        .red{
+            background-color: red;
+        }
+        .green{
+            background-color: #5CB85C;
+        }
+        .orange{
+            background-color: #F0AD4E;
+        }
+
+
+
+    </style>
 </head>
 <body class="backg">
 <div class="wrap">
@@ -45,9 +78,34 @@
                 <iframe name="mapFrame" width="100%" scrolling="no" height="100%" src="/index/visual/map"  frameborder="0"></iframe>
             </div>
             <div class='middleRight'>
-                <div class="contentBottom mainBor">
-                    <!--摄像头-->
 
+                <div class="contentBottom mainBor " id="container">
+                    <div class="content1" >
+                        <div class="chart red">
+                            <video class="h5video" style="width: 100%;height: 100%;" id="Video1"  autoplay webkit-playsinline playsinline>
+
+                        </video>
+
+                        </div>
+                        <div class="chart blue">
+                            <video class="h5video" style="width: 100%;height: 100%;" id="Video2"  autoplay webkit-playsinline playsinline>
+
+                            </video>
+
+                        </div>
+                        <div class="chart green">
+                            <video class="h5video" style="width: 100%;height: 100%;" id="Video3"  autoplay webkit-playsinline playsinline>
+
+                            </video>
+
+                        </div>
+                        <div class="chart orange">
+                            <video class="h5video" style="width: 100%;height: 100%;" id="Video4"  autoplay webkit-playsinline playsinline>
+
+                            </video>
+
+                        </div>
+                    </div>
                 </div>
                 <div class="contentTop mainBor marginTop">
                     <p class="robot">入廊企业</p>
@@ -347,6 +405,10 @@
         || H5sSafariBrowser() === true)
     {
         $('#h5sVideo1').prop("controls", true);
+        $('#Video1').prop("controls", true);
+        $('#Video2').prop("controls", true);
+        $('#Video3').prop("controls", true);
+        $('#Video4').prop("controls", true);
     }
 
     var conf1 = {
@@ -359,12 +421,39 @@
         session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
     };
     var conf2 = {
-        videoid:'h5sVideo2',
+        videoid:'Video1',
         protocol: window.location.protocol, //'http:' or 'https:'
         host: 'localhost:8080', //'localhost:8080'
         rootpath:'/', // '/' or window.location.pathname
         token:'d7ab',
-        hlsver:'v2', //v1 is for ts, v2 is for fmp4
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var conf3 = {
+        videoid:'Video2',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: 'localhost:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:'d7ab',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var conf4 = {
+        videoid:'Video3',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: 'localhost:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:'d7ab',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var conf5 = {
+        videoid:'Video4',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: 'localhost:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:'d7ab',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
         session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
     };
 
@@ -372,6 +461,13 @@
     v1.connect();
     var v2 = H5sPlayerCreate(conf2);
     v2.connect();
+    var v3 = H5sPlayerCreate(conf3);
+    v3.connect();
+    var v5 = H5sPlayerCreate(conf5);
+    v5.connect();
+    var v4 = H5sPlayerCreate(conf4);
+    v4.connect();
+
 
 
 
