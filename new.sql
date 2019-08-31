@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-08-28 21:04:44
+Date: 2019-08-31 15:29:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -78,26 +78,26 @@ CREATE TABLE `qs_auth` (
 INSERT INTO `qs_auth` VALUES ('101', '大数据', '0', 'Visual', 'index', '101', '0', '0', null);
 INSERT INTO `qs_auth` VALUES ('102', 'bim', '0', 'Visual', 'bim', '102', '0', '1', 'http://192.168.5.105');
 INSERT INTO `qs_auth` VALUES ('104', '设备管理', '0', 'Eqpt', 'index', '104', '0', '0', null);
-INSERT INTO `qs_auth` VALUES ('103', '巡查巡检', '0', 'Patrol', 'index', '103', '0', '1', 'http://www.baidu.com');
+INSERT INTO `qs_auth` VALUES ('103', '巡查巡检', '0', 'Patrol', 'index', '103', '0', '0', '');
 INSERT INTO `qs_auth` VALUES ('106', '教育培训', '0', 'Enterprise', 'index', '106', '0', '1', 'http://www.baidu.com');
 INSERT INTO `qs_auth` VALUES ('107', '基本信息管理', '0', 'basic', 'index', '107', '0', '0', null);
 INSERT INTO `qs_auth` VALUES ('129', '人员管理', '107', 'User', 'index', '129', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('105', '机器人巡查巡检', '0', 'Robot', 'index', '105', '0', '1', 'http://www.baidu.com');
 INSERT INTO `qs_auth` VALUES ('110', '设备台账', '104', 'Eqpt', 'ledger', '110', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('111', '销账处理', '104', 'Eqpt', 'cancel', '111', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('112', '设备拆解', '104', 'Eqpt', 'disassemble', '112', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('113', '设备维修', '104', 'Service', 'index', '113', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('114', '设备更换', '104', 'Replace', 'index', '114', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('115', '维护计划', '104', 'Eqpt', 'plan', '115', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('116', '维护报表', '104', 'Eqpt', 'forms', '116', '1', '0', null);
+INSERT INTO `qs_auth` VALUES ('111', '销账处理', '104', 'Eqpt', 'cancel', '111', '1', null, null);
+INSERT INTO `qs_auth` VALUES ('112', '设备拆解', '104', 'Eqpt', 'decompose', '112', '1', '0', null);
+INSERT INTO `qs_auth` VALUES ('113', '设备维修', '104', 'Service', 'index', '113', '1', '1', 'http://192.168.6.36:8080/RMD_PipeGallery/rmdBaseEquipmentController.do?goUpdate&u_id=1');
+INSERT INTO `qs_auth` VALUES ('114', '设备更换', '104', 'Replace', 'index', '114', '1', null, null);
+INSERT INTO `qs_auth` VALUES ('115', '维护计划', '104', 'Eqpt', 'plan', '115', '1', null, null);
+INSERT INTO `qs_auth` VALUES ('116', '维护报表', '104', 'Eqpt', 'forms', '116', '1', null, null);
 INSERT INTO `qs_auth` VALUES ('117', '巡查巡检实况', '103', 'Patrol', 'live', '117', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('118', '路线规划', '103', 'Patrol', 'setting', '118', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('119', '任务管理', '103', 'Patrol', 'manage', '119', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('120', '任务日志', '103', 'Patrol', 'log', '120', '1', '0', null);
+INSERT INTO `qs_auth` VALUES ('118', '路线规划', '103', 'Patrol', 'setting', '118', '1', '1', 'http://192.168.6.36:8080/RMD_PipeGallery/rmdRoutePlanningController.do?list&u_id=1');
+INSERT INTO `qs_auth` VALUES ('119', '任务管理', '103', 'Patrol', 'manage', '119', '1', '1', 'http://192.168.6.36:8080/RMD_PipeGallery/rmdCheckRecordController.do?list&u_id=1');
+INSERT INTO `qs_auth` VALUES ('120', '巡检点管理', '103', 'Patrol', 'log', '120', '1', '1', 'http://192.168.6.36:8080/RMD_PipeGallery/rmdRoutePlanningController.do?list&u_id=1');
 INSERT INTO `qs_auth` VALUES ('130', '分区管理', '107', 'Zone', 'index', '130', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('131', '分类管理', '107', 'Category', 'index', '131', '1', '0', null);
 INSERT INTO `qs_auth` VALUES ('126', '部门管理', '107', 'dept', 'index', '126', '1', '0', null);
-INSERT INTO `qs_auth` VALUES ('109', '视频监控', '0', 'Video', 'index', '109', '0', '1', 'http://localhost:8080/#/app/dashboard');
+INSERT INTO `qs_auth` VALUES ('109', '视频监控', '0', 'Video', 'index', '109', '0', '1', 'http://192.168.0.245:8991/index.html?type=马达保护器(风机)');
 INSERT INTO `qs_auth` VALUES ('124', '实时视频', '109', 'Video', 'liveplay', '124', '1', '0', '');
 INSERT INTO `qs_auth` VALUES ('125', '视频回放', '109', 'Video', 'replay', '125', '1', '1', 'http://www.baidu.com');
 INSERT INTO `qs_auth` VALUES ('128', '角色管理', '107', 'Role', 'index', '128', '1', '0', null);
@@ -453,7 +453,7 @@ CREATE TABLE `qs_site` (
   `parentid` int(11) DEFAULT NULL,
   `site_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qs_site
@@ -517,6 +517,46 @@ INSERT INTO `qs_site` VALUES ('56', '3', 'LX10');
 INSERT INTO `qs_site` VALUES ('57', '3', 'LX11');
 INSERT INTO `qs_site` VALUES ('58', '3', 'LX12');
 INSERT INTO `qs_site` VALUES ('59', '3', 'LX13');
+INSERT INTO `qs_site` VALUES ('99', '5', 'XC20');
+INSERT INTO `qs_site` VALUES ('98', '5', 'XC19');
+INSERT INTO `qs_site` VALUES ('97', '5', 'XC18');
+INSERT INTO `qs_site` VALUES ('96', '5', 'XC17');
+INSERT INTO `qs_site` VALUES ('95', '5', 'XC16');
+INSERT INTO `qs_site` VALUES ('94', '5', 'XC15');
+INSERT INTO `qs_site` VALUES ('93', '5', 'XC14');
+INSERT INTO `qs_site` VALUES ('92', '5', 'XC13');
+INSERT INTO `qs_site` VALUES ('91', '5', 'XC12');
+INSERT INTO `qs_site` VALUES ('90', '5', 'XC11');
+INSERT INTO `qs_site` VALUES ('89', '5', 'XC10');
+INSERT INTO `qs_site` VALUES ('88', '5', 'XC09');
+INSERT INTO `qs_site` VALUES ('87', '5', 'XC08');
+INSERT INTO `qs_site` VALUES ('86', '5', 'XC07');
+INSERT INTO `qs_site` VALUES ('85', '5', 'XC06');
+INSERT INTO `qs_site` VALUES ('84', '5', 'XC05');
+INSERT INTO `qs_site` VALUES ('83', '5', 'XC04');
+INSERT INTO `qs_site` VALUES ('82', '5', 'XC03');
+INSERT INTO `qs_site` VALUES ('81', '5', 'XC02');
+INSERT INTO `qs_site` VALUES ('80', '5', 'XC01');
+INSERT INTO `qs_site` VALUES ('79', '4', 'YBY20');
+INSERT INTO `qs_site` VALUES ('78', '4', 'YBY19');
+INSERT INTO `qs_site` VALUES ('77', '4', 'YBY18');
+INSERT INTO `qs_site` VALUES ('76', '4', 'YBY17');
+INSERT INTO `qs_site` VALUES ('75', '4', 'YBY16');
+INSERT INTO `qs_site` VALUES ('74', '4', 'YBY15');
+INSERT INTO `qs_site` VALUES ('73', '4', 'YBY14');
+INSERT INTO `qs_site` VALUES ('72', '4', 'YBY13');
+INSERT INTO `qs_site` VALUES ('71', '4', 'YBY12');
+INSERT INTO `qs_site` VALUES ('70', '4', 'YBY11');
+INSERT INTO `qs_site` VALUES ('69', '4', 'YBY10');
+INSERT INTO `qs_site` VALUES ('68', '4', 'YBY09');
+INSERT INTO `qs_site` VALUES ('67', '4', 'YBY08');
+INSERT INTO `qs_site` VALUES ('66', '4', 'YBY07');
+INSERT INTO `qs_site` VALUES ('65', '4', 'YBY06');
+INSERT INTO `qs_site` VALUES ('60', '4', 'YBY01');
+INSERT INTO `qs_site` VALUES ('61', '4', 'YBY02');
+INSERT INTO `qs_site` VALUES ('62', '4', 'YBY03');
+INSERT INTO `qs_site` VALUES ('63', '4', 'YBY04');
+INSERT INTO `qs_site` VALUES ('64', '4', 'YBY05');
 
 -- ----------------------------
 -- Table structure for qs_sitefrash
@@ -1192,7 +1232,7 @@ CREATE TABLE `qs_user` (
   `user_role_id` tinyint(4) NOT NULL,
   `user_sex` tinyint(1) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of qs_user
@@ -1208,4 +1248,11 @@ INSERT INTO `qs_user` VALUES ('10', 'dfasadsf', '', 'asdfdsaf', null, '102', '3'
 INSERT INTO `qs_user` VALUES ('11', '李加快递费', 'e10adc3949ba59abbe56e057f20f883e', '17310230333', '/photo/default/usericon.jpeg', '102', '12', '0');
 INSERT INTO `qs_user` VALUES ('12', '李加快递费', 'e10adc3949ba59abbe56e057f20f883e', '17310230333', '/photo/default/usericon.jpeg', '102', '12', '0');
 INSERT INTO `qs_user` VALUES ('13', '李加快递费', 'e10adc3949ba59abbe56e057f20f883e', '17310230333', '/photo/default/usericon.jpeg', '102', '12', '0');
-INSERT INTO `qs_user` VALUES ('14', '熬熬', 'e10adc3949ba59abbe56e057f20f883e', '13646464643', '/photo/default/usericon.jpeg', '103', '2', '0');
+INSERT INTO `qs_user` VALUES ('30', '自行车v', 'e10adc3949ba59abbe56e057f20f883e', '12312321321', '/photo/default/usericon.jpeg', '103', '1', '0');
+INSERT INTO `qs_user` VALUES ('32', 'asdf', 'e10adc3949ba59abbe56e057f20f883e', 'asdf', '/photo/default/usericon.jpeg', '103', '1', '0');
+INSERT INTO `qs_user` VALUES ('33', 'asdf', 'e10adc3949ba59abbe56e057f20f883e', 'aa', '/photo/default/usericon.jpeg', '103', '2', '0');
+INSERT INTO `qs_user` VALUES ('34', 'assa', 'e10adc3949ba59abbe56e057f20f883e', 'asdsda', '/photo/default/usericon.jpeg', '104', '2', '0');
+INSERT INTO `qs_user` VALUES ('35', 'adsf', 'e10adc3949ba59abbe56e057f20f883e', 'asdf', '/photo/default/usericon.jpeg', '102', '2', '0');
+INSERT INTO `qs_user` VALUES ('36', '123', 'e10adc3949ba59abbe56e057f20f883e', '123', '/photo/default/usericon.jpeg', '101', '2', '0');
+INSERT INTO `qs_user` VALUES ('37', 'zzzzz', 'e10adc3949ba59abbe56e057f20f883e', '123', '/photo/default/usericon.jpeg', '104', '3', '1');
+INSERT INTO `qs_user` VALUES ('38', 'aaaaaa', 'e10adc3949ba59abbe56e057f20f883e', 'asdsad', '/photo/default/usericon.jpeg', '104', '1', '1');
