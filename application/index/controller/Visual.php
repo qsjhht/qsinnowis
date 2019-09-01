@@ -25,4 +25,8 @@ class Visual extends Controller
     {
         return $this->fetch();
     }
+    public function demo()
+    {
+        return $this->fetch();
+    }
 }
