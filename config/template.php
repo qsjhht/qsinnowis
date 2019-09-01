@@ -15,7 +15,8 @@
 
 return [
     'tpl_replace_string' => [
-        '__STATIC__' => ROOT_URL . (defined('IF_PUBLIC') ? 'static' : 'public/static'),
+        '__STATIC__'=>'/static',
+        '__JS__' => '/static/javascript',
     ],
     // 模板引擎类型 支持 php think 支持扩展
     'type'         => 'Think',
