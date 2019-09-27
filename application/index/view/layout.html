@@ -17,10 +17,6 @@
     outline:1px solid #247998;
     box-shadow: 0 0 6px #247998 inset;
     }
-
-    a{
-    display:block;
-    }
 </style>
 <body class="backg" style='overflow:-Scroll;overflow-y:hidden'>
 <div class="wrap">
@@ -29,16 +25,21 @@
         <!--报警设置-->
         <ul class="headerUl">
             <li>
-                <a href="branch.html">
-                    <img src="__STATIC__/image/a1.png" alt="">
-                    设置
-                </a>
+                <a href="index/visual/demoone" target="_blank" >左屏</a>
             </li>
             <span>|</span>
             <li>
+                <a href="index/visual/demotwo" target="_blank"><!--<img src="__STATIC__/image/a1.png" alt="">-->中屏</a>
+            </li>
+            <span>|</span>
+            <li>
+                <a href="index/visual/demothree" target="_blank"><!--<img src="__STATIC__/image/a1.png" alt="">-->右屏</a>
+            </li>
+
+            <!--<li>
                 <img src="__STATIC__/image/a2.png" alt="">
                 报警
-            </li>
+            </li>-->
         </ul>
         <!--一级菜单-->
         <ul class="headerNav">
@@ -46,7 +47,7 @@
                 <img src="__STATIC__/image/a3.png" alt="" class="img">
                 智慧管廊综合管理平台
             </li>
-
+            <span>|</span>
             {volist name="Navi" id="vo"}
             <!-- {if condition="$vo['auth_isLink'] neq 1"}
                 <li>
@@ -66,9 +67,9 @@
                 {/case}
             {/switch}
 
-                {if condition="$i neq count($Navi)"}
+
                 <span>|</span>
-                {/if}
+
 
                 {if condition="($i gt count($Navi)) AND ($i eq count($Navi))"}
 
@@ -77,7 +78,7 @@
                     <img src="__STATIC__/image/aRight.png" alt="" class="img1">
                 </li>
                 {/if}
-            
+
 
             {/volist}
 
@@ -91,7 +92,7 @@
         </div>
     </div>
     <!--内容-->
-    <iframe name="contentFrame" width="100%" height="100%" src="/index.php/index/visual/index"  frameborder="0">
+    <iframe name="contentFrame" scrolling="no" width="100%" height="100%" src="/index.php/index/visual/index"  frameborder="0">
     </iframe>
 </div>
 

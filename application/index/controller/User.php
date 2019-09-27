@@ -14,11 +14,14 @@ use app\index\model\User as UserModel;
 class User extends Controller
 {
     private $host;
+    private $url;
+    private $default_icon;
+    private $default_pwd ;
     protected function initialize()
     {
         parent::initialize();
-        $this->host = 'http://192.168.7.107:8080';
-        $this->url = $this->host .= "/RMD_PipeGallery/rmdBaseEquipmentController.do?addOrUpdateUser&params=";
+        $this->host = 'http://192.168.20.60:8080';
+        $this->url = $this->host .= "/RMD_PipeGallery/rmdBaseEquipmentController.do?addOrUpdateUser";
         $this->UserModel = new UserModel;
         $this->default_icon = '/photo/default/usericon.jpeg';
         $this->default_pwd = '123456';
@@ -58,9 +61,10 @@ class User extends Controller
                 $arr['userName'] = $data['user_name'];
                 $arr['userId'] = $user_id;
                 $arr['type'] = 'add';
-                $url = $this->url .= json_encode($arr);
 
-                $res = $this->get_url($url);
+                $arr = json_encode($arr);
+
+                $res = $this->get_url($arr,$this->url);
                 if($res['flag']){
                     $this->success('新增用户成功！');
                 }
@@ -95,9 +99,8 @@ class User extends Controller
                 $arr['userName'] = $data['user_name'];
                 $arr['userId'] = $user_id;
                 $arr['type'] = 'update';
-                $url = $this->url .= json_encode($arr);
-
-                $res = $this->get_url($url);
+                $arr = json_encode($arr);
+                $res = $this->get_url($arr,$this->url);
                 if($res['flag']){
                     $this->success('编辑用户成功！');
                 }
@@ -128,8 +131,9 @@ class User extends Controller
         if ($this->UserModel->where('user_id', $user_id)->delete()) {
             $arr['userId'] = $user_id;
             $arr['type'] = 'delete';
-            $url = $this->url .= json_encode($arr);
-            $res = $this->get_url($url);
+
+            $arr = json_encode($arr);
+            $res = $this->get_url($arr,$this->url);
             if($res['flag']){
                 $this->success('删除用户成功！');
             }
@@ -143,18 +147,21 @@ class User extends Controller
         $depts = $this->UserModel->get_Tree($depts,'dept_id','dept_pid','dept_name');
         return $depts;
     }
-    public function get_url($url){
-        $headerArray =array("Content-type:application/json;","Accept:application/json");
-        $ch = curl_init();
+    public function get_url($arr,$url){
 
-        curl_setopt($ch,CURLOPT_URL,$url);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,FALSE);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,FALSE);
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-        curl_setopt($ch,CURLOPT_HTTPHEADER,$headerArray);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        $output = json_decode($output,true);
+        $post_data = array(
+            "params" => $arr,
+        );
+        $ch = curl_init ();
+        curl_setopt ( $ch, CURLOPT_URL, $url );
+        curl_setopt ( $ch, CURLOPT_POST, 1 );
+        curl_setopt ( $ch, CURLOPT_HEADER, 0 );
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $post_data );
+        curl_setopt ($ch, CURLOPT_HTTPHEADER, array("Expect:"));
+        $return = curl_exec ( $ch );
+        curl_close ( $ch );
+        $output = json_decode($return,true);
         return $output;
     }
 }

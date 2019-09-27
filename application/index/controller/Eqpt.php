@@ -65,6 +65,7 @@ class Eqpt extends Controller
         //获取位置菜单
         $resultsite = Db('site')->order(array( 'id' => 'ESC'))->select();
         $arraysite = array();
+
         foreach ($resultsite as $r) {
             $r['selected'] = $r['id'] == 0 ? 'selected' : '';
             $arraysite[] = $r;
@@ -72,9 +73,10 @@ class Eqpt extends Controller
         $strsite = "<option value='\$id' \$selected>\$spacer \$site_name</option>";
         $tree->init($arraysite);
         $select_sites = $tree->get_tree(0, $strsite);
+        //dump($select_sites);die;
         //$where  =strpos($select_sites,"<option value='999'");
         //将下拉选项 设备未定位选项删除
-        $select_sites  =substr($select_sites,0,strpos($select_sites,"<option value='999'"));
+        //$select_sites  =substr($select_sites,0,strpos($select_sites,"<option value='999'"));
         //dump($select_sites);
         //获取设备信息
         /*$eqpts = Db::table('eqpts')
@@ -101,14 +103,14 @@ class Eqpt extends Controller
             $keyword = $this->request->param('keyword');
             $cate = $this->request->param('cate');
             $site = $this->request->param('site');
-            $Installed = $this->request->param('Installed');
+            /*$Installed = $this->request->param('Installed');
             $unerected = $this->request->param('unerected');
             $normal = $this->request->param('normal');
             $fault = $this->request->param('fault');
-            $scrap = $this->request->param('scrap');
-            $statusNum = $normal + $fault + $scrap;
-            $installNum = $Installed + $unerected;
-            switch ($statusNum) {
+            $scrap = $this->request->param('scrap');*/
+            //$statusNum = $normal + $fault + $scrap;
+            //$installNum = $Installed + $unerected;
+            /*switch ($statusNum) {
                 case 0:
                     $whereStatus ='e.eqpt_id <> 0';
                     break;
@@ -130,10 +132,10 @@ class Eqpt extends Controller
                 case 7:
                     $whereStatus ='e.eqpt_id <> 0';
                     break;
-            }
+            }*/
 
             //数据库设置未安装设备 设备位置id eqpt_site_id 为999
-            switch ($installNum){
+            /*switch ($installNum){
                 case 0:
                     $whereInstall ='e.eqpt_id <> 0';
                     break;
@@ -146,7 +148,7 @@ class Eqpt extends Controller
                 case 3:
                     $whereInstall = 'e.eqpt_id <> 0';;
                     break;
-            }
+            }*/
 
             //实例化工具树类
             $tree = new \util\Tree();
@@ -177,8 +179,25 @@ class Eqpt extends Controller
             }else{
                 $sites = $site;
             }
+            $datas = Db::connect('sqlsrv_config')
+                ->page($page, $limit)
+                ->table('rmd_base_equipment')
+                ->where('equipment_code|equipment_name', 'like', '%' . $keyword . '%')
+                ->where('prevent_fire_area_id', 'in', $sites)
+                ->where('catalogue', 'in', $cates)
+                ->select();
+            //dump($cate);die;
+            //$data=json_decode($datas,false);
 
-                $data = $this->Eqpt_Model->page($page, $limit)
+            $total = Db::connect('sqlsrv_config')
+                ->table('rmd_base_equipment')
+                ->where('equipment_code|equipment_name', 'like', '%' . $keyword . '%')
+                ->where('prevent_fire_area_id', 'in', $sites)
+                ->where('catalogue', 'in', $cates)
+                ->count();
+            $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $datas);
+            return json($result);
+            /*$data = $this->Eqpt_Model->page($page, $limit)
                     ->order(array('eqpt_id' => 'DESC'))
                     ->field('e.eqpt_id,e.eqpt_model,e.eqpt_type,e.eqpt_brand,e.eqpt_num,e.eqpt_site_detail,s.site_name,e.eqpt_status,c.cate_name,e.eqpt_had_model')
                     ->alias('e')
@@ -190,8 +209,8 @@ class Eqpt extends Controller
                     ->where($whereStatus)
                     ->where($whereInstall)
 
-                    /*->fault($fault)
-                    ->scrap($scrap)*/
+                    ->fault($fault)
+                    ->scrap($scrap)
                     ->select();
                 $data=json_decode($data,false);
                 $total = $this->Eqpt_Model
@@ -206,17 +225,216 @@ class Eqpt extends Controller
                     ->where($whereStatus)
 
 
-                    /*->fault($fault)
-                    ->scrap($scrap)*/
+                    ->fault($fault)
+                    ->scrap($scrap)
                     ->count();
 
                 $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $data);
 
-            return json($result);
+            return json($result);*/
         }
         return $this->fetch();
     }
 
+    //设备拆解
+    public function decompose()
+    {
+        //实例化工具树类
+        $tree = new \util\Tree();
+        //获取分类菜单
+        $resultcate = Db('category')->order(array( 'id' => 'ESC'))->select();
+        $arraycate = array();
+        foreach ($resultcate as $r) {
+            $r['selected'] = $r['id'] == 0 ? 'selected' : '';
+            $arraycate[] = $r;
+        }
+        $strcate = "<option value='\$id' \$selected>\$spacer \$cate_name</option>";
+        $tree->init($arraycate);
+        $select_categorys = $tree->get_tree(0, $strcate);
+        /*$cate = $this->request->param('cate');
+        if($tree->get_childs($cate)){
+            $cates = $cate .=  ','. implode(',',$tree->get_childs($cate));
+        }else{
+            $cates = $cate;
+        }
+
+        dump($cates);*/
+        //<option value='1' > 园博园大街</option><option value='6' >&nbsp;├ YBY-001</option><option value='38' >&nbsp;│&nbsp;├ YBY-001-001</option><option value='39' >&nbsp;│&nbsp;├ YBY-001-002</option><option value='40' >&nbsp;│&nbsp;└ YBY-001-003</option><option value='7' >&nbsp;├ YBY-002</option><option value='41' >&nbsp;│&nbsp;├ YBY-002-001</option><option value='42' >&nbsp;│&nbsp;└ YBY-002-002</option><option value='8' >&nbsp;├ YBY-003</option><option value='43' >&nbsp;│&nbsp;└ YBY-003-001</option><option value='9' >&nbsp;├ YBY-004</option><option value='10' >&nbsp;├ YBY-005</option><option value='11' >&nbsp;└ YBY-006</option><option value='2' > 新城大道</option><option value='12' >&nbsp;├ XC-001</option><option value='13' >&nbsp;├ XC-002</option><option value='14' >&nbsp;├ XC-003</option><option value='15' >&nbsp;├ XC-004</option><option value='16' >&nbsp;├ XC-005</option><option value='17' >&nbsp;└ XC-006</option><option value='3' > 太行大街</option><option value='18' >&nbsp;├ TH-001</option><option value='19' >&nbsp;├ TH-002</option><option value='20' >&nbsp;├ TH-003</option><option value='21' >&nbsp;├ TH-004</option><option value='22' >&nbsp;├ TH-005</option><option value='23' >&nbsp;├ TH-006</option><option value='24' >&nbsp;├ TH-007</option><option value='25' >&nbsp;└ TH-008</option><option value='4' > 迎旭大道</option><option value='26' >&nbsp;├ YX-001</option><option value='27' >&nbsp;├ YX-002</option><option value='28' >&nbsp;├ YX-003</option><option value='29' >&nbsp;├ YX-004</option><option value='30' >&nbsp;└ YX-005</option><option value='5' > 隆兴路</option><option value='31' >&nbsp;├ LX-001</option><option value='32' >&nbsp;├ LX-002</option><option value='33' >&nbsp;├ LX-003</option><option value='34' >&nbsp;├ LX-004</option><option value='35' >&nbsp;├ LX-005</option><option value='36' >&nbsp;├ LX-006</option><option value='37' >&nbsp;└ LX-007</option><option value='999' > 未安装定位</option>
+        //获取位置菜单
+        $resultsite = Db('site')->order(array( 'id' => 'ESC'))->select();
+        $arraysite = array();
+
+        foreach ($resultsite as $r) {
+            $r['selected'] = $r['id'] == 0 ? 'selected' : '';
+            $arraysite[] = $r;
+        }
+        $strsite = "<option value='\$id' \$selected>\$spacer \$site_name</option>";
+        $tree->init($arraysite);
+        $select_sites = $tree->get_tree(0, $strsite);
+        //dump($select_sites);die;
+        //$where  =strpos($select_sites,"<option value='999'");
+        //将下拉选项 设备未定位选项删除
+        //$select_sites  =substr($select_sites,0,strpos($select_sites,"<option value='999'"));
+        //dump($select_sites);
+        //获取设备信息
+        /*$eqpts = Db::table('eqpts')
+            ->field('e.id,e.eqpt_name,e.eqpt_type,e.eqpt_brand,e.eqpt_num,e.eqpt_site,e.eqpt_status,c.cate_name')
+            ->alias('e')
+            ->join('category c','e.eqpt_cate_id = c.id')
+            ->select();*/
+        //注入
+        $this->assign("select_sites", $select_sites);
+        $this->assign("select_categorys", $select_categorys);
+        /*        $this->assign('Eqpts',$eqpts);*/
+        /*$data = $this->Eqpt_Model
+            ->order(array('id' => 'DESC'))
+            ->field('e.id,e.eqpt_name,e.eqpt_type,e.eqpt_brand,e.eqpt_num,e.eqpt_site,e.eqpt_status,c.cate_name')
+            ->alias('e')
+            ->join('category c','e.eqpt_cate_id = c.id')
+            ->select();
+        $total = $this->Eqpt_Model->order('id')->count();
+        $result = array("code" => 0, "count" => $total, "data" => $data);
+        dump(json_encode($result));*/
+        if ($this->request->isAjax()) {
+            $limit = $this->request->param('limit/d', 10);
+            $page = $this->request->param('page/d', 1);
+            $keyword = $this->request->param('keyword');
+            $cate = $this->request->param('cate');
+            $site = $this->request->param('site');
+            /*$Installed = $this->request->param('Installed');
+            $unerected = $this->request->param('unerected');
+            $normal = $this->request->param('normal');
+            $fault = $this->request->param('fault');
+            $scrap = $this->request->param('scrap');*/
+            //$statusNum = $normal + $fault + $scrap;
+            //$installNum = $Installed + $unerected;
+            /*switch ($statusNum) {
+                case 0:
+                    $whereStatus ='e.eqpt_id <> 0';
+                    break;
+                case 1:
+                    $whereStatus = 'e.eqpt_status = "正常"';
+                    break;
+                case 2:
+                    $whereStatus = 'e.eqpt_status = "故障"';
+                    break;
+                case 3:
+                    $whereStatus = 'e.eqpt_status = "正常" OR e.eqpt_status = "故障"';
+                    break;
+                case 4:
+                    $whereStatus = 'e.eqpt_status = "报废"';
+                    break;
+                case 6:
+                    $whereStatus = 'e.eqpt_status = "报废" OR e.eqpt_status = "故障"';
+                    break;
+                case 7:
+                    $whereStatus ='e.eqpt_id <> 0';
+                    break;
+            }*/
+
+            //数据库设置未安装设备 设备位置id eqpt_site_id 为999
+            /*switch ($installNum){
+                case 0:
+                    $whereInstall ='e.eqpt_id <> 0';
+                    break;
+                case 1:
+                    $whereInstall = 'e.eqpt_site_id <> 999';
+                    break;
+                case 2:
+                    $whereInstall = 'e.eqpt_site_id = 999';
+                    break;
+                case 3:
+                    $whereInstall = 'e.eqpt_id <> 0';;
+                    break;
+            }*/
+
+            //实例化工具树类
+            $tree = new \util\Tree();
+            //获取分类菜单
+            $resultcate = Db('category')->order(array('id' => 'ESC'))->select();
+            $arraycate = array();
+            foreach ($resultcate as $r) {
+                $r['selected'] = $r['id'] == 0 ? 'selected' : '';
+                $arraycate[] = $r;
+            }
+            $tree->init($arraycate);
+            if ($tree->get_childs($cate)) {
+                $cates = $cate .= ',' . implode(',', $tree->get_childs($cate));
+            } else {
+                $cates = $cate;
+            }
+
+            //获取位置菜单
+            $resultsite = Db('site')->order(array('id' => 'ESC'))->select();
+            $arraysite = array();
+            foreach ($resultsite as $r) {
+                $r['selected'] = $r['id'] == 0 ? 'selected' : '';
+                $arraysite[] = $r;
+            }
+            $tree->init($arraysite);
+            if ($tree->get_childs($site)) {
+                $sites = $site .= ',' . implode(',', $tree->get_childs($site));
+            } else {
+                $sites = $site;
+            }
+
+            $datas = Db::connect('sqlsrv_config')
+                ->page($page, $limit)
+                ->table('rmd_base_equipment')
+                ->where('equipment_code|equipment_name', 'like', '%' . $keyword . '%')
+                ->where('catalogue', 'in', '35,34')
+                ->where('prevent_fire_area_id', 'in', $sites)
+                ->where('catalogue', 'in', $cates)
+                ->select();
+            //dump($cate);die;
+            //$data=json_decode($datas,false);
+            $total = Db::connect('sqlsrv_config')
+                ->table('rmd_base_equipment')
+                ->where('equipment_code|equipment_name', 'like', '%' . $keyword . '%')
+                ->where('catalogue', 'in', '35,34')
+                ->where('prevent_fire_area_id', 'in', $sites)
+                ->where('catalogue', 'in', $cates)
+                ->count();
+            $result = array("code" => 0, "msg" => '', "count" => $total, "data" => $datas);
+            return json($result);
+            /*$data = $this->Eqpt_Model->page($page, $limit)
+                    ->order(array('eqpt_id' => 'DESC'))
+                    ->field('e.eqpt_id,e.eqpt_model,e.eqpt_type,e.eqpt_brand,e.eqpt_num,e.eqpt_site_detail,s.site_name,e.eqpt_status,c.cate_name,e.eqpt_had_model')
+                    ->alias('e')
+                    ->join('category c','e.eqpt_cate_id = c.id')
+                    ->join('site s','e.eqpt_site_id = s.id')
+                    ->where('e.eqpt_id|c.cate_name|e.eqpt_num|e.eqpt_brand|e.eqpt_model|e.eqpt_type|s.site_name','like','%' . $keyword . '%')
+                    ->where('c.id','in',$cates)
+                    ->where('s.id','in',$sites)
+                    ->where($whereStatus)
+                    ->where($whereInstall)
+
+                    ->fault($fault)
+                    ->scrap($scrap)
+                    ->select();
+                $data=json_decode($data,false);
+                $total = $this->Eqpt_Model
+                    ->field('e.eqpt_id,e.eqpt_model,e.eqpt_type,e.eqpt_brand,e.eqpt_num,e.eqpt_site_detail,site_name,e.eqpt_status,c.cate_name,e.eqpt_had_model')
+                    ->alias('e')
+                    ->join('category c','e.eqpt_cate_id = c.id')
+                    ->join('site s','e.eqpt_site_id = s.id')
+                    ->where('e.eqpt_id|c.cate_name|e.eqpt_num|e.eqpt_brand|e.eqpt_model|e.eqpt_type|s.site_name','like','%' . $keyword . '%')
+                    ->where('c.id','in',$cates)
+                    ->where('s.id','in',$sites)
+                    ->where($whereStatus)
+                    ->where($whereStatus)
+
+
+                    ->fault($fault)
+                    ->scrap($scrap)
+                    ->count();
+
+                $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $data);
+
+            return json($result);*/
+        }
+        return $this->fetch();
+    }
     //设备台账添加
     public function eqpt_add()
     {

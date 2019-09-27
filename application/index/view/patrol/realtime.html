@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>document</title>
+    <link rel="stylesheet" href="__STATIC__/new/evironment/evironment.css">
+    <link rel="stylesheet" href="__STATIC__/new/evironment/common.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <script src="__STATIC__/js/echarts.min.js"></script>
+    <!-- 图标 -->
+    <link rel="stylesheet" href="__STATIC__/new/style.css">
+    <link rel="stylesheet" href="__STATIC__/new/demo.css">
+    <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
+</head>
+<body class="backg">
+<style>
+    input.layui-input.layui-unselect{
+        height: 30px;
+        width: 200px;
+        border-radius: 10px;
+        border: 1px solid #00FFFF;
+        color: #000000;
+        margin-top: 5px;
+        padding: 0 14px;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        /*background: url(../image/sanjiao.png) no-repeat right center;*/
+        background-color: #cccfd1;
+    }
+    div.layui-input-inline{
+        margin-right: 15px!important;
+    }
+
+</style>
+
+        <!--内容-->
+        <!--巡查巡检实况-->
+
+            <!--标题-->
+            <div class="middleNav">
+                <i class="layui-icon">&#xe653;</i> &nbsp;
+                巡查巡检实况
+            </div>
+            <input type="hidden" id="sitesdata" class="layui-input" value="{$Sitesdata}">
+            <input type="hidden" id="realtime_IP" class="layui-input" value="{$Config.realtime_IP}">
+            <form class="layui-form" action="">
+                <div class="layui-inline" style="height: 42.6px">
+                    <div class="layui-form-item test"  lay-filter="test"></div>
+                </div>
+            </form>
+            <div class="evirMain">
+                <div class="evirMain2 flex" style="justify-content:space-between;align-content:space-between">
+                    <div class="evirMainDiv mainBor ">
+                        <div class="contentHead">
+                            温度 <img src="__STATIC__/new/image/c13.png" alt="/" width="15" height="20">
+                        </div>
+                        <div class="contentDiv" data-name="T" id="T">
+                            ----
+                            <!-- 30℃ -->
+                        </div>
+                        <div class="contentBelow">℃</div>
+                    </div>
+                    <div class="evirMainDiv mainBor">
+                        <div class="contentHead">
+
+                            湿度
+                            <img src="__STATIC__/new/image/c4.png" alt="/" width="20" height="20">
+                        </div>
+                        <div class="contentDiv" data-name="M" id="M">
+                            ----
+                            <!-- 72% -->
+                        </div>
+                        <div class="contentBelow">%</div>
+                    </div>
+                    <div class="evirMainDiv mainBor">
+                        <div class="contentHead">
+                            水位 <img src="__STATIC__/new/image/c14.png" alt="/" width="30  ">
+                        </div>
+                        <div class="contentDiv" data-name="LT" id="LT">
+                            <!-- 20cm -->
+                            ----
+                        </div>
+                        <div class="contentBelow">CM</div>
+                    </div>
+                    <div class="evirMainDiv mainBor">
+                        <div class="contentHead">
+                            甲烷
+                            <span>&nbsp;CH<sub style="font-size: 1px">4</sub></span>
+                        </div>
+                        <div class="contentDiv" data-name="CH4" id="CH4">
+                            ----
+                            <!-- 3 -->
+                        </div>
+                        <div class="contentBelow">%LEL</div>
+                    </div>
+                    <div class="evirMainDiv mainBor">
+                        <div class="contentHead">
+                            硫化氢
+                            <span>&nbsp;H<sub style="font-size: 1px">2</sub>S</span>
+                        </div>
+                        <div class="contentDiv" data-name="H2S" id="H2S">
+                            ----
+                            <!-- 0 -->
+                        </div>
+                        <div class="contentBelow">PPM</div>
+                    </div>
+                    <div class="evirMainDiv mainBor">
+                        <div class="contentHead">
+                            氧气
+                            <span>&nbsp;O<sub style="font-size: 1px">2</sub></span>
+                        </div>
+                        <div class="contentDiv" data-name="O2" id="O2">
+                            ----
+                            <!-- 20 -->
+                        </div>
+                        <div class="contentBelow">%VOL</div>
+                    </div>
+                </div>
+                <div class="evirMain2 layui-form flex" >
+                    <div class="main2Con">
+                        <div class="divWidth flex">
+                            <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg "/>
+                            <div class="divWidthInput">
+                                水舱排风</br>
+                                <input type="checkbox"  lay-skin="switch"  lay-filter="switchTest" lay-text="ON|OFF"/>
+                            </div>
+                        </div>
+                        <div class="divWidth flex" style="border-top:1px dashed #ffffff">
+                            <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg"/>
+                            <div class="divWidthInput">
+                                电舱排风</br>
+                                <input type="checkbox" lay-skin="switch"  lay-filter="switch" lay-text="ON|OFF">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main2Con flex" style="border-left:1px solid #ffffff;border-right:1px solid #ffffff; margin:0 4px">
+                        <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
+                        <div class="divWidthInput">
+                            水泵</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
+                        </div>
+                    </div>
+                    <div class="main2Con">
+                        <div class="divWidth flex">
+                            <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
+                            <div class="divWidthInput">
+                                灯组一</br>
+                                <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
+                            </div>
+                        </div>
+                        <div class="divWidth flex" style="border-top:1px dashed #ffffff">
+                            <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
+                            <div class="divWidthInput">
+                                灯组三</br>
+                                <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main2Con" style="border-left:1px dashed #ffffff">
+                        <div class="divWidth flex">
+                            <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2 "/>
+                            <div class="divWidthInput">
+                                灯组二</br>
+                                <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
+                            </div>
+                        </div>
+                        <div class="divWidth flex" style="border-top:1px dashed #ffffff">
+                            <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
+                            <div class="divWidthInput">
+                                灯组四</br>
+                                <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="evirMain evirMain1" style="flex-wrap:wrap">
+                <div class="evirMainSele">
+                    <select class="evirSelect" id="seleTwo">
+                        <option value="1">温度</option>
+                        <option value="2">湿度</option>
+                        <option value="3">氧气</option>
+                        <option value="4">甲烷</option>
+                        <option value="5">硫化氢</option>
+                        <option value="6">水位</option>
+                    </select>
+                    <div class="display evirSelect">
+                        <div class="evirSele"><i class="icon-chart-01"></i></div>
+                        <ul class="evirUl">
+                            <li><i class="icon-chart-01"></i></li>
+                            <li><i class="icon-chart-02"></i></li>
+                            <li><i class="icon-chart-03"></i></li>
+                            <li><i class="icon-chart-04"></i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="evirEchart0" class="evirEchart" ></div>
+                <div id="evirEchart1" class="evirEchart" ></div>
+                <div id="evirEchart2" class="evirEchart" ></div>
+                <div id="evirEchart3" class="evirEchart" ></div>
+            </div>
+
+
+
+<script src="__STATIC__/layui/layui.js"></script>
+<script src="__STATIC__/new/itemJS/evironment.js"></script>
+<script>
+    layui.config({
+        base: '__STATIC__/interact/js/',
+    })
+    layui.use(['table','laydate','form','interact'], function(){
+        var table = layui.table,
+            interact = layui.interact,
+            $ = layui.jquery,
+            form = layui.form;
+
+        var site_data = JSON.parse($('#sitesdata').val());
+        interact.render({
+            elem : '.test',
+            // url : '{:url("index/patrol/sitesdata")}',
+            title : '防火分区：',
+            data : site_data,
+            // name : ['street','cang','site'],
+             hint : ['请选择街道','请选择舱室','请选择防火分区']
+        });
+        //监听选择select选择事件 使用lay-filter
+        interact.on('interact(test)',function(data){
+            //判断text是否含有中文
+            var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+            if(!reg.test(data.text)){
+                //根据防火分区 获取实时数据
+                //console.dir(data.text);
+                //第一次 选择 创建定时器 获取实时数据
+                if(typeof(zone) == 'undefined'){
+                    zone = data.text;
+                    real_time(zone);
+                    Interval = window.setInterval("real_time(zone)",5000);
+                }else{
+                    // 删除旧定时器
+                    window.clearInterval(Interval);
+                    zone = data.text;
+                    real_time(zone);
+                    Interval = window.setInterval("real_time(zone)",5000);
+                }
+            }
+        })
+
+
+
+    });
+    function real_time(zone){
+        var zones = zone.replace('/','');
+        var realtime_IP = $('#realtime_IP').val();
+        //console.dir(realtime_IP);
+        $.ajax({
+            //url:realtime_IP+"/real/real_time?zone="+zone,
+            url:"http://localhost:8888/real/real_time?zone="+zone,
+            async:true,
+            success:function(result){
+
+                result = JSON.parse(result);
+                //console.dir(result);
+                /*$(".contentDiv").each(function(){
+
+                    console.dir( $(this).dataset());
+                });*/
+                let list = document.querySelectorAll('.contentDiv');
+                //console.dir(list);
+                for(var i = 0; i < list.length; i++){
+                    var key = 'QS_'+list[i].dataset.name+'_'+zones;
+                    var ids = list[i].dataset.name;
+                    //console.dir(key);
+                    if(typeof(result[key]) !== 'undefined'){
+                        document.getElementById(ids).innerText = result[key];
+                    }else{
+                        document.getElementById(ids).innerText = '----';
+                    }
+                }
+                //console.dir(result.PV_CH4_SL1SX01);
+            }
+        });
+        //console.dir(arr);
+    }
+</script>
+</body>
+</html>

@@ -35,10 +35,7 @@ class Role extends Controller
         return $this->fetch();
 
     }
-    public function map()
-    {
-        return $this->fetch();
-    }
+
     public function role_add()
     {
         if ($this->request->isPost()) {

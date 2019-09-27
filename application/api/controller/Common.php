@@ -12,94 +12,20 @@ class Common extends Controller
     protected $validater; //用来严恒数据/参数
     protected $params; //过滤后符合要求的参数
     protected $rules = array(
-        'User'    => array(
-            'login'           => array(
-                'user_name' => 'require',
-                'user_pwd'  => 'require|length:32',
-            ),
-            'register'        => array(
-                'user_name' => 'require',
-                'user_pwd'  => 'require|length:32',
-                'code'      => 'require|number|length:6',
-            ),
-            'upload_head_img' => array(
-                'user_id'   => 'require|number',
-                //'user_icon' => 'require|image|fileSize:10000000|fileExt:jpg,png,bmp,jpeg',
-            ),
-            'change_pwd'      => array(
-                'user_name'    => 'require',
-                'user_ini_pwd' => 'require|length:32',
-                'user_pwd'     => 'require|length:32',
-            ),
-            'find_pwd'        => array(
-                'user_name' => 'require',
-                'user_pwd'  => 'require|length:32',
-                'code'      => 'require|number|length:6',
-            ),
-            'bind_phone'      => array(
-                'user_id' => 'require|number',
-                'phone'   => ['require', 'regex' => '/^1[34578]\d{9}$/'],
-                'code'    => 'require|number|length:6',
-            ),
-            'bind_email'      => array(
-                'user_id' => 'require|number',
-                'email'   => 'require|email',
-                'code'    => 'require|number|length:6',
-            ),
-            'bind_username'   => array(
-                'user_id'   => 'require|number',
-                'user_name' => 'require',
-                'code'      => 'require|number|length:6',
-            ),
-            'set_nickname'    => array(
-                'user_id'       => 'require|number',
-                'user_nickname' => 'require|chsDash',
-            ),
-            'get_user'    => array(
-                'user_id'       => 'require|number',
-            ),
-        ),
-        'Code'    => array(
-            'get_code' => array(
-                'username' => 'require',
-                'is_exist' => 'require|number|length:1',
-            ),
-        ),
-        'Article' => array(
-            'add_article'    => array(
-                //'article_uid'   => 'require|number',
-                //'article_title' => 'require|chsDash',
-            ),
-            'article_list'   => array(
-                'user_id' => 'require|number',
-                'num'     => 'number',
-                'page'    => 'number',
-            ),
-            'article_list_day'   => array(
-                'user_id' => 'require|number',
-                'start' => 'require|dateFormat:Y-m-d',
-                'end' => 'require|dateFormat:Y-m-d',
-                'num'     => 'number',
-                'page'    => 'number',
-            ),
-            'article_detail' => array(
-                'user_id' => 'require|number',
-            ),
-            'update_article' => array(
-                'article_id'    => 'require|number',
-                'article_title' => 'chsDash',
-            ),
-            'del_article'    => array(
-                'article_id' => 'require|number',
-            ),
-        ),
-
         'Patrol'    => array(
             'data' => array(
-
             ),
             'eqpt_data' => array(
-
+            ),
+            'get_type' => array(
+            ),
+            'demo' => array(
+            ),
+            'get_patrol' => array(
+            ),
+            'get_patrol_json' => array(
+            ),
+            'get_user_position' => array(
             ),
         ),
 
@@ -144,7 +70,7 @@ class Common extends Controller
         $return_data['msg']  = $msg;
         $return_data['data'] = $data;
         // 返回信息并终止脚本
-        echo json_encode($return_data);die;
+        echo json_encode($return_data,JSON_UNESCAPED_UNICODE);die;
     }
     /**
      * 验证token(防止篡改数据)
