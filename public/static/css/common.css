@@ -8,6 +8,11 @@ body,html{
     color:#00FFFF;
     font-weight:400;
 }
+
+::-webkit-scrollbar{
+    display: none;
+}
+
 .eleTree-node-content-label{
     color: #000000;
 }
@@ -70,7 +75,7 @@ body,html{
 }
 /*设置*/
 .header .headerUl{
-    font-size:0;
+    display: flex;
 }
 .header .headerUl li{
     display:inline-block;
@@ -98,7 +103,8 @@ body,html{
 .headerNav{
     padding:1.2% 0;
     font-size:0;
-    border:1px
+    border:1px;
+    margin-left: 1%;
 }
 .headerNav li{
     font-size:18px;
@@ -108,7 +114,9 @@ body,html{
     text-align:center;
     padding:0;
     cursor:pointer;
-    
+    position:relative;
+    top: -8px;
+
 }
 .headerNav li a{
     display:block;
@@ -118,7 +126,7 @@ body,html{
 }
 #iframe_default{
     height: 100%;
-    width: 99.9%;
+    width: 99.8%;
     display: inline-block;
     scrolling:auto;
     border: thin solid #113c58;
@@ -129,7 +137,6 @@ body,html{
     font-size:18px;
     cursor:default;
     position:relative;
-    top:-7px;
 }
 .headerNav li:nth-child(20){
     width:6%;
@@ -148,8 +155,6 @@ body,html{
 }
 .headerNav span{
     display:inline;
-    position:relative;
-    top:8px;
 }
 .headerNav li:nth-child(n+2):nth-child(-n+18):hover{
     outline:1px solid #247998;
@@ -212,7 +217,7 @@ body,html{
 .main{
     margin-top:0.5%;
     width:100%;
-    height:100%;
+    height:95%;
     font-size:0;
     overflow-y: auto;
 }
@@ -224,7 +229,7 @@ body,html{
 
 /*左边框------------------------------------------------------------------------------------------------------------------*/
 .mainLeft{
-    height:100%;
+    height:98%;
     width:15.6%;
     display:inline-block;
     vertical-align: top;
@@ -250,7 +255,7 @@ body,html{
 
 .eqptFrame{
     width: 83.3%;
-    height: 100%;
+    height: 98%;
     margin-left: 16.7%;
 }
 

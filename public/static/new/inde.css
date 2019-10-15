@@ -11,18 +11,12 @@ a{
 /*����ͼ*/
 .backg{
     background:url(../image/a.jpg);
-    width:110%;
-    height:120%;
+    width:100%;
+    height:100%;
     background-size:100%;
     overflow:hidden;
 }
-/*����*/
-.wrap{
-    margin:0.3% auto;
-    width:100%;
-    height:100%;
-}
-/*һ���˵�*/
+
 .header{
     background:url(../image/b.png);
     width:100%;
@@ -65,9 +59,9 @@ a{
     position:relative;
 }
 .wrap{
-    margin:0.3% auto;
-    width:98%;
-    height:99%;
+    margin-top:0.5%;
+    width:100%;
+    height:100%;
 }
 .headerNav{
     padding:1.2% 0;
@@ -129,7 +123,7 @@ a{
 .main{
     margin-top:0.5vh;
     width:100%;
-    height:88vh;
+    height:100%;
     font-size:0;
 }
 
@@ -146,7 +140,7 @@ a{
 
 /* �м� */
 .mainMiddle{
-    width:98vw;
+    width:100vw;
     height:52.5vh;
     display:flex;
     justify-content : space-between;
@@ -163,8 +157,8 @@ a{
 }
 /* ���� */
 .mainBottom{
-    width:98vw;
-    height:35vh;
+    width:100vw;
+    height:37.5vh;
     display:flex;
     justify-content : space-between;
 }
@@ -183,23 +177,22 @@ a{
 /*--------------------------------------------main------------------------------*/
 .contentTop{
     height:20vh;
-    width:100%;
 }
 .contentBottom{
 
     height:31.1vh;
-    width:100%;
+    width:99.5%;
 }
 .marginTop{
     margin-top:1vh;
 }
 .contentTop2{
     height:13vh;
-    width:100%;
+    width:99.5%;
 }
 .contentBottom2{
-    height:20.5vh;
-    width:100%;
+    height:23.2vh;
+    width:99.5%;
 }
 
 /*--------------------------------------��ȫ��Ϣ--------------------------------------------*/
@@ -245,27 +238,28 @@ a{
     vertical-align: top;
     width:120px;
     height:20px;
-    padding:8px 0;
+    padding:8px 10px;
 }
 .progressFro{
     width:100%;
     height:4px;
-    background-color:#cccccc;
+    /*background-color:#cccccc;*/
 }
 .progressBack{
-    width:30px;
-    height:6px;
+    width:100%;
+    height:3px;
     background-color:#00ffff;
     position:relative;
-    top:-5px;
+    top:0;
 }
 /*---------------------------------------������----------------------*/
 .robot{
     padding:10px 10px;
     color:#00ffff;
     position:relative;
+    font-size:16px;
 }
-/*������ҵ*/
+
 .firmContent{
     display:flex;
     width:90%;
@@ -273,7 +267,7 @@ a{
     margin:0 auto;
     justify-content:center;
 }
-/* ��� */
+
 .firmLeft{
     width:48%;
 }
@@ -282,38 +276,54 @@ a{
     height:35px;
     margin:2px 0;
     position:relative;
+    padding:1.3vh 0;
+}
+.firmConMain{
+    /*display:block;*/
+    width:100%; 
+    height:12px;
+    font-size:0;
+}
+.firmConMain span{
+    font-size:12px;
 }
 .firmConText{
-    padding:6px 0;
+    padding:7px 0;
 }
 .firmConBack{
-    width:100%;
-    height:6px;
-    background-color:#999999;
-}
-.firmConNum{
-    /*width:50%;*/
-    height:6px;
+    margin-left:1px;
     background-color:#00ffff;
-    text-align:right;
-    top:31px;
+    height:12px
 }
-.absonlute{
+.display{
+    display:inline-block;
+    vertical-align: top;
+}
+.absolute{
     position:absolute;
     right:0;
 }
-.abson{
-    position:absolute;
-}
-/* �ֽ��� */
+/* 分界线 */
 .firmMiddle{
-    width:0.5%;
+    height:90%;
+    width:1px;
     background-color:#ffffff;
     margin:0 5px;
 }
-/* �ұ� */
+/* 右面 */
 .firmRight{
     width:48%;
+}
+
+/* 上边 */
+#firmConTop{
+    position:absolute;
+    width:100px;
+    height:100px;
+    background-color:rgba(99,99,99,0.4);
+    display:none;
+    border-radius:3px;
+    padding:5px;
 }
 
 /*----------------------------------��������----------------------*/
@@ -321,7 +331,7 @@ a{
     width:100%;
     height:18vh;
 }
-/*���*/
+/*����*/
 .callUl{
     width:100%;
 }
@@ -378,7 +388,7 @@ a{
     width:100%;
 }
 .robotToble tr{
-    height:31px;
+    height:23px;
 }
 .robotToble tr:hover{
     background-color: #237b99;
@@ -387,10 +397,10 @@ a{
     font-weight:400;
 }
 .robotHide{
-    top:22.1vh;
+    top:0.5vh;
     width:28.6vw;
     position:absolute;
-    height:31.7vh;
+    height:52.5vh;
     border:1px solid #00ffff;
     background-color:#000000;
     z-index: 50;
@@ -403,9 +413,11 @@ a{
 }
 .borTitle select{
     position:absolute;
+    text-align: center;
+    text-align-last: center;
     right:10px;
     height:30px;
-    width:120px;
+    padding: 0 6%;
     border-radius:3px;
     border:1px solid #00ffff;
     appearance:none;
