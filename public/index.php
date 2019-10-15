@@ -22,7 +22,6 @@ define('ROOT_PATH', __DIR__ . DIRECTORY_SEPARATOR);
 define('STATIC_PATH',ROOT_PATH. 'static' .DIRECTORY_SEPARATOR);
 define('APP_PATH', ROOT_PATH . '../application' . DIRECTORY_SEPARATOR);
 
-
 // 加载基础文件
 require __DIR__ . '/../thinkphp/base.php';
 
