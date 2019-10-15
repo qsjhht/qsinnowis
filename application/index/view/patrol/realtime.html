@@ -178,35 +178,13 @@
                 </div>
             </div>
             <div class="evirMain evirMain1" style="flex-wrap:wrap">
-                <div class="evirMainSele">
-                    <select class="evirSelect" id="seleTwo">
-                        <option value="1">温度</option>
-                        <option value="2">湿度</option>
-                        <option value="3">氧气</option>
-                        <option value="4">甲烷</option>
-                        <option value="5">硫化氢</option>
-                        <option value="6">水位</option>
-                    </select>
-                    <div class="display evirSelect">
-                        <div class="evirSele"><i class="icon-chart-01"></i></div>
-                        <ul class="evirUl">
-                            <li><i class="icon-chart-01"></i></li>
-                            <li><i class="icon-chart-02"></i></li>
-                            <li><i class="icon-chart-03"></i></li>
-                            <li><i class="icon-chart-04"></i></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="evirEchart0" class="evirEchart" ></div>
-                <div id="evirEchart1" class="evirEchart" ></div>
-                <div id="evirEchart2" class="evirEchart" ></div>
-                <div id="evirEchart3" class="evirEchart" ></div>
+                <div id="container" style="width: 600px;height:400px;"></div>
             </div>
 
 
 
 <script src="__STATIC__/layui/layui.js"></script>
-<script src="__STATIC__/new/itemJS/evironment.js"></script>
+
 <script>
     layui.config({
         base: '__STATIC__/interact/js/',
@@ -258,7 +236,7 @@
         $.ajax({
             //url:realtime_IP+"/real/real_time?zone="+zone,
             url:"http://localhost:8888/real/real_time?zone="+zone,
-            async:true,
+            async:false,
             success:function(result){
 
                 result = JSON.parse(result);
@@ -284,6 +262,150 @@
         });
         //console.dir(arr);
     }
+
+    var container = document.getElementById('container');
+    var myContainer = echarts.init(container);
+
+    var base = + new Date(2018,9,30);
+    var oneDay = 24*3600*1000;
+    var date = [];
+    var data = [Math.random()*150];
+    var now = new Date(base);
+    function addData(shift){
+        now = [now.getFullYear(),now.getMonth()+1,now.getDate()].join('/');
+        date.push(now);
+        data.push((Math.random()-0.5)*10+data[data.length-1]);
+        if (shift) {
+            //console.log(data);
+            date.shift();
+            data.shift();
+        }
+        now = new Date(+new Date(now)+oneDay);
+    }
+
+
+
+    for (var i = 0; i < 100; i++) {
+        addData();
+    }
+    var datas,lastdata;
+    arrDate = [];
+    arrData = [];
+    function realtimes() {
+        $.ajax({
+            //url:realtime_IP+"/real/real_time?zone="+zone,
+            url:"http://localhost:8888/real/real_times?name=QS_LT_XC13S",
+            async:false,
+            success:function(result){
+                let jsonObj = $.parseJSON(result);
+                objToArray(jsonObj);
+                console.dir(arrDate);
+                console.dir(arrData);
+            }
+        });
+    }
+    function lastdata() {
+        $.ajax({
+            //url:realtime_IP+"/real/real_time?zone="+zone,
+            url:"http://localhost:8888/real/get_last_real?name=QS_LT_XC13S",
+            async:false,
+            success:function(result){
+                console.dir(result);
+                let jsonObj = $.parseJSON(result);
+                objToArray(jsonObj,true);
+                console.dir(arrDate);
+                console.dir(arrData);
+            }
+        });
+    }
+    realtimes();
+
+
+   /* var arr = [];
+    for (let i in obj) {
+        //arr.push(obj[i]); //属性
+        //arr.push(obj[i]); //值
+        var o={};
+        o[i]=obj[i];
+        arr.push(o);
+    }*/
+
+    function objToArray(array,shift) {
+        for (var i in array) {
+            /*var o={};
+            o[i]=array[i];
+            arrDate.push(o);*/
+            arrDate.push(i);
+            arrData.push(array[i]);
+        }
+        if (shift) {
+            //console.log(data);
+            arrDate.shift();
+            arrData.shift();
+        }
+    }
+    // console.log(arr)
+
+
+    //console.dir(typeof(arrdata));
+    //console.dir(arrdata);
+    //设置图标配置项
+    myContainer.setOption({
+        title:{
+            text:'ECharts 30天内数据实时更新'
+        },
+        xAxis:{
+            type:"category",
+            boundaryGap:false,
+            data:arrDate
+        },
+        yAxis:{
+            boundaryGap:[0,'50%'],
+            type:'value'
+        },
+        series:[{
+            name:'成交',
+            type:'line',
+            smooth:true, //数据光滑过度
+            symbol:'none', //下一个数据点
+            stack:'a',
+            areaStyle:{
+                normal:{
+                }
+            },
+            data:arrData
+        }]
+    });
+    setInterval(function(){
+        //addData(true);
+        //console.dir(data);
+        /*$.ajax({
+            //url:realtime_IP+"/real/real_time?zone="+zone,
+            url:"http://localhost:8888/real/real_times?name=QS_LT_XC13S",
+            async:false,
+            success:function(result){
+
+                result = JSON.parse(result);
+                console.dir(result);
+            }
+        });*/
+        /*realtimes();
+        let jsonObj = $.parseJSON(datas);
+        objToArray(jsonObj);
+        console.dir(arrDate);
+        console.dir(arrData);*/
+        lastdata();
+        //console.dir(lastdata);
+        myContainer.setOption({
+            xAxis:{
+                data:arrDate
+            },
+            series:[{
+                name:'成交',
+                data:arrData
+            }]
+        });
+    },5000)
 </script>
 </body>
 </html>
