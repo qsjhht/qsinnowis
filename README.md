@@ -154,7 +154,7 @@ www  WEB部署目录（或者子目录）
 
 ### 常量和配置
 
-*   常量以大写字母和下划线命名，例如 `APP_PATH`和 `THINK_PATH`；
+*   常量以大写字母和下划线命名，例如 `APP_PATH`和 `THINK_PATurl_route_onH`；
 *   配置参数以小写字母和下划线命名，例如 `url_route_on` 和`url_convert`；
 
 ### 数据表和字段
