@@ -60,4 +60,10 @@ class Patrol extends Controller
         $user_data = json_encode($user_data);
         return $user_data;
     }
+    public function json()
+    {
+        $json = array('name'=>array("iso","english","china","ufo","seo"),'data'=>array(400,200,300,100,11));
+        $json = json_encode($json);
+        return $json;
+    }
 }
