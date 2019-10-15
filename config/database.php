@@ -19,7 +19,7 @@ return [
     // 用户名
     'username'        => 'root',
     // 密码
-    'password'        => 'root',
+    'password'        => 'Qskj@123',
     // 端口
     'hostport'        => '3306',
     // 连接dsn
@@ -60,4 +60,46 @@ return [
     'break_reconnect' => false,
     // 断线标识字符串
     'break_match_str' => [],
+    'sqlsrv_config' => [
+        // 数据库类型
+        'type'            => 'sqlsrv',
+        // 服务器地址
+        'hostname'        => '192.168.20.60',
+        // 数据库名
+        'database'        => 'ZD_PIPE',
+        // 用户名
+        'username'        => 'qs_user',
+        // 密码
+        'password'        => 'qs@123',
+        // 端口
+        'hostport'        => '1433',
+    ],
+    'mysql_config' => [
+        // 数据库类型
+        'type'            => 'mysql',
+        // 服务器地址
+        'hostname'        => '127.0.0.1',
+        // 数据库名
+        'database'        => 'new',
+        // 用户名
+        'username'        => 'root',
+        // 密码
+        'password'        => 'Qskj@123',
+        // 端口
+        'hostport'        => '3306',
+    ],
+    'yk_config' => [
+        // 数据库类型
+        'type'            => 'mysql',
+        // 服务器地址
+        'hostname'        => 'localhost',
+        // 数据库名
+        'database'        => 'new',
+        // 用户名
+        'username'        => 'root',
+        // 密码
+        'password'        => 'Qskj@123',
+        // 端口
+        'hostport'        => '3306',
+    ],
 ];
