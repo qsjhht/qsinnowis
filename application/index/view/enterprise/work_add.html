@@ -13,7 +13,7 @@
         <div class="layerNav">
             <div class="floatLeft">
                 <i class="layui-icon">&#xe653;</i> &nbsp;
-                新增企业信息
+                新增入廊施工
             </div>
         </div>
         <div class="scrollber" >
@@ -43,9 +43,50 @@
                         <div class="layui-inline">
                             <label class="layui-form-label" style="float: left">企业名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="co_name" lay-verify="eqpt_name" placeholder="{$Info.co_name}" style="width: 650px"  autocomplete="off" class="layui-input">
+                                <input type="text" name="co_name" lay-verify="eqpt_name" placeholder="请输入企业名称" style="width: 650px"  autocomplete="off" class="layui-input">
                             </div>
                         </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">企业类型</label>
+                            <select name="co_type" lay-verify="required">
+                                <option value="">请选择</option>
+                                {volist name="Co_type" id="vo"}
+                                <option value="{$vo.co_type_id}">{$vo.type_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <!--<div class="layui-inline">
+                            <label class="layui-form-label">法人代表</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_legal" placeholder="请输入法人代表姓名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>-->
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_linker" placeholder="联系人姓名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_phone" placeholder="联系人电话" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人职务</label>
+                            <input type="text" name="co_linker_post" placeholder="请输入联系人职务" autocomplete="off" class="layui-input">
+                        </div>
+
+
                     </div>
 
                     <div class="layui-form-item">
@@ -60,82 +101,99 @@
                         </div>
                     </div>
 
+
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <div class="layui-form-item" id="area-picker">
-                                <div class="layui-form-label">详细地址</div>
-                                <div class="layui-input-inline" style="width: 200px;">
-                                    <select name="province" class="province-selector" data-value="" lay-filter="province-1">
-                                        <option value="">请选择省</option>
-                                    </select>
-                                </div>
-                                <div class="layui-input-inline" style="width: 200px;">
-                                    <select name="city" class="city-selector" data-value="" lay-filter="city-1">
-                                        <option value="">请选择市</option>
-                                    </select>
-                                </div>
-                                <div class="layui-input-inline" style="width: 200px;">
-                                    <select name="county" class="county-selector" data-value="" lay-filter="county-1">
-                                        <option value="">请选择区</option>
-                                    </select>
-                                </div>
+                            <label class="layui-form-label">入廊长度</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="en_long" placeholder="入廊长度" autocomplete="off" class="layui-input">
                             </div>
-                            <input type="text" name="add" placeholder="{$Add}" style="width: 490px"  autocomplete="off" class="layui-input">
                         </div>
-                    </div>
-                    <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label" style="float: left">企业类型</label>
-                            <select name="co_type" lay-verify="required">
+                            <label class="layui-form-label" style="float: left">经办人</label>
+                            <select name="user_id" lay-verify="required">
                                 <option value="">请选择</option>
-                                {volist name="Co_type" id="vo"}
-                                {if $vo.co_type_id == $Info.co_type}
-                                <option value="{$vo.co_type_id}" selected>{$vo.type_name}</option>
-                                {else/}
-                                <option value="{$vo.co_type_id}">{$vo.type_name}</option>
-                                {/if}
+                                {volist name="User" id="vo"}
+                                <option value="{$vo.user_id}">{$vo.user_name}</option>
                                 {/volist}
                             </select>
                         </div>
+                    </div>
+
+
+
+
+                    <input type="hidden" id="sitesdata" class="layui-input" value="{$Sitesdata}">
+                    <input type="hidden" id="local_data" class="layui-input" value="{$local_data}">
+                    <!--底部信息-->
+                    <!--<div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label" style="float: left">设备位置</label>
+
+
+                        <label class="layui-form-label">IP地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="eqpt_IP_address" placeholder="请输入设备IP地址" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>-->
+                <!--<fieldset class="layui-elem-field layui-field-title">
+                </fieldset>
+                <div class="addParets" id='parts'  data-type="openSelect">
+                    <i class="layui-icon">&#xe654;</i>
+                    添加配件
+                </div>
+                <fieldset class="layui-elem-field layui-field-title">
+                </fieldset>-->
+
+                    <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">法人代表</label>
+                            <label class="layui-form-label" style="float: left">施工企业名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="co_legal" placeholder="{$Info.co_legal}" autocomplete="off" class="layui-input">
+                                <input type="text" name="co_name" lay-verify="eqpt_name" placeholder="请输入施工企业名称" style="width: 650px"  autocomplete="off" class="layui-input">
                             </div>
                         </div>
                     </div>
+
+
                     <div class="layui-form-item">
                         <div class="layui-inline">
                             <label class="layui-form-label">联系人</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="co_linker" placeholder="{$Info.co_linker}" autocomplete="off" class="layui-input">
+                                <input type="text" name="co_linker" placeholder="联系人姓名" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label" style="float: left">联系电话</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="co_phone" placeholder="{$Info.co_phone}" autocomplete="off" class="layui-input">
+                                <input type="text" name="co_phone" placeholder="联系人电话" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                     </div>
 
-
                     <div class="layui-form-item">
                         <div class="layui-inline">
                             <label class="layui-form-label">联系人职务</label>
-                            <input type="text" name="co_linker_post" placeholder="{$Info.co_linker_post}" autocomplete="off" class="layui-input">
+                            <input type="text" name="co_linker_post" placeholder="请输入联系人职务" autocomplete="off" class="layui-input">
                         </div>
-                        <label class="layui-form-label"   style="float: left">入廊时间</label>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">施工人数</label>
+                            <input type="text" name="co_linker_post" placeholder="请输入联系人职务" autocomplete="off" class="layui-input">
+                        </div>
+
+
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"   style="float: left">计划施工时间</label>
                         <input type="text" lay-verify="required" name="en_time" class="layui-input" id="test5" placeholder="" class="layui-input">
 
                     </div>
-                    <input type="hidden" name="co_id" class="layui-input" value="{$Info.co_id}">
-                    <input type="hidden" id="sitesdata" class="layui-input" value="{$Sitesdata}">
-                    <input type="hidden" id="local_data" class="layui-input" value="{$local_data}">
-                    <input type="hidden" id="endstr" class="layui-input" value="{$Endstr}">
-                    <input type="hidden" id="startstr" class="layui-input" value="{$Startstr}">
-                    <input type="hidden" id="local" class="layui-input" value="{$Local}">
-                    <input type="hidden" id="en_time" class="layui-input" value="{$Time}">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"   style="float: left">实际施工时间</label>
+                        <input type="text" lay-verify="required" name="en_time" class="layui-input" id="test6" placeholder="" class="layui-input">
+
+                    </div>
+
                     <!--底部信息-->
                     <!--<div class="layui-form-item" style="display: none">
                         <label class="layui-form-label" style="float: left">设备位置</label>
@@ -147,51 +205,22 @@
                         </div>
                     </div>-->
 
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">入廊长度</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="en_long" placeholder="{$Info.en_long}" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label" style="float: left">经办人</label>
-                            <select name="user_id" lay-verify="required">
-                                <option value="">请选择</option>
-                                {volist name="User" id="vo"}
 
-                                {if $vo.user_id == $Info.user_id}
-                                <option value="{$vo.user_id}" selected>{$vo.user_name}</option>
-                                {else/}
-                                <option value="{$vo.user_id}">{$vo.user_name}</option>
-                                {/if}
-                                {/volist}
-                            </select>
-                        </div>
-                    </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">备注信息</label>
                         <div class="layui-input-block" style="width: 650px">
-                            <textarea name="en_remark"  placeholder="请输入" class="layui-textarea">{$Info.en_remark}</textarea>
+                            <textarea name="en_remark"  placeholder="请输入" class="layui-textarea"></textarea>
                         </div>
                     </div>
                 </div>
-                <!--<fieldset class="layui-elem-field layui-field-title">
-                </fieldset>
-                <div class="addParets" id='parts'  data-type="openSelect">
-                    <i class="layui-icon">&#xe654;</i>
-                    添加配件
-                </div>
-                <fieldset class="layui-elem-field layui-field-title">
-                </fieldset>-->
-
                 <div class="layui-form-item">
                     <div class="layui-input-block margin-top-seven">
                         <!--<button type="button" class="layui-btn">
                             <i class="layui-icon">&#xe857;</i>提交并绑定设备模型
                         </button>-->
                         <button class="layui-btn" id="sub" lay-submit lay-filter="sub">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
             </form>
@@ -217,18 +246,14 @@
         var $ = layui.$;
 
         var site_data = JSON.parse($('#sitesdata').val());
-        var startstr = JSON.parse($('#startstr').val());
-        var endstr = JSON.parse($('#endstr').val());
-        var local = JSON.parse($('#local').val());
-        var en_time = $('#en_time').val();
-//        console.dir(en_time);
+        // console.dir(site_data);
 
         layarea.render({
             elem: '#area-picker',
             data: {
-                province: local['0'],
-                city: local['1'],
-                county: local['2'],
+                province: '河北省',
+                city: '石家庄市',
+                county: '正定县',
             },
             change: function (res) {
                 //选择结果
@@ -242,7 +267,6 @@
             // url : '{:url("index/patrol/sitesdata")}',
             title : '入廊起点：',
             data : site_data,
-            selected : startstr,
             // name : ['street','cang','site'],
             name : 'start',
             hint : ['请选择街道','请选择舱室','请选择防火分区']
@@ -253,7 +277,6 @@
             // url : '{:url("index/patrol/sitesdata")}',
             title : '入廊终点：',
             data : site_data,
-            selected : endstr,
             // name : ['street','cang','site'],
             name : 'end',
             hint : ['请选择街道','请选择舱室','请选择防火分区']
@@ -269,13 +292,23 @@
         //日期时间选择器
         laydate.render({
             elem: '#test5'
-            ,type: 'datetime'
+
 //            ,showBottom:false
-            ,value:en_time
+            ,range: true
             ,done: function(value){
                 console.log(value); //得到日期生成的值，如：2017-08-18
             }
         });
+
+        laydate.render({
+            elem: '#test6'
+//            ,showBottom:false
+            ,range: true
+            ,done: function(value){
+                console.log(value); //得到日期生成的值，如：2017-08-18
+            }
+        });
+
 
 
         /* $(document).on('click','#parts',function(){

@@ -196,9 +196,9 @@
                 });
 
             }else if(obj.event === 'del'){
-                layer.confirm('确定删除该角色？', { icon: 3, title: '提示' }, function(index) {
-                    console.dir(data.role_id);
-                    $.post('{:url("role/role_del")}', { 'role_id': data.role_id }, function(data) {
+                layer.confirm('确定删除该企业信息？', { icon: 3, title: '提示' }, function(index) {
+                    console.dir(data.co_id);
+                    $.post('{:url("enterprise/info_del")}', { 'co_id': data.co_id }, function(data) {
                         //layer.msg(data.msg);
                         if (data.code == 1) {
                             if (data.url) {
