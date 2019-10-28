@@ -134,7 +134,14 @@ class Patrol extends Common
         $site_id =Db::connect('mysql_config')->table('qs_site')->field('parentid')->where('id',$datas['prevent_fire_area_id'])->find();
         $site_name =Db::connect('mysql_config')->table('qs_site')->field('site_name')->where('id',$site_id['parentid'])->find();
         $datas['location'] = $site_name['site_name'] .'-' .$datas['prevent_fire_area'];
+        //$datas['catalogue_type'] = $datas['catalogue_value'];
+        foreach ($datas as $key=>$value) {
+            if ($key == 'catalogue_value'){
+                $datas['catalogue_type'] = $datas[$key];
+            }
+        }
         unset($datas['prevent_fire_area_id']);
+        unset($datas['catalogue_value']);
         unset($datas['prevent_fire_area']);
         $return_data['code'] = 200;
         $return_data['msg']  = '查询成功！';

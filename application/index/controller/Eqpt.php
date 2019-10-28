@@ -12,10 +12,10 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 use app\index\model\Eqpts as Eqpt_Model;
+use app\common\controller\Adminbase;
 
 
-
-class Eqpt extends Controller
+class Eqpt extends Adminbase
 {
     protected function initialize()
     {

@@ -11,8 +11,9 @@ use think\Controller;
 use think\Db;
 use Config;
 use app\index\model\Patrol as PatrolModel;
+use app\common\controller\Adminbase;
 
-class Patrol extends Controller
+class Patrol extends Adminbase
 {
 
     protected function initialize()

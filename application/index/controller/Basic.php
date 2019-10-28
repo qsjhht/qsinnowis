@@ -8,9 +8,10 @@
 namespace app\index\controller;
 
 use think\Controller;
+use app\common\controller\Adminbase;
 use think\Db;
 
-class Basic extends Controller
+class Basic extends Adminbase
 {
     public function index()
     {

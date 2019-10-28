@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报警日志详情</title>
+    <link rel="stylesheet" href="__STATIC__/new/inno/common.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__STATIC__/new/inno/police.css">
+    <script src="__STATIC__/layui/layui.js"></script>
+    <script src="__STATIC__/js/jquery-1.7.1.min.js"></script>
+</head>
+<body class="backg">
+
+            <div class="layer">
+                <!-- header -->
+                <!-- 内容 -->
+                <div class="layerMiddle scrollber" style="overflow-y:auto;">
+                    <ul class="layerUl" >
+                        {volist name="details" id="vo"}
+                        <li class="layui-row policeBorder">
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    时间：<span>{$vo['alarmtime']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    类型：<span>{$vo['typecontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    系统：<span>{$vo['eqpt_sys']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    设备：<span>{$vo['eqpt_type']}</span>
+                                </li>
+                            </ul>
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    报警编码：<span>{$vo['alarmcode']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    报警内容：<span>{$vo['codecontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    报警级别：<span>{$vo['lvlcontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    处置方法：<span>{$vo['manage_type']}</span>
+                                </li>
+                            </ul>
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    处置状态：<span>{$vo['is_manage']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    GIS位置：<span>{$vo['eqpt_site_detail']}</span>
+                                </li>
+                                <li class="layui-col-md6">
+                                    处置说明：<span>{$vo['rec_details']}</span>
+                                </li>
+                            </ul>
+                            <ul class="layui-row policeTop">
+                                <li class="layui-col-md2 policeRela">
+                                    报警处置：
+                                </li>
+                                <li class="layui-col-md7 layui-form">
+                                    <input type="text" name="details" class="layui-input" placeholder="{$vo['rec_details']}" style="color:black">
+                                </li>
+                                <li class="layui-col-md3">
+
+                                    <div data-recid="{$vo['id']}" class="see_class">
+                                        <input type="button" class="layui-btn" name="1001" value="确认">
+                                        <input type="button" class="layui-btn" name="1004" value="误报">
+                                        <input type="button" class="layui-btn" name="1005" value="其他">
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div>
+
+</body>
+<script>
+    layui.use(['layer'], function(){
+        var layer = layui.layer;
+        var $ = layui.$;
+        $(function(){
+            $("input:button").click(function() {
+                var type = $(this).attr("name"); // $(this)表示获取当前被点击元素的name值
+                var rec_id = $(this).parents('div').data('recid');
+                var details = $(this).parents('.layui-col-md3').prev('li').find('input').val();
+                //console.dir(details);
+                var top = $(this).parents('.policeBorder');
+                layer.confirm('执行该动作？', { icon: 3, title: '提示' }, function(index) {
+                    console.dir(details);
+                    $.post('{:url("alarm/alarm_manage")}', { 'rec_id': rec_id ,'type':type,'details':details}, function(data) {
+                        //layer.msg(data.msg);
+                        if (data.code == 1) {
+                            layer.msg(data.msg);
+                            top.hide();
+                            layer.close(index);
+                        } else {
+                            layer.msg(data.msg);
+                            layer.close(index);
+                        }
+
+                    });
+                });
+
+
+
+            });
+        })
+    });
+</script>
+</html>

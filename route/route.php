@@ -27,3 +27,9 @@ Route::get('patrol/get_user_position', 'api/patrol/get_user_position')->allowCro
 Route::get('real/real_time', 'api/real/real_time')->allowCrossDomain();
 Route::get('real/real_times', 'api/real/real_times')->allowCrossDomain();
 Route::get('real/get_last_real', 'api/real/get_last_real')->allowCrossDomain();
+
+Route::get('bigdata/date', 'api/bigdata/date')->allowCrossDomain();
+Route::get('master/last_alarm', 'api/master/last_alarm')->allowCrossDomain();
+Route::get('master/add_alarm', 'api/master/add_alarm')->allowCrossDomain();
+
+Route::get('master/alarm_manage', 'api/master/alarm_manage')->allowCrossDomain();

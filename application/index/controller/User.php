@@ -10,8 +10,9 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 use app\index\model\User as UserModel;
+use app\common\controller\Adminbase;
 
-class User extends Controller
+class User extends Adminbase
 {
     private $host;
     private $url;

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报警日志详情</title>
+    <link rel="stylesheet" href="__STATIC__/new/inno/common.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__STATIC__/new/inno/dataLin.css">
+    <script src="__STATIC__/layui/layui.js"></script>
+    <script src="__STATIC__/js/jquery-1.7.1.min.js"></script>
+</head>
+<body class="backg">
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
+    <!--标题-->
+    <div class="middleNav">
+        <i class="layui-icon">&#xe653;</i> &nbsp;
+        新增联动
+    </div>
+    <input type="hidden" id="catesdata" class="layui-input" value="{$Catesdata}">
+    选择的省: <select class="province" id="province">
+                    <option value="">请选择省份</option>
+                </select>
+    选择的省:    <select class="city" id="city">
+                    <option value="">请选择城市</option>
+                </select>
+
+    <div class="mainTable scrollber">
+
+        <!--<table class="layui-table" id="ledger" lay-filter="eqpt_show"></table>
+        <script type="text/html" id="barDemo">
+            &lt;!&ndash;   <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>&ndash;&gt;
+            <a class="layui-btn layui-btn-xs operBtn" lay-event="edit">编辑</a>
+            &lt;!&ndash;<a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>&ndash;&gt;
+        </script>-->
+        <div class="layui-inline" style="height: 42.6px">
+            <div class="layui-form-item test"  lay-filter="test"></div>
+        </div>
+        <form action="">
+            <div class="addPop popu baseMsg scrollber">
+                <!--条件信息-->
+                <div class="conMsg">
+                    <fieldset class="layui-field-title" style="margin-top:20px "><legend>条件信息</legend>
+                    </fieldset>
+                    <div class="conNum">
+                        <div>条件一</div>
+                        <div class="conSunMsg">
+                            <!--<div><span>系统名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">人员入侵系统</option>
+                                    <option value="">人员入侵</option>
+                                    <option value="">巡查巡检</option>
+                                    <option value="">环境控制</option>
+                                </select>
+                            </div>
+                            <div><span>设备名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">入侵报警设备</option>
+                                    <option value="">火灾报警设备</option>
+                                    <option value="">水灾报警设备</option>
+                                </select>
+                            </div>-->
+
+
+
+                            <div><span>参数名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">入侵报警</option>
+                                    <option value="">水灾报警</option>
+                                    <option value="">火灾报警</option>
+                                </select>
+                            </div>
+                            <div><span>参数设值：</span>
+                                <input class="popInp" type="text">
+                            </div>
+                            <div><span>联动方式：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">与</option>
+                                    <option value="">或</option>
+                                    <option value="">非</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="conNum">
+                        <div>条件二</div>
+                        <div class="conSunMsg">
+                            <div><span>系统名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">人员入侵系统</option>
+                                    <option value="">人员入侵</option>
+                                    <option value="">巡查巡检</option>
+                                    <option value="">环境控制</option>
+                                </select>
+                            </div>
+                            <div><span>设备名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">入侵报警设备</option>
+                                    <option value="">火灾报警设备</option>
+                                    <option value="">水灾报警设备</option>
+                                </select>
+                            </div>
+                            <div><span>参数名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">入侵报警</option>
+                                    <option value="">水灾报警</option>
+                                    <option value="">火灾报警</option>
+                                </select>
+                            </div>
+                            <div><span>参数设值：</span>
+                                <input class="popInp" type="text">
+                            </div>
+                            <div><span>联动方式：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">与</option>
+                                    <option value="">或</option>
+                                    <option value="">非</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 添加条件按钮 -->
+                    <div class="conNum addBtn">
+                        <input type="button" value="+添加条件">
+                    </div>
+                </div>
+
+                <!--执行信息-->
+                <div class="goMsg">
+                    <fieldset class="layui-field-title" style="margin-top:20px "><legend>执行信息</legend>
+                    </fieldset>
+                    <div class="conNum">
+                        <div>执行一</div>
+                        <div class="conSunMsg">
+                            <div><span>系统名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">人员入侵系统</option>
+                                    <option value="">人员入侵</option>
+                                    <option value="">巡查巡检</option>
+                                    <option value="">环境控制</option>
+                                </select>
+                            </div>
+                            <div><span>设备名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">摄像机</option>
+                                    <option value="">灭火器</option>
+                                    <option value="">水位监测</option>
+                                    <option value="">排水</option>
+                                </select>
+                            </div>
+                            <div><span>参数名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">入侵报警</option>
+                                    <option value="">水灾报警</option>
+                                    <option value="">火灾报警</option>
+                                </select>
+                            </div>
+                            <div><span>参数设值：</span>
+                                <input class="popInp" type="text">
+                            </div>
+                            <div><span>联动方式：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">与</option>
+                                    <option value="">或</option>
+                                    <option value="">非</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="conNum">
+                        <div>执行二</div>
+                        <div class="conSunMsg">
+                            <div><span>系统名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">定焦摄像头</option>
+                                </select>
+                            </div>
+                            <div><span>设备名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">定焦摄像头</option>
+                                </select>
+                            </div>
+                            <div><span>参数名称：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">定焦摄像头</option>
+                                </select>
+                            </div>
+                            <div><span>参数设值：</span>
+                                <input class="popInp" type="text">
+                            </div>
+                            <div><span>联动方式：</span>
+                                <select name=""  class="select">
+                                    <option value="">请选择</option>
+                                    <option value="">定焦摄像头</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 添加条件按钮 -->
+                    <div class="conNum addBtn">
+                        <input type="button" value="+添加执行">
+                    </div>
+                </div>
+
+                <!--其他信息-->
+                <div class="otherMsg">
+                    <fieldset class="layui-field-title" style="margin-top:20px "><legend>其他信息</legend>
+                    </fieldset>
+                    <div class="other">
+                        <div><span>备注</span>
+                            <textarea class="textarea" name="" id="" cols="140" rows="8"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- btn按钮 -->
+                <div>
+                    <div class="layerSub">
+                        <input type="submit" value="确定" ><input type="button" value="取消" class="cancel">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+</body>
+<script>
+
+    layui.use(['table','form','layer'], function(){
+        var $ = layui.$;
+        $(function(){
+            var city_json = JSON.parse($('#catesdata').val());
+            console.dir(city_json);
+//页面加载完毕后开始执行的事件
+/*var city_json='{"江苏":["南京","常州"],"河南":["南阳","安阳"]}';
+            var city_obj=eval('('+city_json+')');*/
+            for (var key in city_json)
+            {
+                $(".province").append("<option value='"+key+"'>"+key+"</option>");
+            }
+            $(".province").change(function(){
+                var now_province=$(this).val();
+                $(".city").html('<option value="">请选择城市</option>');
+                for(var k in city_json[now_province])
+                {
+                    var now_city=city_json[now_province][k];
+                    $(".city").append('<option value="'+now_city+'">'+now_city+'</option>');
+                }
+            });
+        });
+
+    });
+
+
+</script>
+</html>

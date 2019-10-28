@@ -14,7 +14,7 @@
 
 
 
-var url = "http://192.168.0.243:8090/iserver/services/map-zhengDing/rest/maps/zhengDing";
+var url = "http://10.3.100.6:8090/iserver/services/map-zhengDing/rest/maps/zhengDing";
 var map = new ol.Map({
     target: 'map',
     // controls: ol.control.defaults({attributionOptions: {collapsed: false}})

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报警日志详情</title>
+    <link rel="stylesheet" href="__STATIC__/new/inno/common.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__STATIC__/new/inno/police.css">
+</head>
+<body class="backg">
+<div class="wrap">
+    <div class='main'>
+        <!-- 弹窗 -->
+        <div class="mask">
+            <div class="layer">
+                <!-- header -->
+                <!-- 内容 -->
+                <div class="layerMiddle scrollber" style="overflow-y:auto;">
+                    <ul class="layerUl" >
+                        {volist name="details" id="vo"}
+                            <li class="layui-row policeBorder">
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    时间：<span>{$vo['alarmtime']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    类型：<span>{$vo['typecontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    系统：<span>{$vo['eqpt_sys']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    设备：<span>{$vo['eqpt_type']}</span>
+                                </li>
+                            </ul>
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    报警编码：<span>{$vo['alarmcode']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    报警内容：<span>{$vo['codecontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    报警级别：<span>{$vo['lvlcontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    处置方法：<span>{$vo['manage_type']}</span>
+                                </li>
+                            </ul>
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    处置状态：<span>{$vo['is_manage']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    GIS位置：<span>{$vo['eqpt_site_detail']}</span>
+                                </li>
+                                <li class="layui-col-md6">
+                                    处置说明：<span>{$vo['rec_details']}</span>
+                                </li>
+                            </ul>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

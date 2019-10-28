@@ -10,8 +10,9 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 use app\index\model\Dept as DeptModel;
+use app\common\controller\Adminbase;
 
-class Dept extends Controller
+class Dept extends Adminbase
 {
     protected function initialize()
     {

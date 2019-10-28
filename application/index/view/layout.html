@@ -25,15 +25,15 @@
         <!--报警设置-->
         <ul class="headerUl">
             <li>
-                <a href="index/visual/demoone" target="_blank" >左屏</a>
+                <a href="{:url('index/visual/demoone')}" target="_blank" >左屏</a>
             </li>
             <span>|</span>
             <li>
-                <a href="index/visual/demotwo" target="_blank"><!--<img src="__STATIC__/image/a1.png" alt="">-->中屏</a>
+                <a href="{:url('index/visual/demotwo')}" target="_blank"><!--<img src="__STATIC__/image/a1.png" alt="">-->中屏</a>
             </li>
             <span>|</span>
             <li>
-                <a href="index/visual/demothree" target="_blank"><!--<img src="__STATIC__/image/a1.png" alt="">-->右屏</a>
+                <a href="{:url('index/visual/demothree')}" target="_blank"><!--<img src="__STATIC__/image/a1.png" alt="">-->右屏</a>
             </li>
 
             <!--<li>
@@ -82,6 +82,17 @@
 
             {/volist}
 
+            <!--<ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item"><a href="javascript:;">{$userInfo.username}</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="{:url('admin/index/logout')}">安全退出</a></dd>
+                        <dd><a href="javascript:;" class="re_qrcode" id="re_qrcode">更新二维码</a></dd>
+                    </dl>
+                </li>
+            </ul>-->
+            <li style="float: right">
+                <a href="{:url('index/Attendance/self')}" target="contentFrame">{$userInfo.username}</a>
+            </li>
 
         </ul>
         <!--动画-->
@@ -92,7 +103,7 @@
         </div>
     </div>
     <!--内容-->
-    <iframe name="contentFrame" scrolling="no" width="100%" height="100%" src="/index.php/index/visual/index"  frameborder="0">
+    <iframe name="contentFrame" scrolling="auto" width="100%" height="100%" src="/index.php/index/visual/index"  frameborder="0">
     </iframe>
 </div>
 

@@ -110,7 +110,7 @@ body,html{
     font-size:18px;
     display:inline-block;
     vertical-align: top;
-    width:7.4%;
+    width:5.4%;
     text-align:center;
     padding:0;
     cursor:pointer;
@@ -132,7 +132,7 @@ body,html{
     border: thin solid #113c58;
 }
 .headerNav li:nth-child(1){
-    width:24.3%;
+    width:17.9%;
     border:0;
     font-size:18px;
     cursor:default;
@@ -156,7 +156,7 @@ body,html{
 .headerNav span{
     display:inline;
 }
-.headerNav li:nth-child(n+2):nth-child(-n+18):hover{
+.headerNav li:nth-child(n+2):nth-child(-n+30):hover{
     outline:1px solid #247998;
     box-shadow: 0 0 6px #247998 inset;
 }
@@ -494,7 +494,7 @@ body,html{
     display:none
 }
 .layerMiddle{
-    height:640px;
+    height:100%;
     width:100%;
     overflow-y:auto;
 }

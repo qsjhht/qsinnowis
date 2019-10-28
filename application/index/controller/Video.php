@@ -10,8 +10,9 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 use app\index\model\Visuals as Visual_Model;
+use app\common\controller\Adminbase;
 
-class Video extends Controller
+class Video extends Adminbase
 {
     public function index()
     {

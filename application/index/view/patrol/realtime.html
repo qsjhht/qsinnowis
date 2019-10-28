@@ -33,6 +33,9 @@
     div.layui-input-inline{
         margin-right: 15px!important;
     }
+    .backg{
+        overfl
+    }
 
 </style>
 
@@ -42,7 +45,7 @@
             <!--标题-->
             <div class="middleNav">
                 <i class="layui-icon">&#xe653;</i> &nbsp;
-                巡查巡检实况
+                环境控制
             </div>
             <input type="hidden" id="sitesdata" class="layui-input" value="{$Sitesdata}">
             <input type="hidden" id="realtime_IP" class="layui-input" value="{$Config.realtime_IP}">
@@ -178,7 +181,34 @@
                 </div>
             </div>
             <div class="evirMain evirMain1" style="flex-wrap:wrap">
-                <div id="container" style="width: 600px;height:400px;"></div>
+                <div class="evirMainSele">
+                    <select class="evirSelect" id="seleTwo">
+                        <option value="1">温度</option>
+                        <option value="2">湿度</option>
+                        <option value="3">氧气</option>
+                        <option value="4">甲烷</option>
+                        <option value="5">硫化氢</option>
+                        <option value="6">水位</option>
+                    </select>
+                    <div class="display evirSelect">
+                        <div class="evirSele"><i class="icon-chart-01"></i></div>
+                        <ul class="evirUl">
+                            <li><i class="icon-chart-01"></i></li>
+                            <li><i class="icon-chart-02"></i></li>
+                            <li><i class="icon-chart-03"></i></li>
+                            <li><i class="icon-chart-04"></i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="container" class="evirEchart"></div>
+                <!--<div id="container" style="width:100%;height:100%;"></div>-->
+
+                <div class="evirMain evirMain1" id="evirSett1">
+
+                </div>
+                <div class="evirMain evirMain1" id="evirSett2">
+
+                </div>
             </div>
 
 
@@ -294,7 +324,7 @@
     function realtimes() {
         $.ajax({
             //url:realtime_IP+"/real/real_time?zone="+zone,
-            url:"http://localhost:8888/real/real_times?name=QS_LT_XC13S",
+            url:"http://localhost:8888/real/real_times?name=QS_O2_XC13S",
             async:false,
             success:function(result){
                 let jsonObj = $.parseJSON(result);
@@ -307,7 +337,7 @@
     function lastdata() {
         $.ajax({
             //url:realtime_IP+"/real/real_time?zone="+zone,
-            url:"http://localhost:8888/real/get_last_real?name=QS_LT_XC13S",
+            url:"http://localhost:8888/real/get_last_real?name=QS_O2_XC13S",
             async:false,
             success:function(result){
                 console.dir(result);
@@ -352,7 +382,13 @@
     //设置图标配置项
     myContainer.setOption({
         title:{
-            text:'ECharts 30天内数据实时更新'
+            text:'温度监测',
+            textStyle:{
+                color:'#00ffff',
+                fontWeight:'normal',
+                fontSize:16
+            },
+            padding:[15,10]
         },
         xAxis:{
             type:"category",
@@ -406,6 +442,78 @@
             }]
         });
     },5000)
+
+
+
+    // -----------------------沉降系统----------------------------------
+    var evirSett1 = echarts.init(document.getElementById('evirSett1'));
+    evirSett1.setOption({
+        title:{
+            text:'沉降监测',
+            textStyle:{
+                color:'#00ffff',
+                fontWeight:'normal',
+                fontSize:16
+            },
+            padding:[15,10]
+        },
+        xAxis:{
+            type:'category',
+            axisLine:{
+                lineStyle:{
+                    color:'#e4e4e4'
+                }
+            }
+        },
+        yAxis:{
+            name:'拉线式位移（cm）',
+            type:'value',
+            axisLine:{
+                lineStyle:{
+                    color:'#e4e4e4'
+                }
+            }
+        },
+        series:[{
+            data:[['11:21',0],['11:22',0],['11:23',0],['11:24',0],['11:25',0],['11:26',0],['11:27',0]],
+            type:'line'
+        }]
+    })
+
+
+    var evirSett2 = echarts.init(document.getElementById('evirSett2'))
+    evirSett2.setOption({
+        title:{
+            text:'拉线式位移',
+            textStyle:{
+                color:'#00ffff',
+                fontWeight:400,
+                fontSize:16
+            }
+        },
+        xAxis:{
+            type:'category',
+            axisLine:{
+                lineStyle:{
+                    color:'#e4e4e4'
+                }
+            }
+        },
+        yAxis:{
+            name:'拉线式位移（cm）',
+            type:'value',
+            axisLine:{
+                lineStyle:{
+                    color:'#e4e4e4'
+                }
+            }
+        },
+        series:[{
+            data:[['13:10',0],['13:11',0],['13:12',0],['13:13',0],['13:14',0],['13:15',0],['13:16',0]],
+            type:'line'
+        }]
+    })
+
 </script>
 </body>
 </html>

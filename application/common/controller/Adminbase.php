@@ -4,33 +4,36 @@
 // +----------------------------------------------------------------------
 namespace app\common\controller;
 
-use app\admin\model\AdminUser as AdminUser_model;
+use app\index\model\AdminUser as AdminUser_model;
+use think\Controller;
 
-class Adminbase extends Base
+class Adminbase extends Controller
 {
     public $_userinfo; //当前登录账号信息
     //初始化
     protected function initialize()
     {
         parent::initialize();
-        //验证登录
-        //过滤不需要登陆的行为
-        $allowUrl = ['admin/index/login',
-            'admin/index/logout',
+        //验证需要登陆的行为
+        $allowUrl = ['index/index/login',
+            'index/index/logout',
         ];
         $rule = strtolower($this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action());
         if (in_array($rule, $allowUrl)) {
 
         } else {
             $this->AdminUser_model = new AdminUser_model;
+            //检验是否登录
+            $this->competence();
+            /*
             if (defined('UID')) {
                 return;
             }
             define('UID', (int) $this->AdminUser_model->isLogin());
             if (false == $this->competence()) {
                 //跳转到登录界面
-                $this->redirect(url('admin/index/login'));
-                $this->error('请先登陆', url('admin/index/login'));
+                $this->redirect(url('index/index/login'));
+                $this->error('请先登陆', url('index/index/login'));
             } else {
                 //是否超级管理员
                 if (!$this->AdminUser_model->isAdministrator()) {
@@ -40,9 +43,8 @@ class Adminbase extends Base
                     }
                 }
 
-            }
+            }*/
         }
-
     }
 
     //验证登录
@@ -69,35 +71,6 @@ class Adminbase extends Base
         return $userInfo;
 
     }
-
-    public function return_msg($code, $msg = '', $data = [])
-    {
-        // 组合数据
-        $return_data['code'] = $code;
-        $return_data['msg']  = $msg;
-        $return_data['data'] = $data;
-        // 返回信息并终止脚本
-        echo json_encode($return_data);die;
-    }
-
-    /**
-     * 操作错误跳转的快捷方法
-     */
-    final public function error($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
-    {
-        model('admin/Adminlog')->record($msg, 0);
-        parent::error($msg, $url, $data, $wait, $header);
-    }
-
-    /**
-     * 操作成功跳转的快捷方法
-     */
-    final public function success($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
-    {
-        model('admin/Adminlog')->record($msg, 1);
-        parent::success($msg, $url, $data, $wait, $header);
-    }
-
     /**
      * 权限检测
      * @param string  $rule    检测的规则

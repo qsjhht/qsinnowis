@@ -10,8 +10,9 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 use app\index\model\Role as RoleModel;
+use app\common\controller\Adminbase;
 
-class Zone extends Controller
+class Zone extends Adminbase
 {
     protected function initialize()
     {

@@ -70,7 +70,7 @@ class Common extends Controller
         $return_data['msg']  = $msg;
         $return_data['data'] = $data;
         // 返回信息并终止脚本
-        echo json_encode($return_data,JSON_UNESCAPED_UNICODE);die;
+
     }
     /**
      * 验证token(防止篡改数据)
