@@ -32,6 +32,30 @@ class Attendance extends Adminbase
         return $this->fetch();
     }
 
+//    新增排班
+    public function set_add()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+
+            $data['v_start_time'] = strtotime($data['v_start']);
+            $data['v_end_time'] = strtotime($data['v_end']);
+            $res = Db('visitor')
+                ->strict(false)
+                ->insert($data);
+            if ($res){
+                $this->success('新增访客信息成功！');
+            }$this->error('新增访客信息失败！');
+        }else{
+            $user = Db('user')->field('user_id,user_name')->select();
+            $this->assign('User',$user);
+            $duty = Db('duty_room')->field('d_id,d_name')->select();
+            $this->assign('Duty',$duty);
+            return $this->fetch();
+        }
+    }
+
+
 //    值班考勤
     public function check()
     {
