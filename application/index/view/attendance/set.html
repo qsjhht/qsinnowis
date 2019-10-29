@@ -27,7 +27,7 @@
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
             <a class="layui-btn layui-btn-xs operBtn" lay-event="edit">编辑</a>
-            <!--<a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>-->
+            <a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>
         </script>
     </div>
 </div>
@@ -117,7 +117,7 @@
         table.render({
             elem: '#ledger' //指定原始表格元素选择器（推荐id选择器）
             ,height:  'full-140' //容器高度
-            ,url: '{:url("index/visitor/index")}'
+            ,url: '{:url("index/attendance/set")}'
             ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                 //layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
                 //,curr: 5 //设定初始在第 5 页
@@ -130,17 +130,12 @@
             }
             ,cols: [[
                 //,{field:'floor_id',title:'分层ID', width:110, sort: true}
-                {field:'v_name',title:'姓名'/*,width:180*/}
-                ,{field:'v_company',width:180,align:'center',title:'单位'}
-                ,{field:'v_post',align:'center', title: '职务' ,width: 80}
+                {field:'p_name',title:'计划名称'/*,width:180*/}
+                ,{field:'d_name',width:180,align:'center',title:'值班室'}
                 /*,{field:'co_linker_post',align:'center', title: '联系人职务', width: 100}*/
-                ,{field:'v_phone',width:120,align:'center',title:'联系电话'}
-                ,{field:'v_num',width:90,align:'center',title:'随行人数'}
-                ,{field:'v_start_time',width:180,align:'center',title:'来访时间'}
-                ,{field:'v_end_time',width:180,align:'center',title:'离开时间'}
-                ,{field:'v_for',width:200,align:'center',title:'来访目的'}
-                ,{field:'user_name',width:80,align:'center',title:'接待人'}
-                ,{field:'v_place',width:90,align:'center',title:'接待地点'}
+                ,{field:'date_range',/*width:120,*/align:'center',title:'日期'}
+                ,{field:'time_range',/*width:120,*/align:'center',title:'时间'}
+                ,{field:'producer',width:90,align:'center',title:'计划人'}
                 ,{align:'center',title:'操作', toolbar: '#barDemo'}
             ]
             ] //设置表头
@@ -159,7 +154,7 @@
         table.on('tool(eqpt_show)', function(obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
-                console.dir('aaaa');
+                //console.dir('aaaa');
                 //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
                 layer.open({
                     title:"编辑企业信息",
@@ -168,7 +163,7 @@
                     area: ['1070px', '655px'],
                     fixed: true, //不固定
                     maxmin: true,
-                    content: ['{:url("visitor/visitor_edit")}' + "?v_id=" + data.v_id],
+                    content: ['{:url("attendance/set_edit")}' + "?p_id=" + data.p_id],
                     shade: [0.8, '#393D49'],
                     /*cancel: function(){
                         //右上角关闭回调  刷新父页面
@@ -187,7 +182,7 @@
                     area: ['1070px', '655px'],
                     fixed: true, //不固定
                     maxmin: true,
-                    content: ['{:url("visitor/visitor_details")}' + "?v_id=" + data.v_id],
+                    content: ['{:url("attendance/set_details")}' + "?p_id=" + data.p_id],
                     shade: [0.8, '#393D49'],
                     /* cancel: function(){
                      //右上角关闭回调  刷新父页面
@@ -197,9 +192,9 @@
                 });
 
             }else if(obj.event === 'del'){
-                layer.confirm('确定删除该企业信息？', { icon: 3, title: '提示' }, function(index) {
-                    console.dir(data.co_id);
-                    $.post('{:url("enterprise/info_del")}', { 'co_id': data.co_id }, function(data) {
+                layer.confirm('确定删除该排班信息？', { icon: 3, title: '提示' }, function(index) {
+                    // console.dir(data.co_id);
+                    $.post('{:url("attendance/set_del")}', { 'p_id': data.p_id }, function(data) {
                         //layer.msg(data.msg);
                         if (data.code == 1) {
                             if (data.url) {
