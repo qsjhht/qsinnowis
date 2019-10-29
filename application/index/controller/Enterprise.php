@@ -213,17 +213,42 @@ class Enterprise extends Adminbase
         }$this->error('删除企业信息失败！');
     }
 
+    //    入廊施工信息展示
     public function construction()
     {
+        if ($this->request->isAjax()) {
+            $limit = $this->request->param('limit/d', 10);
+            $page = $this->request->param('page/d', 1);
+            $field = "e.wo_id,e.co_name,e.wo_name,e.wo_linker,e.co_linker,e.en_start,e.en_end,e.co_phone,e.en_long,t.type_name,u.user_name,e.wo_plan,wo_real";
+            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+            $res   = db('enterprise_work')->alias('e')->field($field)->order('e.wo_id', 'desc')->join($join)->page($page, $limit)->select();
+            foreach ($res as &$re) {
+                $starts = trim($re['en_start'],'-');
+                $startarr = explode('-',$starts);
+               // $startone = db('sites')->where('id',$startarr['1'])->field('site_name')->find();
+                $starttwo = db('sites')->where('id',$startarr['2'])->field('site_name')->find();
+                $re['en_start'] =/* $startone['site_name'] .*/ $starttwo['site_name'];
+
+                $ends = trim($re['en_end'],'-');
+                $endarr = explode('-',$ends);
+//                $endone = db('sites')->where('id',$endarr['1'])->field('site_name')->find();
+                $endtwo = db('sites')->where('id',$endarr['2'])->field('site_name')->find();
+                $re['en_end'] =/* $endone['site_name'] .*/ $endtwo['site_name'];
+            }
+            $total = db('enterprise_work')->count();
+            $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $res);
+            return json($result);
+        }
+        /*$depts = $this->UserModel->get_Tree($depts);
+        //dump($depts);die;
+        $this->assign('depts',$depts);*/
         return $this->fetch();
     }
 
     public function work_add()
     {
         if ($this->request->isPost()) {
-
             $data = $this->request->post();
-            $data['en_time'] = strtotime($data['en_time']);
             $data['en_start'] = '';
             $data['en_end'] = '';
             foreach ($data['start'] as $v1) {
@@ -232,13 +257,12 @@ class Enterprise extends Adminbase
             foreach ($data['end'] as $v2) {
                 $data['en_end'] .= $v2.'-';
             }
-            $data['co_local'] = $data['province'] .'-'. $data['city']  .'-'. $data['county']  .'-'. $data['add'];
-            $res = Db('enterprise')
+            $res = Db('enterprise_work')
                 ->strict(false)
                 ->insert($data);
             if ($res){
-                $this->success('新增企业信息成功！');
-            }$this->error('新增企业信息失败！');
+                $this->success('新增入廊施工信息成功！');
+            }$this->error('新增入廊施工信息失败！');
         }else{
             $local = '[{"id":1,"pid":0,"title":"河北省"},{"id":2,"pid":0,"title":"北京"},{"id":3,"pid":0,"title":"天津"},{"id":4,"pid":1,"title":"石家庄市"},{"id":5,"pid":1,"title":"唐山市"},{"id":6,"pid":1,"title":"秦皇岛市"},{"id":7,"pid":1,"title":"邯郸市"},{"id":8,"pid":1,"title":"邢台市"},{"id":9,"pid":1,"title":"保定市"},{"id":10,"pid":1,"title":"张家口市"},{"id":11,"pid":1,"title":"承德市"},{"id":12,"pid":1,"title":"沧州市"},{"id":13,"pid":1,"title":"廊坊市"},{"id":14,"pid":1,"title":"衡水市"},{"id":15,"pid":4,"title":"长安区"},{"id":16,"pid":4,"title":"桥东区"},{"id":17,"pid":4,"title":"桥西区"},{"id":18,"pid":4,"title":"新华区"},{"id":19,"pid":4,"title":"井陉矿区"},{"id":20,"pid":4,"title":"裕华区"},{"id":21,"pid":4,"title":"井陉县"},{"id":22,"pid":4,"title":"正定县"},{"id":21,"pid":4,"title":"栾城区"},{"id":21,"pid":4,"title":"行唐县"}]';
             $this->assign('local_data', $local);
@@ -253,6 +277,84 @@ class Enterprise extends Adminbase
             $this->assign('User',$user);
             return $this->fetch();
         }
+    }
+
+
+
+//    入廊施工详情
+    public function work_details()
+    {
+        $wo_id = $this->request->param('wo_id');
+        $field = "e.wo_id,e.co_name,e.wo_name,e.co_linker,e.co_linker_post,e.wo_linker,e.wo_phone,e.wo_linker_post,e.wo_num,e.wo_plan,e.wo_real,e.en_start,e.en_end,e.co_phone,e.wo_remark,e.en_long,t.type_name,u.user_name";
+        $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+        $res   = db('enterprise_work')->alias('e')->where('wo_id',$wo_id)->field($field)->join($join)->find();
+
+
+        $starts = trim($res['en_start'],'-');
+        $startarr = explode('-',$starts);
+        $startone = db('sites')->where('id',$startarr['1'])->field('site_name')->find();
+        $starttwo = db('sites')->where('id',$startarr['2'])->field('site_name')->find();
+        $res['en_start'] = $startone['site_name'] . $starttwo['site_name'];
+
+        $ends = trim($res['en_end'],'-');
+        $endarr = explode('-',$ends);
+        $endone = db('sites')->where('id',$endarr['1'])->field('site_name')->find();
+        $endtwo = db('sites')->where('id',$endarr['2'])->field('site_name')->find();
+        $res['en_end'] = $endone['site_name'] . $endtwo['site_name'];
+        $this->assign('Info',$res);
+        return $this->fetch();
+    }
+
+//    入廊施工编辑
+    public function work_edit()
+    {
+        if ($this->request->isPost()) {
+
+            $wo_real = $this->request->param('wo_real');
+            $wo_id = $this->request->param('wo_id');
+
+
+            $res = Db('enterprise_work')
+                ->where('wo_id',$wo_id)
+                ->strict(false)
+                ->update(['wo_real' => $wo_real]);
+            if ($res){
+                $this->success('修改实际施工时间成功！');
+            }$this->error('修改实际施工时间失败！');
+        }else{
+            $wo_id = $this->request->param('wo_id');
+            $field = "e.wo_id,e.co_name,e.wo_name,e.co_linker,e.co_linker_post,e.wo_linker,e.wo_phone,e.wo_linker_post,e.wo_num,e.wo_plan,e.wo_real,e.en_start,e.en_end,e.co_phone,e.wo_remark,e.en_long,t.type_name,u.user_name";
+            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+            $res   = db('enterprise_work')->alias('e')->where('wo_id',$wo_id)->field($field)->join($join)->find();
+
+
+            $starts = trim($res['en_start'],'-');
+            $startarr = explode('-',$starts);
+            $startone = db('sites')->where('id',$startarr['1'])->field('site_name')->find();
+            $starttwo = db('sites')->where('id',$startarr['2'])->field('site_name')->find();
+            $res['en_start'] = $startone['site_name'] . $starttwo['site_name'];
+
+            $ends = trim($res['en_end'],'-');
+            $endarr = explode('-',$ends);
+            $endone = db('sites')->where('id',$endarr['1'])->field('site_name')->find();
+            $endtwo = db('sites')->where('id',$endarr['2'])->field('site_name')->find();
+            $res['en_end'] = $endone['site_name'] . $endtwo['site_name'];
+            $this->assign('Info',$res);
+            return $this->fetch();
+
+        }
+    }
+
+//    删除入廊施工信息
+    public function work_del()
+    {
+        $wo_id = $this->request->param('wo_id');
+        if (empty($wo_id)) {
+            $this->error('ID错误');
+        }
+        if(Db('enterprise_work')->delete($wo_id)){
+            $this->success('删除入廊施工信息成功！');
+        }$this->error('删除入廊施工信息失败！');
     }
 
 

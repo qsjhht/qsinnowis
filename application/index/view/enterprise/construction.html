@@ -117,7 +117,7 @@
         table.render({
             elem: '#ledger' //指定原始表格元素选择器（推荐id选择器）
             ,height:  'full-140' //容器高度
-            ,url: '{:url("index/enterprise/info")}'
+            ,url: '{:url("index/enterprise/construction")}'
             ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                 //layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
                 //,curr: 5 //设定初始在第 5 页
@@ -130,14 +130,18 @@
             }
             ,cols: [[
                 //,{field:'floor_id',title:'分层ID', width:110, sort: true}
-                {field:'co_name',title:'名称'/*,width:180*/}
-                ,{field:'type_name',width:80,align:'center',title:'类型'}
+                {field:'co_name',width:100,title:'入廊企业'/*,width:180*/}
                 ,{field:'co_linker',align:'center', title: '联系人' ,width: 80}
+                ,{field:'wo_name',width:100,align:'center',title:'施工企业'}
+                ,{field:'wo_linker',align:'center', title: '联系人' ,width: 80}
+                ,{field:'type_name',width:80,align:'center',title:'类型'}
+
                 /*,{field:'co_linker_post',align:'center', title: '联系人职务', width: 100}*/
-                ,{field:'co_phone',width:120,align:'center',title:'联系人电话'}
-                ,{field:'en_start',width:180,align:'center',title:'入廊起点'}
-                ,{field:'en_end',width:180,align:'center',title:'入廊终点'}
-                ,{field:'en_time',width:180,align:'center',title:'入廊时间'}
+               /* ,{field:'co_phone',width:120,align:'center',title:'联系人电话'}*/
+                ,{field:'en_start',width:80,align:'center',title:'起点'}
+                ,{field:'en_end',width:80,align:'center',title:'终点'}
+                ,{field:'wo_plan',width:190,align:'center',title:'计划时间'}
+                ,{field:'wo_real',width:190,align:'center',title:'实际时间'}
                 ,{field:'en_long',width:100,align:'center',title:'长度(km)'}
                 ,{field:'user_name',width:80,align:'center',title:'经办人'}
                 ,{align:'center',title:'操作', toolbar: '#barDemo'}
@@ -158,16 +162,15 @@
         table.on('tool(eqpt_show)', function(obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
-                console.dir('aaaa');
                 //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
                 layer.open({
-                    title:"编辑角色",
+                    title:"编辑入廊施工信息",
                     type: 2,
                     offset: ['100px', '130px'],
-                    area: ['1070px', '655px'],
+                    area: ['1070px', '760px'],
                     fixed: true, //不固定
                     maxmin: true,
-                    content: ['{:url("enterprise/info_edit")}' + "?co_id=" + data.co_id],
+                    content: ['{:url("enterprise/work_edit")}' + "?wo_id=" + data.wo_id],
                     shade: [0.8, '#393D49'],
                     /*cancel: function(){
                      //右上角关闭回调  刷新父页面
@@ -180,13 +183,13 @@
                 //iframe层-父子操作
                 //alert(data.id);
                 layer.open({
-                    title:"角色详情",
+                    title:"入廊施工详情",
                     type: 2,
                     offset: ['100px', '130px'],
-                    area: ['1070px', '655px'],
+                    area: ['1070px', '760px'],
                     fixed: true, //不固定
                     maxmin: true,
-                    content: ['{:url("enterprise/info_details")}' + "?co_id=" + data.co_id],
+                    content: ['{:url("enterprise/work_details")}' + "?wo_id=" + data.wo_id],
                     shade: [0.8, '#393D49'],
                     /* cancel: function(){
                      //右上角关闭回调  刷新父页面
@@ -196,9 +199,9 @@
                 });
 
             }else if(obj.event === 'del'){
-                layer.confirm('确定删除该企业信息？', { icon: 3, title: '提示' }, function(index) {
+                layer.confirm('确定删除该入廊施工信息？', { icon: 3, title: '提示' }, function(index) {
                     console.dir(data.co_id);
-                    $.post('{:url("enterprise/info_del")}', { 'co_id': data.co_id }, function(data) {
+                    $.post('{:url("enterprise/work_del")}', { 'wo_id': data.wo_id }, function(data) {
                         //layer.msg(data.msg);
                         if (data.code == 1) {
                             if (data.url) {
@@ -309,7 +312,7 @@
                 title:"新增入廊施工",
                 type: 2,
                 offset: ['15px', '60px'],
-                area: ['1070px', '655px'],
+                area: ['1070px', '760px'],
                 fixed: true, //不固定
                 maxmin: true,
                 content: ['{:url("enterprise/work_add")}', 'no'],
