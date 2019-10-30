@@ -22,20 +22,22 @@
 <div class="">
 
 
+    <input type="hidden" name="cates" id="cates" class="layui-input" value="{$Catesdata}">
+
     <!-- 添加信息弹窗 -->
-    <form action="" class="layui-form">
+    <form action="" class="layui-form" method="post">
         <div class="addPop popu baseMsg scrollber">
             <!--条件信息-->
             <div class="conMsg">
                 <fieldset class="layui-field-title" style="margin-top:20px "><legend>条件信息</legend>
                 </fieldset>
                 <div class="conNum conNumCon">
-                    <div>条件一</div>
+                    <div>条件：1</div>
                     <div class="conSunMsg">
                         <div class="layui-form-item">
                             <label class="layui-form-label">系统名称：</label>
                             <div class="layui-input-inline">
-                                <select name="SHB"  class="select" lay-filter="TJXT" placeholder='请选择' >
+                                <select name="SHB[]"  class="select" lay-filter="TJXT" placeholder='请选择' >
                                     <option value="">请选择</option>
                                     <option value="0">安防系统</option>
                                     <option value="1">消防系统</option>
@@ -45,32 +47,32 @@
                             </div>
                             <label class="layui-form-label">设备名称：</label>
                             <div class="layui-input-inline">
-                                <select name="SHB"  class="SHB" id="SHB">
+                                <select name="SHBsub[]"  class="SHB" id="SHB">
                                     <option value="">请选择</option>
                                 </select>
                             </div>
                             <label class="layui-form-label">参数名称：</label>
                             <div class="layui-input-inline">
-                                <select name=""  class="select">
-                                    <option value="">请选择</option>
-                                    <option value="">入侵报警</option>
-                                    <option value="">水灾报警</option>
-                                    <option value="">火灾报警</option>
+                                <select name="paramset[]"  class="select">
+                                    <option value="0">请选择</option>
+                                    <option value="1">入侵报警</option>
+                                    <option value="2">水灾报警</option>
+                                    <option value="3">火灾报警</option>
                                 </select>
                             </div>
 
                             <label class="layui-form-label">参数设值：</label>
                             <div class="layui-input-inline">
-                                <input class="layui-input" type="text">
+                                <input class="layui-input" name="paramsetnum[]" type="text">
                             </div>
 
                             <label class="layui-form-label">联动方式：</label>
                             <div class="layui-input-inline">
-                                <select name=""  class="select">
-                                    <option value="">请选择</option>
-                                    <option value="">与</option>
-                                    <option value="">或</option>
-                                    <option value="">非</option>
+                                <select name="lingtypeset[]"  class="select">
+                                    <option value="0">请选择</option>
+                                    <option value="1">与</option>
+                                    <option value="2">或</option>
+                                    <option value="3">非</option>
                                 </select>
                             </div>
 
@@ -88,12 +90,12 @@
                 <fieldset class="layui-field-title" style="margin-top:20px "><legend>执行信息</legend>
                 </fieldset>
                 <div class="conNum conNumGo">
-                    <div>执行一</div>
+                    <div>执行：1</div>
                     <div class="conSunMsg">
                         <div class="layui-form-item">
                             <label class="layui-form-label">系统名称：</label>
                             <div class="layui-input-inline">
-                                <select name="ZX"  class="select" lay-filter="ZXXT" placeholder='请选择' >
+                                <select name="ZX[]"  class="select" lay-filter="ZXXT" placeholder='请选择' >
                                     <option value="">请选择</option>
                                     <option value="0">安防系统</option>
                                     <option value="1">消防系统</option>
@@ -103,32 +105,32 @@
                             </div>
                             <label class="layui-form-label">设备名称：</label>
                             <div class="layui-input-inline">
-                                <select name="ZX"  class="SHB" id="ZX">
+                                <select name="ZXsub[]"  class="SHB" id="ZX">
                                     <option value="">请选择</option>
                                 </select>
                             </div>
                             <label class="layui-form-label">参数名称：</label>
                             <div class="layui-input-inline">
-                                <select name=""  class="select">
-                                    <option value="">请选择</option>
-                                    <option value="">入侵报警</option>
-                                    <option value="">水灾报警</option>
-                                    <option value="">火灾报警</option>
+                                <select name="paramdo[]"  class="select">
+                                    <option value="0">请选择</option>
+                                    <option value="1">入侵报警</option>
+                                    <option value="2">水灾报警</option>
+                                    <option value="3">火灾报警</option>
                                 </select>
                             </div>
 
                             <label class="layui-form-label">参数设值：</label>
                             <div class="layui-input-inline">
-                                <input class="layui-input" type="text">
+                                <input class="layui-input" name="paramdonum[]" type="text">
                             </div>
 
                             <label class="layui-form-label">联动方式：</label>
                             <div class="layui-input-inline">
-                                <select name=""  class="select">
-                                    <option value="">请选择</option>
-                                    <option value="">与</option>
-                                    <option value="">或</option>
-                                    <option value="">非</option>
+                                <select name="linktypedo[]"  class="select">
+                                    <option value="0">请选择</option>
+                                    <option value="1">与</option>
+                                    <option value="2">或</option>
+                                    <option value="3">非</option>
                                 </select>
                             </div>
 
@@ -147,7 +149,7 @@
                 </fieldset>
                 <div class="other">
                     <div><span>备注</span>
-                        <textarea class="textarea" name="" id="" cols="140" rows="8"></textarea>
+                        <textarea class="textarea" name="remark" id="" cols="140" rows="8"></textarea>
                     </div>
                 </div>
             </div>

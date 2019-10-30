@@ -22,19 +22,73 @@ class Linkage extends Adminbase
     }
     public function index()
     {
-        $cates_data = json_encode($this->Linkage->getCates());
+        /*$depts = $this->UserModel->get_Tree($depts);
+        //dump($depts);die;
+        $this->assign('depts',$depts);*/
+        $res = db('linkage')->order('l_id', 'desc')->select();
+        $remarks = array();
+        $datas = array();
+        $set = ['SHB','SHBsub','paramset','paramsetnum','lingtypeset'];
+        foreach ($res as $k=>$re) {
+            $remarks[] = $re['remark'];
+            unset($re['remark']);
+            foreach ($re as $kk=>$vv) {
+                $vv = trim($vv,',');
+                $vv = explode(',',$vv);
 
-        $this->assign('Catesdata', $cates_data);
+                if(in_array($kk,$set)){
+                    foreach ($vv as $kkk=>$vvv) {
+                        $datas[$k]['set'][$kkk][$kk] =$vvv;
+                        $datas[$k]['remark'] = $remarks[$k];
+                }
 
+                }else{
+                    foreach ($vv as $kkk=>$vvv) {
+                        $datas[$k]['get'][$kkk][$kk] =$vvv;
+                        $datas[$k]['remark'] = $remarks[$k];
+                    }
+                }
+            }
+        }
+        $this->assign('Datas', $datas);
+//        dump($datas);
         return $this->fetch();
     }
 
 //    新增联动
     public function linkage_add()
     {
-        $cates_data = json_encode($this->Linkage->getCates());
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $datas = array();
+            foreach ($data as $key=>$val) {
+                $datas[$key] = '';
+                if($key !== 'remark'){
+                    if(is_array($val)){
+                        foreach ($val as $vo) {
 
-        $this->assign('Catesdata', $cates_data);
-        return $this->fetch();
+                            $datas[$key] .= $vo.',';
+                        }
+                    }else{
+                        $datas[$key] .= $val.',';
+                    }
+                }
+            }
+            $datas['remark'] = $data['remark'];
+
+            $res = Db('linkage')
+                ->strict(false)
+                ->insert($datas);
+
+            if ($res) {
+                $this->success('新增系统联动成功！');
+            }
+            $this->error('新增系统联动失败！');
+        } else {
+            $cates_data = json_encode($this->Linkage->getCates(), JSON_UNESCAPED_UNICODE);
+            $this->assign('Catesdata', $cates_data);
+            return $this->fetch();
+        }
+
     }
 }

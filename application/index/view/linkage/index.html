@@ -8,14 +8,94 @@
 </style>
 {block name="main"}
 <link rel="stylesheet" href="/static/css/eqpt.css">
-
+<link rel="stylesheet" href="__STATIC__/new/css/dataLin.css">
 <div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
     <!--标题-->
 
-    <div class="middleScreen layui-inline" style="position: absolute;top: 65px;right: 20px">
+    <div class="middleScreen layui-inline" style="top: 35px;right: 20px">
         <button class="middleAdd" id="linkage_add"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
     </div>
 
+<div>
+    <!-- 联动事件 -->
+    <div class="linkMain scrollber">
+        {volist name="$Datas" id="vo"}
+        <!-- 联动事件一 -->
+        <div>
+            <div class="middleNav"><i class="layui-icon">&#xe653;</i>&nbsp&nbsp&nbsp<span class="linkName">联动事件</span></div>
+            <div class="linkMsg">
+                <!--编辑及控制条-->
+                <div class="ediCon">
+                    <div><button class="editor" id="eventEditor" ><img src="__STATIC__/image/editor.png" alt="编辑" ></button></div>
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <label class="lab layui-form-label"></label>
+                            <input type="checkbox" name="switch" lay-skin="switch" lay-text="执行|停止" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <!--条件及执行信息-->
+                <div class="baseMsg">
+                    <!--条件信息-->
+
+
+                    <div class="conMsg">
+                        <fieldset class="layui-field-title" style="margin-top:20px "><legend>条件信息</legend>
+                        </fieldset>
+                        {volist name="$vo.set" id="vv"}
+                        <div class="conNum">
+
+                            <div>条件</div>
+                            <div class="conSunMsg">
+                                <div><span>系统名称：</span><span>{$vv.SHB}</span></div>
+                                <div><span>设备名称：</span><span>{$vv.SHBsub}</span></div>
+                                <div><span>参数名称：</span><span>{$vv.paramset}</span></div>
+                                <div><span>参数设置值：</span><span>{$vv.paramsetnum}</span></div>
+                                <div><span>联动方式：</span><span>{$vv.lingtypeset}</span></div>
+                            </div>
+
+                        </div>
+                        {/volist}
+                    </div>
+
+
+
+
+                    <!--执行信息-->
+                    <div class="goMsg">
+                        <fieldset class="layui-field-title" style="margin-top:20px "><legend>执行信息</legend>
+                        </fieldset>
+                        {volist name="$vo.get" id="vv"}
+                        <div class="conNum">
+
+                            <div>执行</div>
+                            <div class="conSunMsg">
+                                <div><span>系统名称：</span><span>{$vv.ZX}</span></div>
+                                <div><span>设备名称：</span><span>{$vv.ZXsub}</span></div>
+                                <div><span>参数名称：</span><span>{$vv.paramdo}</span></div>
+                                <div><span>参数设置值：</span><span>{$vv.paramdonum}</span></div>
+                                <div><span>联动方式：</span><span>{$vv.linktypedo}</span></div>
+                            </div>
+
+                        </div>
+                        {/volist}
+                    </div>
+
+                    <!--其他信息-->
+                    <div class="otherMsg">
+                        <fieldset class="layui-field-title" style="margin-top:20px "><legend>其他信息</legend>
+                        </fieldset>
+                        <div><span>备注</span>
+                            <textarea class="textarea" disabled name="remark" id="" cols="140" rows="3">{$vo.remark}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/volist}
+    </div>
+</div>
 
    <!-- <div class="mainTable scrollber">
 
@@ -531,7 +611,7 @@
                 title:"新增联动",
                 type: 2,
                 offset: ['15px', '60px'],
-                area: ['1070px', '655px'],
+                area: ['1100px', '655px'],
                 fixed: true, //不固定
                 maxmin: true,
                 content: ['{:url("linkage/linkage_add")}', 'no'],
