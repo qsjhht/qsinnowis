@@ -10,12 +10,29 @@
     <link rel="stylesheet" href="__STATIC__/css/common.css">
     <link rel="stylesheet" href="__STATIC__/css/equipment.css">
     <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+
+    <script src="/static/layui/layui.js"></script>
+    <script src="/static/js/jquery-1.7.1.min.js"></script>
 </head>
 <style>
 
     .shadow{
     outline:1px solid #247998;
     box-shadow: 0 0 6px #247998 inset;
+    }
+    .layui-layer-content{
+        color: black;
+    }
+    #user_name{
+        position: relative;
+    }
+    #hover-togg{
+        width: 100%;
+        display: none;
+        position: absolute;
+    }
+    .bck:hover{
+        background: gray;
     }
 </style>
 <body class="backg" style='overflow:-Scroll;overflow-y:hidden'>
@@ -43,7 +60,7 @@
         </ul>
         <!--一级菜单-->
         <ul class="headerNav">
-            <li>
+            <li id="copyright">
                 <img src="__STATIC__/image/a3.png" alt="" class="img">
                 智慧管廊综合管理平台
             </li>
@@ -90,8 +107,17 @@
                     </dl>
                 </li>
             </ul>-->
-            <li style="float: right">
-                <a href="{:url('index/Attendance/self')}" target="contentFrame">{$userInfo.username}</a>
+            <li  id="user_name" style="float: right">
+                {if $userInfo.username != ''}
+                <a href="{:url('index/Attendance/check')}" target="contentFrame">{$userInfo.username}</a>
+                    <dl id="hover-togg">
+                        <dd class="bck"><a href="javascript:void(0);"  id="logout">安全退出</a></dd>
+                        <!--<dd class="bck"><a href="" class="re_qrcode" id="re_qrcode">更新二维码</a></dd>-->
+                    </dl>
+                {else/}
+                    <a href="javascript:void(0);" id="login">请登录</a>
+                {/if}
+
             </li>
 
         </ul>
@@ -107,9 +133,7 @@
     </iframe>
 </div>
 
-<script src="/static/layui/layui.js"></script>
 
-<script src="/static/js/jquery-1.7.1.min.js"></script>
 <script>
     $(function () {
         /* $(".headerNav li").click(function () {
@@ -128,7 +152,7 @@
             $(this).next("span").css("color","#00ffff");
         });
 */
-        
+
         $(".headerNav li").mousemove(function(){
             $("span").css("color","#00ffff");
             $(this).prev("span").css("color","#000");
@@ -152,6 +176,75 @@
         });*/
 
     });
+
+    layui.use('layer', function(){
+        var layer = layui.layer;
+        $("#copyright").click(function(){
+            layer.open({
+                title: '版权声明！'
+                ,content: '本软件版权为求实科技集团有限公司所有。<br> 受《中华人民共和国著作权法》和著作权国际公约的保护。<br> 未经求实科技集团有限公司书面许可，不得以任何方式或理由对该软件或资料的任何部分进行使用、破解、复制、修改、抄录、传播或与其它产品捆绑使用、销售，侵权必究。<br> ' +
+                '软件名称：InnoWis智慧管廊综合管理平台<br> ' +
+                '授权使用：河北承宏管廊工程有限公司<br> ' +
+                '使用范围：正定新区存量综合管廊工程 <br> ' +
+                '授权期限：永久授权<br> ' +
+                '授权单位：求实科技集团有限公司<br> '
+            });
+        });
+
+        $("#login").click(function(){
+            layer.open({
+                type: 2,
+                offset: ['200px', '530px'],
+                area: ['500px', '415px'],
+                title:false,
+                fixed: true, //不固定
+                //maxmin: true,
+                content: ['{:url("index/login")}'],
+                shade: [0.8, '#393D49'],
+                /* cancel: function(){
+                 //右上角关闭回调  刷新父页面
+                 window.parent.location.reload();
+                 //return false 开启该代码可禁止点击该按钮关闭
+                 }*/
+            });
+        });
+        $("#logout").click(function(){
+            layer.confirm('确定要退出吗？', { icon: 3, title: false }, function(index) {
+                $.post('{:url("index/logout")}', function(data) {
+                    layer.msg(data.msg);
+                    location.reload();
+                    /*if (data.code == 1) {
+                        if (data.url) {
+                            layer.msg(data.msg + ' 页面即将自动跳转~');
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                        setTimeout(function() {
+                            if (data.url) {
+                                location.href = data.url;
+                            } else {
+                                location.reload();
+                            }
+                        }, 1500);
+                    } else {
+                        layer.msg(data.msg + ' 页面即将自动刷新~');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }*/
+
+                });
+            });
+        });
+
+
+        $('#user_name').hover(function () {
+            $("#hover-togg").slideToggle();
+        });
+    });
+
+
+
 </script>
 </body>
 

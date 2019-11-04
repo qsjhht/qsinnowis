@@ -40,12 +40,11 @@ class Index extends Adminbase
             $this->error('验证码输入错误！');
             return false;
             }*/
-            $AdminUser_model->login($data['username'], $data['password']);
             if ($AdminUser_model->login($data['username'], $data['password'])) {
 
-                $this->success('恭喜您，登陆成功', url('index/index/index'));
+                $this->success('恭喜您，登陆成功!');
             } else {
-                $this->error($AdminUser_model->getError(), url('index/index/index'));
+                $this->error($AdminUser_model->getError());
             }
         } else {
             return $this->fetch();
@@ -60,7 +59,7 @@ class Index extends Adminbase
         if ($AdminUser_model->logout()) {
             //手动登出时，清空forward
             //cookie("forward", NULL);
-            $this->success('注销成功！', url("admin/index/login"));
+            $this->success('注销成功！');
         }
     }
 }

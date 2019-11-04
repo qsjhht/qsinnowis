@@ -17,84 +17,87 @@
     </div>
 
 <div>
-    <!-- 联动事件 -->
-    <div class="linkMain scrollber">
-        {volist name="$Datas" id="vo"}
-        <!-- 联动事件一 -->
-        <div>
-            <div class="middleNav"><i class="layui-icon">&#xe653;</i>&nbsp&nbsp&nbsp<span class="linkName">联动事件</span></div>
-            <div class="linkMsg">
-                <!--编辑及控制条-->
-                <div class="ediCon">
-                    <div><button class="editor" id="eventEditor" ><img src="__STATIC__/image/editor.png" alt="编辑" ></button></div>
-                    <div class="layui-form">
-                        <div class="layui-form-item">
-                            <label class="lab layui-form-label"></label>
-                            <input type="checkbox" name="switch" lay-skin="switch" lay-text="执行|停止" checked>
-                        </div>
-                    </div>
-                </div>
 
-                <!--条件及执行信息-->
-                <div class="baseMsg">
-                    <!--条件信息-->
-
-
-                    <div class="conMsg">
-                        <fieldset class="layui-field-title" style="margin-top:20px "><legend>条件信息</legend>
-                        </fieldset>
-                        {volist name="$vo.set" id="vv"}
-                        <div class="conNum">
-
-                            <div>条件</div>
-                            <div class="conSunMsg">
-                                <div><span>系统名称：</span><span>{$vv.SHB}</span></div>
-                                <div><span>设备名称：</span><span>{$vv.SHBsub}</span></div>
-                                <div><span>参数名称：</span><span>{$vv.paramset}</span></div>
-                                <div><span>参数设置值：</span><span>{$vv.paramsetnum}</span></div>
-                                <div><span>联动方式：</span><span>{$vv.lingtypeset}</span></div>
+        <!-- 联动事件 -->
+        <div class="linkMain scrollber">
+            {volist name="$Datas" id="vo"}
+            <!-- 联动事件一 -->
+            <div>
+                <div class="middleNav"><i class="layui-icon">&#xe653;</i>&nbsp&nbsp&nbsp<span class="linkName">联动事件</span></div>
+                <div class="linkMsg">
+                    <!--编辑及控制条-->
+                    <div class="ediCon">
+                        <div><button class="editor" id="eventEditor" ><img src="__STATIC__/image/editor.png" alt="编辑" ></button></div>
+                        <div class="layui-form">
+                            <div class="layui-form-item">
+                                <label class="lab layui-form-label"></label>
+                                <input type="checkbox" name="switch" lay-skin="switch" lay-text="执行|停止" checked>
                             </div>
-
                         </div>
-                        {/volist}
                     </div>
 
+                    <!--条件及执行信息-->
+                    <div class="baseMsg">
+                        <!--条件信息-->
 
 
+                        <div class="conMsg">
+                            <fieldset class="layui-field-title" style="margin-top:20px "><legend>条件信息</legend>
+                            </fieldset>
+                            {volist name="$vo.set" id="vv"}
+                            <div class="conNum">
 
-                    <!--执行信息-->
-                    <div class="goMsg">
-                        <fieldset class="layui-field-title" style="margin-top:20px "><legend>执行信息</legend>
-                        </fieldset>
-                        {volist name="$vo.get" id="vv"}
-                        <div class="conNum">
+                                <div>条件</div>
+                                <div class="conSunMsg">
+                                    <div><span>系统名称：</span><span>{$vv.SHB}</span></div>
+                                    <div><span>设备名称：</span><span>{$vv.SHBsub}</span></div>
+                                    <div><span>参数名称：</span><span>{$vv.paramset}</span></div>
+                                    <div><span>参数设置值：</span><span>{$vv.paramsetnum}</span></div>
+                                    <div><span>联动方式：</span><span>{$vv.lingtypeset}</span></div>
+                                </div>
 
-                            <div>执行</div>
-                            <div class="conSunMsg">
-                                <div><span>系统名称：</span><span>{$vv.ZX}</span></div>
-                                <div><span>设备名称：</span><span>{$vv.ZXsub}</span></div>
-                                <div><span>参数名称：</span><span>{$vv.paramdo}</span></div>
-                                <div><span>参数设置值：</span><span>{$vv.paramdonum}</span></div>
-                                <div><span>联动方式：</span><span>{$vv.linktypedo}</span></div>
                             </div>
-
+                            {/volist}
                         </div>
-                        {/volist}
-                    </div>
 
-                    <!--其他信息-->
-                    <div class="otherMsg">
-                        <fieldset class="layui-field-title" style="margin-top:20px "><legend>其他信息</legend>
-                        </fieldset>
-                        <div><span>备注</span>
-                            <textarea class="textarea" disabled name="remark" id="" cols="140" rows="3">{$vo.remark}</textarea>
+
+
+
+                        <!--执行信息-->
+                        <div class="goMsg">
+                            <fieldset class="layui-field-title" style="margin-top:20px "><legend>执行信息</legend>
+                            </fieldset>
+                            {volist name="$vo.get" id="vv"}
+                            <div class="conNum">
+
+                                <div>执行</div>
+                                <div class="conSunMsg">
+                                    <div><span>系统名称：</span><span>{$vv.ZX}</span></div>
+                                    <div><span>设备名称：</span><span>{$vv.ZXsub}</span></div>
+                                    <div><span>参数名称：</span><span>{$vv.paramdo}</span></div>
+                                    <div><span>参数设置值：</span><span>{$vv.paramdonum}</span></div>
+                                    <div><span>联动方式：</span><span>{$vv.linktypedo}</span></div>
+                                </div>
+
+                            </div>
+                            {/volist}
+                        </div>
+
+                        <!--其他信息-->
+                        <div class="otherMsg">
+                            <fieldset class="layui-field-title" style="margin-top:20px "><legend>其他信息</legend>
+                            </fieldset>
+                            <div><span>备注</span>
+                                <textarea class="textarea" disabled name="remark" id="" cols="140" rows="3">{$vo.remark}</textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {/volist}
         </div>
-        {/volist}
-    </div>
+    <div id="test1"></div>
+
 </div>
 
    <!-- <div class="mainTable scrollber">
@@ -111,25 +114,25 @@
 
 {block name="script"}
 <script>
-    $("input").focus(function(){
-        $(this).parent().children(".input_clear").show();
-    });
-    $("input").blur(function(){
-        if($(this).val()=='')
-        {
-            $(this).parent().children(".input_clear").hide();
-        }
-    });
-    $(".input_clear").click(function(){
-        $(this).parent().find('input').val('');
-        $(this).hide();
-    });
-</script>
-<script>
-    layui.use(['table','form','layer'], function(){
+    layui.use(['table','form','layer','laypage'], function(){
         var table = layui.table,
             form = layui.form,
             layer = layui.layer;
+        var laypage = layui.laypage;
+
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+            ,count: 50 //数据总数，从服务端得到
+            ,jump: function(obj, first){
+                //obj包含了当前分页的所有参数，比如：
+                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                console.log(obj.limit); //得到每页显示的条数
+                console.log(obj); //得到每页显示的条数
+
+
+            }
+        });
         //创建arr对象  ps：关联数组无法转换成json
         //arr = {"Installed":true,"unerected":true,"normal":true,"fault":true,"scrap":true};
         //监听提交

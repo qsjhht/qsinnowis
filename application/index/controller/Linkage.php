@@ -25,7 +25,42 @@ class Linkage extends Adminbase
         /*$depts = $this->UserModel->get_Tree($depts);
         //dump($depts);die;
         $this->assign('depts',$depts);*/
+        if ($this->request->isAjax()) {
+            $limit = $this->request->param('limit/d', 10);
+            $page = $this->request->param('page/d', 1);
+            $res = db('linkage')->order('l_id', 'desc')->page($page, $limit)->select();
+            $total = db('linkage')->count();
+            $remarks = array();
+            $datas = array();
+            $set = ['SHB','SHBsub','paramset','paramsetnum','lingtypeset'];
+            foreach ($res as $k=>$re) {
+                $remarks[] = $re['remark'];
+                unset($re['remark']);
+                foreach ($re as $kk=>$vv) {
+                    $vv = trim($vv,',');
+                    $vv = explode(',',$vv);
+
+                    if(in_array($kk,$set)){
+                        foreach ($vv as $kkk=>$vvv) {
+                            $datas[$k]['set'][$kkk][$kk] =$vvv;
+                            $datas[$k]['remark'] = $remarks[$k];
+                    }
+
+                    }else{
+                        foreach ($vv as $kkk=>$vvv) {
+                            $datas[$k]['get'][$kkk][$kk] =$vvv;
+                            $datas[$k]['remark'] = $remarks[$k];
+                        }
+                    }
+                }
+            }
+           // $this->assign('Datas', $datas);
+            $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $datas);
+            return json($result);
+    //        dump($datas);
+        }
         $res = db('linkage')->order('l_id', 'desc')->select();
+        $total = db('linkage')->count();
         $remarks = array();
         $datas = array();
         $set = ['SHB','SHBsub','paramset','paramsetnum','lingtypeset'];
@@ -40,7 +75,7 @@ class Linkage extends Adminbase
                     foreach ($vv as $kkk=>$vvv) {
                         $datas[$k]['set'][$kkk][$kk] =$vvv;
                         $datas[$k]['remark'] = $remarks[$k];
-                }
+                    }
 
                 }else{
                     foreach ($vv as $kkk=>$vvv) {
@@ -51,8 +86,8 @@ class Linkage extends Adminbase
             }
         }
         $this->assign('Datas', $datas);
-//        dump($datas);
         return $this->fetch();
+
     }
 
 //    新增联动

@@ -153,6 +153,7 @@ class Attendance extends Adminbase
         $d2 = date('Y-m-d',strtotime('+1 day'));
 
         $this->assign('Uid',$this->_userinfo['userid']);
+        $this->assign('Uname',$this->_userinfo['username']);
         $m_d_l = strtotime($d. '09:00:00');
 
         $n_s_l = strtotime($d. '17:00:00');

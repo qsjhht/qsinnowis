@@ -19,7 +19,7 @@
 </style>
 <div id="mydiv">
     <div class="login-main">
-        <div class="layui-elip">栾城托幼餐饮采购管理系统&nbsp;</div>
+        <div class="layui-elip">智慧管廊综合管理平台&nbsp;</div>
         <form class="layui-form" action="{:url('index/index/login')}">
             <div class="layui-form-item">
                 <div class="layui-input-inline input-item">
@@ -61,7 +61,9 @@
                         icon: 1,
                         time: 1000
                     }, function() {
-                        window.location.href = data.url;
+                        window.parent.location.reload();
+                        /* var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                        parent.layer.close(index);		//关闭窗口*/
                     });
                 } else {
                     console.dir(data.msg);

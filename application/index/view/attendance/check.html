@@ -15,6 +15,7 @@
         </div>
 
         <input type="hidden" id="u_id" class="layui-input" value="{$Uid}">
+        <input type="hidden" id="u_name" class="layui-input" value="{$Uname}">
         <table lay-filter="parse-table-demo">
             <thead>
             <tr>
@@ -173,6 +174,9 @@
         return date;
     }
 
+    var u_name = $('#u_name').val();
+
+
     function getLangDate() {
         var dateObj = new Date(); //表示当前系统时间的Date对象
         var year = dateObj.getFullYear(); //当前系统时间的完整年份值
@@ -186,7 +190,11 @@
         var second = dateObj.getSeconds(); //当前系统时间的秒钟值
         var timeValue = "" + ((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午"); //当前时间属于上午、晚上还是下午
         newDate = dateFilter(year) + "年" + dateFilter(month) + "月" + dateFilter(date) + "日 " + " " + dateFilter(hour) + ":" + dateFilter(minute) + ":" + dateFilter(second);
-        document.getElementById("nowTime").innerHTML = timeValue + "好！ 当前时间为： " + newDate + "　" + week;
+        if(u_name == undefined){
+            document.getElementById("nowTime").innerHTML = timeValue + "好！ 当前时间为： " + newDate + "　" + week;
+        }else{
+            document.getElementById("nowTime").innerHTML = u_name + timeValue + "好！ 当前时间为： " + newDate + "　" + week;
+        }
         setTimeout("getLangDate()", 1000);
     }
 </script>
