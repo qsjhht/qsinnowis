@@ -83,7 +83,7 @@ class Master extends Controller
         unset($this->params['sign_method']);
         unset($this->params['sign']);
         $this->params['alarmtime'] = strtotime($this->params['alarmtime']);
-        Db('alarmlog')->insert($this->params);
+        Db('alarmsend')->insert($this->params);
     }
 
     public function asc_sort($params = array())
@@ -131,14 +131,14 @@ class Master extends Controller
         $url = rtrim($url,htmlspecialchars('&'));
 
         //return $url;
-        echo $url;
+        //echo $url;
         $ch = curl_init ();
         if(substr($url,0,5)=='https'){
             curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
             curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,true);
         }
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt ( $ch, CURLOPT_URL, '192.168.10.18/patrol/get_user_position?check_user_id=40' );
+        curl_setopt ( $ch, CURLOPT_URL, $url );
 //        curl_setopt ( $ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt ( $ch, CURLOPT_HEADER, 0 );
 
