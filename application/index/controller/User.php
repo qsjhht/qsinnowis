@@ -62,27 +62,63 @@ class User extends Adminbase
                 $data['password'] = $this->default_pwd;
                 //$user_id = Db('user')->insertGetId($data);
                 $user_id = $this->AdminUser->createManager($data);
-
-                //拼接url 发送get请求
+                $this->return_msg('0','新增用户成功！');
+               // return $data;
+                /*//拼接url 发送get请求
                 $arr['userName'] = $data['username'];
                 $arr['userId'] = $user_id;
                 $arr['type'] = 'add';
                 $arr = json_encode($arr);
-                $res = $this->get_url($arr,$this->url);
+                $res = $this->get_url($arr,$this->url);*/
 
-                if($res['flag']){
+                /*if($user_id){
+                    return json_encode($data);
                     $this->success('新增用户成功！');
                 }else {
                     $this->error('远程新增失败，请稍后同步！');
-                }
+                }*/
             });
-            $this->error('新增用户失败！');
+            //$this->error('新增用户失败！');
         }else{
             $fieldrole  = "role_id,role_name";
             $role = Db('role')->field($fieldrole)->select();
             $this->assign('Role',$role);
             return $this->fetch();
         }
+    }
+
+    public function user_add_ajax()
+    {
+        Db::transaction(function () {
+            $data['username'] = $this->request->param('username');
+            $data['phone'] = $this->request->param('phone');
+            $data['sex'] = $this->request->param('sex');
+            $data['last_login_time'] = time();
+            $data['nickname'] = $this->request->param('nickname');
+            $data['deptid'] = $this->request->param('user_dept_id');
+            $data['roleid'] = $this->request->param('roleid');
+//                $data['user_icon'] = $this->default_icon;
+            $data['password'] = $this->default_pwd;
+            //$user_id = Db('user')->insertGetId($data);
+            $user_id = $this->AdminUser->createManager($data);
+            $this->return_msg('0','新增用户成功！');
+            // return $data;
+            /*//拼接url 发送get请求
+            $arr['userName'] = $data['username'];
+            $arr['userId'] = $user_id;
+            $arr['type'] = 'add';
+            $arr = json_encode($arr);
+            $res = $this->get_url($arr,$this->url);*/
+
+            /*if($user_id){
+                return json_encode($data);
+                $this->success('新增用户成功！');
+            }else {
+                $this->error('远程新增失败，请稍后同步！');
+            }*/
+        });
+        $this->return_msg('1','shibai！');
+        //$this->error('新增用户失败！');
     }
     public function user_details()
     {
