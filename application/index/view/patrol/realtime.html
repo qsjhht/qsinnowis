@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="__STATIC__/new/demo.css">
     <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
 </head>
-<body class="backg" style="overflow: auto;>
 <style>
     input.layui-input.layui-unselect{
         height: 30px;
@@ -33,185 +32,180 @@
     div.layui-input-inline{
         margin-right: 15px!important;
     }
-    .backg{
-        overfl
-    }
 
 </style>
+<body class="backg" style="overflow: auto">
 
-        <!--内容-->
-        <!--巡查巡检实况-->
+    <div class="middleNav">
+        <i class="layui-icon">&#xe653;</i> &nbsp;
+        大数据管理
+    </div>
 
-            <!--标题-->
-            <div class="middleNav">
-                <i class="layui-icon">&#xe653;</i> &nbsp;
-                环境控制
+
+    <input type="hidden" id="sitesdata" class="layui-input" value="{$Sitesdata}">
+    <input type="hidden" id="realtime_IP" class="layui-input" value="{$Config.realtime_IP}">
+    <form class="layui-form" action="">
+        <div class="layui-inline" style="height: 42.6px">
+            <div class="layui-form-item test"  lay-filter="test"></div>
+        </div>
+    </form>
+    <div class="evirMain">
+        <div class="evirMain2 flex" style="justify-content:space-between;align-content:space-between">
+            <div class="evirMainDiv mainBor ">
+                <div class="contentHead">
+                    温度 <img src="__STATIC__/new/image/c13.png" alt="/" width="15" height="20">
+                </div>
+                <div class="contentDiv" data-name="T" id="T">
+                    ----
+                    <!-- 30℃ -->
+                </div>
+                <div class="contentBelow">℃</div>
             </div>
-            <input type="hidden" id="sitesdata" class="layui-input" value="{$Sitesdata}">
-            <input type="hidden" id="realtime_IP" class="layui-input" value="{$Config.realtime_IP}">
-            <form class="layui-form" action="">
-                <div class="layui-inline" style="height: 42.6px">
-                    <div class="layui-form-item test"  lay-filter="test"></div>
-                </div>
-            </form>
-            <div class="evirMain">
-                <div class="evirMain2 flex" style="justify-content:space-between;align-content:space-between">
-                    <div class="evirMainDiv mainBor ">
-                        <div class="contentHead">
-                            温度 <img src="__STATIC__/new/image/c13.png" alt="/" width="15" height="20">
-                        </div>
-                        <div class="contentDiv" data-name="T" id="T">
-                            ----
-                            <!-- 30℃ -->
-                        </div>
-                        <div class="contentBelow">℃</div>
-                    </div>
-                    <div class="evirMainDiv mainBor">
-                        <div class="contentHead">
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
 
-                            湿度
-                            <img src="__STATIC__/new/image/c4.png" alt="/" width="20" height="20">
-                        </div>
-                        <div class="contentDiv" data-name="M" id="M">
-                            ----
-                            <!-- 72% -->
-                        </div>
-                        <div class="contentBelow">%</div>
-                    </div>
-                    <div class="evirMainDiv mainBor">
-                        <div class="contentHead">
-                            水位 <img src="__STATIC__/new/image/c14.png" alt="/" width="30  ">
-                        </div>
-                        <div class="contentDiv" data-name="LT" id="LT">
-                            <!-- 20cm -->
-                            ----
-                        </div>
-                        <div class="contentBelow">CM</div>
-                    </div>
-                    <div class="evirMainDiv mainBor">
-                        <div class="contentHead">
-                            甲烷
-                            <span>&nbsp;CH<sub style="font-size: 1px">4</sub></span>
-                        </div>
-                        <div class="contentDiv" data-name="CH4" id="CH4">
-                            ----
-                            <!-- 3 -->
-                        </div>
-                        <div class="contentBelow">%LEL</div>
-                    </div>
-                    <div class="evirMainDiv mainBor">
-                        <div class="contentHead">
-                            硫化氢
-                            <span>&nbsp;H<sub style="font-size: 1px">2</sub>S</span>
-                        </div>
-                        <div class="contentDiv" data-name="H2S" id="H2S">
-                            ----
-                            <!-- 0 -->
-                        </div>
-                        <div class="contentBelow">PPM</div>
-                    </div>
-                    <div class="evirMainDiv mainBor">
-                        <div class="contentHead">
-                            氧气
-                            <span>&nbsp;O<sub style="font-size: 1px">2</sub></span>
-                        </div>
-                        <div class="contentDiv" data-name="O2" id="O2">
-                            ----
-                            <!-- 20 -->
-                        </div>
-                        <div class="contentBelow">%VOL</div>
+                    湿度
+                    <img src="__STATIC__/new/image/c4.png" alt="/" width="20" height="20">
+                </div>
+                <div class="contentDiv" data-name="M" id="M">
+                    ----
+                    <!-- 72% -->
+                </div>
+                <div class="contentBelow">%</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+                    水位 <img src="__STATIC__/new/image/c14.png" alt="/" width="30  ">
+                </div>
+                <div class="contentDiv" data-name="LT" id="LT">
+                    <!-- 20cm -->
+                    ----
+                </div>
+                <div class="contentBelow">CM</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+                    甲烷
+                    <span>&nbsp;CH<sub style="font-size: 1px">4</sub></span>
+                </div>
+                <div class="contentDiv" data-name="CH4" id="CH4">
+                    ----
+                    <!-- 3 -->
+                </div>
+                <div class="contentBelow">%LEL</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+                    硫化氢
+                    <span>&nbsp;H<sub style="font-size: 1px">2</sub>S</span>
+                </div>
+                <div class="contentDiv" data-name="H2S" id="H2S">
+                    ----
+                    <!-- 0 -->
+                </div>
+                <div class="contentBelow">PPM</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+                    氧气
+                    <span>&nbsp;O<sub style="font-size: 1px">2</sub></span>
+                </div>
+                <div class="contentDiv" data-name="O2" id="O2">
+                    ----
+                    <!-- 20 -->
+                </div>
+                <div class="contentBelow">%VOL</div>
+            </div>
+        </div>
+        <div class="evirMain2 layui-form flex" >
+            <div class="main2Con">
+                <div class="divWidth flex">
+                    <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg "/>
+                    <div class="divWidthInput">
+                        水舱排风</br>
+                        <input type="checkbox"  lay-skin="switch"  lay-filter="switchTest" lay-text="ON|OFF"/>
                     </div>
                 </div>
-                <div class="evirMain2 layui-form flex" >
-                    <div class="main2Con">
-                        <div class="divWidth flex">
-                            <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg "/>
-                            <div class="divWidthInput">
-                                水舱排风</br>
-                                <input type="checkbox"  lay-skin="switch"  lay-filter="switchTest" lay-text="ON|OFF"/>
-                            </div>
-                        </div>
-                        <div class="divWidth flex" style="border-top:1px dashed #ffffff">
-                            <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg"/>
-                            <div class="divWidthInput">
-                                电舱排风</br>
-                                <input type="checkbox" lay-skin="switch"  lay-filter="switch" lay-text="ON|OFF">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="main2Con flex" style="border-left:1px solid #ffffff;border-right:1px solid #ffffff; margin:0 4px">
-                        <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
-                        <div class="divWidthInput">
-                            水泵</br>
-                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
-                        </div>
-                    </div>
-                    <div class="main2Con">
-                        <div class="divWidth flex">
-                            <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
-                            <div class="divWidthInput">
-                                灯组一</br>
-                                <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
-                            </div>
-                        </div>
-                        <div class="divWidth flex" style="border-top:1px dashed #ffffff">
-                            <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
-                            <div class="divWidthInput">
-                                灯组三</br>
-                                <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="main2Con" style="border-left:1px dashed #ffffff">
-                        <div class="divWidth flex">
-                            <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2 "/>
-                            <div class="divWidthInput">
-                                灯组二</br>
-                                <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
-                            </div>
-                        </div>
-                        <div class="divWidth flex" style="border-top:1px dashed #ffffff">
-                            <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
-                            <div class="divWidthInput">
-                                灯组四</br>
-                                <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
-                            </div>
-                        </div>
+                <div class="divWidth flex" style="border-top:1px dashed #ffffff">
+                    <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg"/>
+                    <div class="divWidthInput">
+                        电舱排风</br>
+                        <input type="checkbox" lay-skin="switch"  lay-filter="switch" lay-text="ON|OFF">
                     </div>
                 </div>
             </div>
-            <div class="evirMain evirMain1" style="flex-wrap:wrap">
-                <div class="evirMainSele">
-                    <select class="evirSelect" id="seleTwo">
-                        <option value="1">温度</option>
-                        <option value="2">湿度</option>
-                        <option value="3">氧气</option>
-                        <option value="4">甲烷</option>
-                        <option value="5">硫化氢</option>
-                        <option value="6">水位</option>
-                    </select>
-                    <div class="display evirSelect">
-                        <div class="evirSele"><i class="icon-chart-01"></i></div>
-                        <ul class="evirUl">
-                            <li><i class="icon-chart-01"></i></li>
-                            <li><i class="icon-chart-02"></i></li>
-                            <li><i class="icon-chart-03"></i></li>
-                            <li><i class="icon-chart-04"></i></li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="container" class="evirEchart"></div>
-                <!--<div id="container" style="width:100%;height:100%;"></div>-->
-
-                <div class="evirMain evirMain1" id="evirSett1">
-
-                </div>
-                <div class="evirMain evirMain1" id="evirSett2">
-
+            <div class="main2Con flex" style="border-left:1px solid #ffffff;border-right:1px solid #ffffff; margin:0 4px">
+                <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
+                <div class="divWidthInput">
+                    水泵</br>
+                    <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
                 </div>
             </div>
+            <div class="main2Con">
+                <div class="divWidth flex">
+                    <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
+                    <div class="divWidthInput">
+                        灯组一</br>
+                        <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
+                    </div>
+                </div>
+                <div class="divWidth flex" style="border-top:1px dashed #ffffff">
+                    <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
+                    <div class="divWidthInput">
+                        灯组三</br>
+                        <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
+                    </div>
+                </div>
+            </div>
+            <div class="main2Con" style="border-left:1px dashed #ffffff">
+                <div class="divWidth flex">
+                    <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2 "/>
+                    <div class="divWidthInput">
+                        灯组二</br>
+                        <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
+                    </div>
+                </div>
+                <div class="divWidth flex" style="border-top:1px dashed #ffffff">
+                    <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
+                    <div class="divWidthInput">
+                        灯组四</br>
+                        <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="evirMain evirMain1" style="flex-wrap:wrap">
+        <div class="evirMainSele">
+            <select class="evirSelect" id="seleTwo">
+                <option value="1">温度</option>
+                <option value="2">湿度</option>
+                <option value="3">氧气</option>
+                <option value="4">甲烷</option>
+                <option value="5">硫化氢</option>
+                <option value="6">水位</option>
+            </select>
+            <div class="display evirSelect">
+                <div class="evirSele"><i class="icon-chart-01"></i></div>
+                <ul class="evirUl">
+                    <li><i class="icon-chart-01"></i></li>
+                    <li><i class="icon-chart-02"></i></li>
+                    <li><i class="icon-chart-03"></i></li>
+                    <li><i class="icon-chart-04"></i></li>
+                </ul>
+            </div>
+        </div>
+        <div id="container" class="evirEchart"></div>
+        <!--<div id="container" style="width:100%;height:100%;"></div>-->
 
+        <div class="evirMain evirMain1" id="evirSett1">
 
+        </div>
+        <div class="evirMain evirMain1" id="evirSett2">
+
+        </div>
+    </div>
+</body>
 
 <script src="__STATIC__/layui/layui.js"></script>
 
@@ -262,15 +256,14 @@
     function real_time(zone){
         var zones = zone.replace('/','');
         var realtime_IP = $('#realtime_IP').val();
-        //console.dir(realtime_IP);
+        //console.dir(zones);
         $.ajax({
-            //url:realtime_IP+"/real/real_time?zone="+zone,
-            url:"http://localhost:8888/real/real_time?zone="+zone,
+            url:realtime_IP+"/real/real_time?zone="+zones,
+            // url:"http://localhost:8888/real/real_time?zone="+zone,
             async:false,
             success:function(result){
-
                 result = JSON.parse(result);
-                //console.dir(result);
+                console.dir(result);
                 /*$(".contentDiv").each(function(){
 
                     console.dir( $(this).dataset());
@@ -278,7 +271,7 @@
                 let list = document.querySelectorAll('.contentDiv');
                 //console.dir(list);
                 for(var i = 0; i < list.length; i++){
-                    var key = 'QS_'+list[i].dataset.name+'_'+zones;
+                    var key = list[i].dataset.name+'_'+zones;
                     var ids = list[i].dataset.name;
                     //console.dir(key);
                     if(typeof(result[key]) !== 'undefined'){
@@ -322,29 +315,31 @@
     arrDate = [];
     arrData = [];
     function realtimes() {
+        var realtime_IP = $('#realtime_IP').val();
+        // console.dir(realtime_IP);
         $.ajax({
-            //url:realtime_IP+"/real/real_time?zone="+zone,
-            url:"http://localhost:8888/real/real_times?name=QS_O2_XC13S",
+            url:realtime_IP+"/real/real_times?name=QS_O2_XC13S",
+            // url:"http://localhost:8888/real/real_times?name=QS_O2_XC13S",
             async:false,
             success:function(result){
                 let jsonObj = $.parseJSON(result);
                 objToArray(jsonObj);
                 console.dir(arrDate);
-                console.dir(arrData);
             }
         });
     }
     function lastdata() {
+        var realtime_IP = $('#realtime_IP').val();
+        // console.dir(realtime_IP);
         $.ajax({
-            //url:realtime_IP+"/real/real_time?zone="+zone,
-            url:"http://localhost:8888/real/get_last_real?name=QS_O2_XC13S",
+            url:realtime_IP+"/real/get_last_real?name=QS_O2_XC13S",
+            // url:"http://localhost:8888/real/get_last_real?name=QS_O2_XC13S",
             async:false,
             success:function(result){
                 console.dir(result);
                 let jsonObj = $.parseJSON(result);
                 objToArray(jsonObj,true);
                 console.dir(arrDate);
-                console.dir(arrData);
             }
         });
     }
@@ -393,11 +388,21 @@
         xAxis:{
             type:"category",
             boundaryGap:false,
-            data:arrDate
+            data:arrDate,
+            axisLine:{
+                lineStyle:{
+                    color:'#e4e4e4'
+                }
+            }
         },
         yAxis:{
             boundaryGap:[0,'50%'],
-            type:'value'
+            type:'value',
+            axisLine:{
+                lineStyle:{
+                    color:'#e4e4e4'
+                }
+            }
         },
         series:[{
             name:'成交',

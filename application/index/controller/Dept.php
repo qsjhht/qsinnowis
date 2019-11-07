@@ -26,6 +26,9 @@ class Dept extends Adminbase
             $page = $this->request->param('page/d', 1);
             $total = $this->DeptModel->count();
             $data = $this->DeptModel->page($page, $limit)->select();
+            foreach ($data as &$da) {
+                $da['user_num'] = db('admin')->where('deptid',$da['dept_id'])->count();
+                }
             $data=json_decode($data,false);
             $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $data);
             return json($result);

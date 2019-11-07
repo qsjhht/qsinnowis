@@ -31,10 +31,10 @@ class AdminUser extends Model
             $this->error = '没有数据！';
             return false;
         }
-        $passwordinfo = encrypt_password($data['password']); //对密码进行处理
+        $passwordinfo = $this->encrypt_password($data['password']); //对密码进行处理
         $data['password'] = $passwordinfo['password'];
         $data['encrypt'] = $passwordinfo['encrypt'];
-        $id = $this->allowField(true)->save($data);
+        $id = $this->allowField(true)->insertGetId($data);
         if ($id) {
             return $id;
         }

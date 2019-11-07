@@ -10,22 +10,28 @@
         <form class="layui-form form-horizontal" action="" method="post">
 
             <div class="layui-form-item">
-                <label class="layui-form-label">用户名称</label>
+                <label class="layui-form-label">用户名</label>
                 <div class="layui-input-inline w400" >
-                    <input type="text" name="user_name" autocomplete="off" value=""  placeholder="用户名称" class="layui-input">
+                    <input type="text" name="username" autocomplete="off" value=""  placeholder="登录用户名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户昵称</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="nickname" autocomplete="off" value=""  placeholder="用户昵称" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">用户手机</label>
                 <div class="layui-input-inline w400" >
-                    <input type="text" name="user_phone" autocomplete="off" value=""  placeholder="用户手机" class="layui-input">
+                    <input type="text" name="phone" autocomplete="off" value=""  placeholder="用户手机" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">性别</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="user_sex" value="0" title="男" checked>
-                    <input type="radio" name="user_sex" value="1" title="女" >
+                    <input type="radio" name="sex" value="1" title="男" checked>
+                    <input type="radio" name="sex" value="0" title="女" >
                 </div>
             </div>
             <div class="layui-form-item">
@@ -40,7 +46,7 @@
             <div class="layui-form-item" style="width: 450px;">
                 <label class="layui-form-label">所属角色</label>
                 <div class="layui-input-block">
-                    <select name="user_role_id" lay-verify="required">
+                    <select name="roleid" lay-verify="required">
                         <option value="">请选择所属角色</option>
                         {volist name="Role" id="vo"}
                         <option value="{$vo.role_id}">{$vo.role_name}</option>

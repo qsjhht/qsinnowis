@@ -23,7 +23,12 @@ class Bigdata extends Controller
      //$this->date_start = new \DateTime($this->start_date['start_time']);
      //$days = $this->start_date['start_time']->diff($this->new_date)->days;
      $days = floor(abs((time() - $this->start_date['start_time']) / 86400));
-     $arr['days'] = $days;
+     $num=str_pad($days,4,"0",STR_PAD_LEFT);
+
+     $arr['units'] = substr($num,0,1);
+     $arr['tens'] = substr($num,1,1);
+     $arr['hundreds'] = substr($num,2,1);
+     $arr['thousands'] = substr($num,3,1);
      $txt =  json_encode($arr,JSON_UNESCAPED_UNICODE);
      echo $txt;
     }

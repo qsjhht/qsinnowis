@@ -9,6 +9,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use think\Db;
+use app\index\model\AdminUser as AdminUser;
 use app\index\model\User as UserModel;
 use app\common\controller\Adminbase;
 
@@ -23,6 +24,7 @@ class User extends Adminbase
         parent::initialize();
         $this->host = 'http://192.168.20.60:8080';
         $this->url = $this->host .= "/RMD_PipeGallery/rmdBaseEquipmentController.do?addOrUpdateUser";
+        $this->AdminUser = new AdminUser;
         $this->UserModel = new UserModel;
         $this->default_icon = '/photo/default/usericon.jpeg';
         $this->default_pwd = '123456';
@@ -32,10 +34,10 @@ class User extends Adminbase
         if ($this->request->isAjax()) {
             $limit = $this->request->param('limit/d', 10);
             $page = $this->request->param('page/d', 1);
-            $field = "u.user_id,u.user_name,u.user_phone,u.user_icon,u.user_sex,r.role_name,d.dept_name";
-            $join  = [['role r', 'u.user_role_id = r.role_id', 'LEFT'], ['dept d', 'u.user_dept_id = d.dept_id', 'LEFT']];
-            $res   = db('user')->alias('u')->field($field)->order('u.user_id', 'desc')->join($join)->page($page, $limit)->select();
-            $total = $this->UserModel->count();
+            $field = "u.userid,u.username,u.phone,u.nickname,u.sex,r.role_name,d.dept_name";
+            $join  = [['role r', 'u.roleid = r.role_id', 'LEFT'], ['dept d', 'u.deptid = d.dept_id', 'LEFT']];
+            $res   = db('admin')->alias('u')->field($field)->order('u.userid', 'desc')->join($join)->page($page, $limit)->select();
+            $total = $this->AdminUser->count();
             $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $res);
             return json($result);
         }
@@ -48,26 +50,30 @@ class User extends Adminbase
     public function user_add()
     {
         if ($this->request->isPost()) {
-
             Db::transaction(function () {
-                $data['user_name'] = $this->request->param('user_name');
-                $data['user_phone'] = $this->request->param('user_phone');
-                $data['user_sex'] = $this->request->param('user_sex');
-                $data['user_dept_id'] = $this->request->param('user_dept_id');
-                $data['user_role_id'] = $this->request->param('user_role_id');
-                $data['user_icon'] = $this->default_icon;
-                $data['user_pwd'] = md5($this->default_pwd);
-                $user_id = Db('user')->insertGetId($data);
+                $data['username'] = $this->request->param('username');
+                $data['phone'] = $this->request->param('phone');
+                $data['sex'] = $this->request->param('sex');
+                $data['last_login_time'] = time();
+                $data['nickname'] = $this->request->param('nickname');
+                $data['deptid'] = $this->request->param('user_dept_id');
+                $data['roleid'] = $this->request->param('roleid');
+//                $data['user_icon'] = $this->default_icon;
+                $data['password'] = $this->default_pwd;
+                //$user_id = Db('user')->insertGetId($data);
+                $user_id = $this->AdminUser->createManager($data);
+
                 //拼接url 发送get请求
-                $arr['userName'] = $data['user_name'];
+                $arr['userName'] = $data['username'];
                 $arr['userId'] = $user_id;
                 $arr['type'] = 'add';
-
                 $arr = json_encode($arr);
-
                 $res = $this->get_url($arr,$this->url);
+
                 if($res['flag']){
                     $this->success('新增用户成功！');
+                }else {
+                    $this->error('远程新增失败，请稍后同步！');
                 }
             });
             $this->error('新增用户失败！');

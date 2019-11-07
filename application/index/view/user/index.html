@@ -13,7 +13,7 @@
     <!--标题-->
     <div class="middleNav">
         <i class="layui-icon">&#xe653;</i> &nbsp;
-        组织机构列表
+        用户列表
     </div>
     <div class="middleScreen layui-inline" style="right: 20px">
         <button class="middleAdd" id="add_user"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
@@ -56,16 +56,14 @@
             }
             ,cols: [[
                 //,{field:'floor_id',title:'分层ID', width:110, sort: true}
-                ,{field:'user_id',width:40,title:'用户id'}
-                ,{field:'user_name',align:'center',title:'用户名称'}
-                ,{field:'user_phone',align:'center',title:'用户手机'}
-                ,{field:'user_sex',align:'center',title:'用户性别'}
-                ,{field:'role_name',align:'center',title:'用户角色'}
+                {field:'userid',width:80,title:'用户id'}
+                ,{field:'username',title:'用户名'}
+                ,{field:'nickname',align:'center',title:'用户昵称'}
+                ,{field:'phone',width:150,align:'center',title:'用户手机'}
+                ,{field:'sex',width:100,align:'center',title:'用户性别'}
+                ,{field:'role_name',width:150,align:'center',title:'用户角色'}
                 ,{field:'dept_name',width:150,align:'center',title:'用户所在部门'}
-
                 /*,{field:'eqpt_site',title:'设备位置'}*/
-
-
                 ,{align:'center',title:'操作', toolbar: '#barDemo'}
             ]
             ]

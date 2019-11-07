@@ -28,7 +28,7 @@ class Real  extends Controller
                 $query->table('history')->field('TIME')->order('TIME','desc')->limit(1);
             })
             ->select();*/
-        $realdata = [];
+        /*$realdata = [];
         $real = Db::connect('yk_config')->table('newtable')
             ->where('TIME','=',function($query){
                 $query->table('newtable')->field('TIME')->order('TIME','desc')->limit(1);
@@ -38,12 +38,43 @@ class Real  extends Controller
             ->select();
         foreach ($real as $value){
             $realdata[$value['NAME']] = $value['VALUE'];
+        }*/
+        $conn=odbc_connect('kinghistory','sa','sa');
+        if (!$conn)
+        {
+            exit("连接失败: " . $conn);
         }
+
+        $sql="SELECT * FROM history";
+        $rs=odbc_exec($conn,$sql);
+
+        if (!$rs)
+        {
+            exit("SQL 语句错误");
+        }
+        $yk_arr = array();
+        while (odbc_fetch_row($rs))
+        {
+            $name = substr(odbc_result($rs,"TagName"),-5);
+            /* $compname=odbc_result($rs,"TagName");*/
+            //$conname=odbc_result($rs,"DataTime");
+            if($name == $zone){
+                $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
+            }
+//            $yk_arr[$name]['TagName'] = $name;
+//            $yk_arr[$name]['DataTime'] = odbc_result($rs,"DataTime");
+//            $yk_arr[$name]['DataValue'] = odbc_result($rs,"DataValue");
+//            echo "<tr><td>$compname</td>";
+            //echo "<td>$conname</td></tr>";
+        }
+        odbc_close($conn);
+        /*dump($yk_arr);
+        die;*/
         //dump($realdata);
         /*$return_data['code'] = 200;
         $return_data['msg']  = '查询成功！';
         $return_data['data'] = $real;*/
-        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
+        echo json_encode($yk_arr,JSON_UNESCAPED_UNICODE);die;
     }
     public function real_times()
     {
@@ -68,7 +99,7 @@ class Real  extends Controller
         $real_times = Db::connect('yk_config')
             ->table('newtable')
             ->field('TIME,VALUE')
-            ->order('TIME','desc')
+            ->order('TIME','esc')
             ->where('NAME',$name)
             ->limit(100)
             ->select();

@@ -60,10 +60,10 @@
                <div class="infoRun">
                     <ul class="infoRunUl">
                          <li class="infoRunLi">安全运行</li>
-                         <li class="infoRunNum">0</li>
-                         <li class="infoRunNum">1</li>
-                         <li class="infoRunNum">3</li>
-                         <li class="infoRunNum">6</li>
+                         <li class="infoRunNum" id="units">0</li>
+                         <li class="infoRunNum" id="tens">0</li>
+                         <li class="infoRunNum" id="hundreds">0</li>
+                         <li class="infoRunNum" id="thousands">0</li>
                          <li class="infoRunLi">天</li>
                     </ul>
                </div>
@@ -178,6 +178,24 @@
           </div>
      </div>
 </div>
+<script>
+    // ajax 安全运行时间
+    function safety() {
+        $.get('http://localhost:8888/bigdata/date', function(data) {
+            data = JSON.parse(data);
+            console.dir(data);
+            $('#units').html(data.units);
+            $('#tens').html(data.tens);
+            $('#hundreds').html(data.hundreds);
+            $('#thousands').html(data.thousands);
+        });
+    }
+
+    $(function(){
+        safety();
+        setInterval(safety,60000);
+    });
+</script>
 <script src="__STATIC__/new/gis/QueryBySQL.js"></script>
 <script src="__STATIC__/new/itemJS/demoOne.js"></script>
 </body>
