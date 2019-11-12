@@ -1,22 +1,3 @@
-let evirImg = document.getElementsByClassName('evirImg')
-layui.use('form',function(){
-    var form = layui.form;
-
-    form.on('switch(switchTest)',function(){
-       if(this.checked ? true : false == true){
-            evirImg[0].classList.add('evirImgKey')
-       }else if(this.checked ? trun : false == false){
-            evirImg[0].classList.remove('evirImgKey')
-       }
-    })
-    form.on('switch(switch)',function(){
-        if(this.checked ? true : false == true){
-            evirImg[1].classList.add('evirImgKey')
-       }else if(this.checked ? trun : false == false){
-            evirImg[1].classList.remove('evirImgKey')
-       }
-    })
-})
 
 // 开关监听
 // let check = document.getElementsByClassName('check');

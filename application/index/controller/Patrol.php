@@ -67,4 +67,121 @@ class Patrol extends Adminbase
         $json = json_encode($json);
         return $json;
     }
+
+    public function log()
+    {
+        if ($this->request->isAjax()) {
+            $limit = $this->request->param('limit/d', 10);
+            $page = $this->request->param('page/d', 1);
+            $res   = db('patrol_log')->order('log_id', 'desc')->page($page, $limit)->select();
+
+            foreach ($res as &$re) {
+                $re['user_names'] = '';
+                $userstr = trim($re['user_ids'],',');
+                $userarr = explode(',',$userstr);
+                $users = db('admin')->field('nickname')->where('userid','in',$userarr)->select();
+                foreach ($users as $vo) {
+                    $re['user_names'] .= $vo['nickname'].',';
+                }
+                $re['user_names'] = trim($re['user_names'],',');
+
+                /*$starts = trim($re['en_start'],'-');
+                $startarr = explode('-',$starts);
+                $startone = db('sites')->where('id',$startarr['1'])->field('site_name')->find();
+                $starttwo = db('sites')->where('id',$startarr['2'])->field('site_name')->find();
+                $re['en_start'] = $startone['site_name'] . $starttwo['site_name'];
+
+                $ends = trim($re['en_end'],'-');
+                $endarr = explode('-',$ends);
+                $endone = db('sites')->where('id',$endarr['1'])->field('site_name')->find();
+                $endtwo = db('sites')->where('id',$endarr['2'])->field('site_name')->find();
+                $re['en_end'] = $endone['site_name'] . $endtwo['site_name'];*/
+            }
+            $total = db('patrol_log')->count();
+            $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $res);
+            return json($result);
+        }
+        /*$depts = $this->UserModel->get_Tree($depts);
+        //dump($depts);die;
+        $this->assign('depts',$depts);*/
+        return $this->fetch();
+    }
+
+    public function log_add()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $data['patrol_ids'] = '';
+            $data['user_ids'] = '';
+
+           /* $data['en_start'] = '';
+            $data['en_end'] = '';
+            foreach ($data['start'] as $v1) {
+                $data['en_start'] .= $v1.'-';
+            }
+            foreach ($data['end'] as $v2) {
+                $data['en_end'] .= $v2.'-';
+            }
+*/
+            foreach ($data['patrol'] as $id=>$d) {
+                $data['patrol_ids'] .= $id .',';
+            }
+
+            foreach ($data['user'] as $id=>$d) {
+                $data['user_ids'] .= $id .',';
+            }
+
+            $data['registrant'] = $this->_userinfo['nickname'];
+
+            $res = Db('patrol_log')
+                ->strict(false)
+                ->insert($data);
+            if ($res){
+                $this->success('新增巡检记录成功！');
+            }$this->error('新增巡检记录失败！');
+        }else{
+            $sites_data = json_encode($this->Patrol->getSites());
+            //dump($sites_data);
+            $config['realtime_IP'] = Config::get('config.realtime_IP');
+            $this->assign('Sitesdata', $sites_data);
+            $user = Db('admin')->field('userid,nickname')->select();
+            $this->assign('User',$user);
+            return $this->fetch();
+        }
+    }
+
+    public function log_details()
+    {
+        $log_id = $this->request->param('log_id');
+        $res   = db('patrol_log')->where('log_id',$log_id)->find();
+        $userstr = trim($res['user_ids'],',');
+        $userarr = explode(',',$userstr);
+        $patrolstr = trim($res['patrol_ids'],',');
+        $patrolarr = explode(',',$patrolstr);
+        foreach ($userarr as $item) {
+            $user =  db('admin')->where('userid',$item)->field('nickname')->find();
+            $res['users'][] = $user['nickname'];
+        }
+
+        foreach ($patrolarr as $item) {
+            $res['patrols'][] = $item;
+        }
+
+        /*$starts = trim($res['en_start'],'-');
+        $startarr = explode('-',$starts);
+        $startone = db('sites')->where('id',$startarr['1'])->field('site_name')->find();
+        $starttwo = db('sites')->where('id',$startarr['2'])->field('site_name')->find();
+        $res['en_start'] = $startone['site_name'] . $starttwo['site_name'];
+
+        $ends = trim($res['en_end'],'-');
+        $endarr = explode('-',$ends);
+        $endone = db('sites')->where('id',$endarr['1'])->field('site_name')->find();
+        $endtwo = db('sites')->where('id',$endarr['2'])->field('site_name')->find();
+        $res['en_end'] = $endone['site_name'] . $endtwo['site_name'];*/
+
+        $this->assign('Info',$res);
+        $user = Db('admin')->field('userid,nickname')->select();
+        $this->assign('User',$user);
+        return $this->fetch();
+    }
 }

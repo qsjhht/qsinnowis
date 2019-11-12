@@ -9,28 +9,28 @@
     <div class="layui-card-body">
         <form class="layui-form form-horizontal" action="" method="post">
             <div class="layui-form-item">
-                <label class="layui-form-label">用户头像</label>
-                <div>
-                    <img src="{$details['user_icon']}" alt="" />
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="username" autocomplete="off" disabled="disabled"  value="{$details['username']}"  placeholder="登录名" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">用户名称</label>
+                <label class="layui-form-label">用户昵称</label>
                 <div class="layui-input-inline w400" >
-                    <input type="text" name="user_name" autocomplete="off" disabled="disabled" value="{$details['user_name']}"  placeholder="部门名称" class="layui-input">
+                    <input type="text" name="nickname" autocomplete="off" disabled="disabled" value="{$details['nickname']}"  placeholder="用户昵称" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">用户手机</label>
                 <div class="layui-input-inline w400" >
-                    <input type="text" name="user_phone" autocomplete="off" disabled="disabled" value="{$details['user_phone']}"  placeholder="部门名称" class="layui-input">
+                    <input type="text" name="phone" autocomplete="off" disabled="disabled" value="{$details['phone']}"  placeholder="用户手机" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">性别</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="user_sex" value="1" title="男" {if $details.user_sex=="0"}checked{/if}>
-                    <input type="radio" name="user_sex" value="2" title="女" {if $details.user_sex=="1"}checked{/if}>
+                    <input type="radio" name="sex" value="1" title="男" {if $details.sex=="1"}checked{/if}>
+                    <input type="radio" name="sex" value="0" title="女" {if $details.sex=="0"}checked{/if}>
                 </div>
             </div>
             <div class="layui-form-item">

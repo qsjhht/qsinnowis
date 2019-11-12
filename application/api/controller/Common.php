@@ -28,6 +28,30 @@ class Common extends Controller
             'get_user_position' => array(
             ),
         ),
+        'Real'    => array(
+            'real_time' => array(
+            ),
+            'real_times' => array(
+            ),
+            'get_last_real' => array(
+            ),
+
+        ),
+        'Master'    => array(
+            'last_alarm' => array(
+            ),
+            'add_alarm' => array(
+            ),
+
+
+        ),
+        'Bigdata'    => array(
+            'date' => array(
+            ),
+            'real_times' => array(
+            ),
+
+        ),
 
     );
     // 图片验证规则

@@ -25,13 +25,13 @@ let time = {
         }
     },
     crew:function(){
-        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:2px"/>在岗36人'
+        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:2px"/>在岗03人'
     }
 };
 let infoDate = document.getElementById('infoDate');
 let content = time.year()+'&nbsp;&nbsp;'+time.dayDate()+'&nbsp;&nbsp;|&nbsp;&nbsp;'+time.crew();
 infoDate.innerHTML = content;
-// 值班人员设置
+/*// 值班人员设置
 let duty = {
     crew:'李勇',
     strip:'<div class="progress">'+
@@ -43,7 +43,7 @@ let duty = {
     }
 }
 let infoDty = document.getElementById('infoDty');
-infoDty.innerHTML = duty.sum();
+infoDty.innerHTML = duty.sum();*/
 
 let data = {
     getYear:date.getFullYear(),//年

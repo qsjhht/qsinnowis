@@ -113,7 +113,7 @@
                             <select name="user_id" lay-verify="required">
                                 <option value="">请选择</option>
                                 {volist name="User" id="vo"}
-                                <option value="{$vo.user_id}">{$vo.user_name}</option>
+                                <option value="{$vo.userid}">{$vo.nickname}</option>
                                 {/volist}
                             </select>
                         </div>

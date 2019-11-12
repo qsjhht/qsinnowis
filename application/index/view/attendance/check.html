@@ -16,14 +16,17 @@
 
         <input type="hidden" id="u_id" class="layui-input" value="{$Uid}">
         <input type="hidden" id="u_name" class="layui-input" value="{$Uname}">
+        <input type="hidden" id="start" class="layui-input" value="{$Start}">
+
         <table lay-filter="parse-table-demo">
             <thead>
             <tr>
-                <th lay-data="{field:'order', width:200}">登记次序</th>
-                <th lay-data="{field:'type', width:150}">登记类型</th>
-                <th lay-data="{field:'d_line', Width: 180}">规定时间</th>
-                <th lay-data="{field:'range', minWidth: 180}">规定范围</th>
-                <th lay-data="{field:'c_time', minWidth: 180}">登记时间</th>
+                <th lay-data="{field:'order', width:300}">登记次序</th>
+                <th lay-data="{field:'type', width:300}">登记类型</th>
+                <th lay-data="{field:'d_line', Width: 300}">打卡规定时间</th>
+
+
+                <th lay-data="{field:'c_time', minWidth: 300}">登记时间</th>
 
             </tr>
             </thead>
@@ -31,8 +34,8 @@
             <tr>
                 <td>第一次登记</td>
                 <td>上班签到</td>
-                <td>08：30：00</td>
-                <td>00：00：00 至 09：00：00</td>
+                <td>{$S_range}</td>
+
                 <td>{$Info.m_time}</td>
 
 
@@ -40,8 +43,8 @@
             <tr>
                 <td>第二次登记</td>
                 <td>下班签到</td>
-                <td>17：30：00</td>
-                <td>17：00：00 至 00：00：00</td>
+                <td>{$E_range}</td>
+
                 <td>{$Info.n_time}</td>
 
 
@@ -55,7 +58,9 @@
                 <button class="layui-btn" data-type="m_check">上班登记</button>
             </div>
             {else/}
+            <div class="layui-btn-group demoTable" style="margin-bottom: 10px;">
             <button type="button" disabled class="layui-btn layui-btn-disabled"  lay-filter="m_check">上班登记</button>
+            </div>
             {/if}
 
             {if $Info.n_c}
@@ -63,7 +68,9 @@
                 <button class="layui-btn" data-type="n_check">下班签退</button>
             </div>
             {else/}
+            <div class="layui-btn-group demoTable" style="margin-bottom: 10px;">
             <button type="button" disabled class="layui-btn layui-btn-disabled" >下班签退</button>
+            </div>
             {/if}
         </div>
 
@@ -81,7 +88,7 @@
         var $ = layui.$, active = {
             n_check: function(){
                 console.dir('adf');
-                $.post('{:url("attendance/sign")}', { 'check': 'n_check' }, function(data) {
+                $.post('{:url("attendance/sign")}', { 'check': 'n_check'}, function(data) {
                     //layer.msg(data.msg);
                     if (data.code == 1) {
                         if (data.url) {
@@ -107,8 +114,9 @@
             },
 
             m_check: function(){
-                console.dir('aaaa');
-                $.post('{:url("attendance/sign")}', { 'check': 'm_check' }, function(data) {
+                var start = $('#start').val();
+                console.dir(start);
+                $.post('{:url("attendance/sign")}', { 'check': 'm_check', 'start': start}, function(data) {
                     //layer.msg(data.msg);
                     if (data.code == 1) {
                         if (data.url) {
@@ -147,7 +155,7 @@
             });
         });
 
-        $('#set_add').on('click', function() {
+        /*$('#set_add').on('click', function() {
             layer.open({
 
                 title:"新增排班信息",
@@ -158,13 +166,13 @@
                 maxmin: true,
                 content: ['{:url("attendance/set_add")}', 'no'],
                 shade: [0.8, '#393D49']
-                /*cancel: function(){
+                /!*cancel: function(){
                     //右上角关闭回调  刷新父页面
                     window.parent.location.reload();
                     //return false 开启该代码可禁止点击该按钮关闭
-                }*/
+                }*!/
             })
-        });
+        });*/
     });
     var newDate = '';
     getLangDate();
@@ -190,10 +198,11 @@
         var second = dateObj.getSeconds(); //当前系统时间的秒钟值
         var timeValue = "" + ((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午"); //当前时间属于上午、晚上还是下午
         newDate = dateFilter(year) + "年" + dateFilter(month) + "月" + dateFilter(date) + "日 " + " " + dateFilter(hour) + ":" + dateFilter(minute) + ":" + dateFilter(second);
-        if(u_name == undefined){
-            document.getElementById("nowTime").innerHTML = timeValue + "好！ 当前时间为： " + newDate + "　" + week;
+        console.dir(u_name);
+        if(u_name == undefined || u_name == ''){
+            document.getElementById("nowTime").innerHTML = timeValue + "好！请先登录！ 本地时间为： " + newDate + "　" + week;
         }else{
-            document.getElementById("nowTime").innerHTML = u_name + timeValue + "好！ 当前时间为： " + newDate + "　" + week;
+            document.getElementById("nowTime").innerHTML = u_name+ "&nbsp;,&nbsp;  " + timeValue + "好！ 本地时间为： " + newDate + "　" + week;
         }
         setTimeout("getLangDate()", 1000);
     }

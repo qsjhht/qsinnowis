@@ -160,10 +160,10 @@
                                 <option value="">请选择</option>
                                 {volist name="User" id="vo"}
 
-                                {if $vo.user_id == $Info.user_id}
-                                <option value="{$vo.user_id}" selected>{$vo.user_name}</option>
+                                {if $vo.userid == $Info.userid}
+                                <option value="{$vo.userid}" selected>{$vo.nickname}</option>
                                 {else/}
-                                <option value="{$vo.user_id}">{$vo.user_name}</option>
+                                <option value="{$vo.userid}">{$vo.nickname}</option>
                                 {/if}
                                 {/volist}
                             </select>

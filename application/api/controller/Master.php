@@ -10,7 +10,7 @@ namespace app\api\controller;
 use think\Controller;
 use think\Db;
 
-class Master extends Controller
+class Master extends Common
 {
     protected function initialize()
     {

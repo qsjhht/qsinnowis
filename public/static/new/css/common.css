@@ -8,6 +8,9 @@ body,html{
     color:#00FFFF;
     font-weight:400;
 }
+.layui-textarea{
+    color: #000;
+}
 a{
     text-decoration: none
 }

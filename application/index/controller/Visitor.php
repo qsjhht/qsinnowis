@@ -29,8 +29,8 @@ class Visitor extends Adminbase
             $res   = db('visitor')->alias('v')->field($field)->order('v.v_id', 'desc')->join($join)->page($page, $limit)->select();
             $total = db('visitor')->count();
             foreach ($res as &$re) {
-                $re['v_start_time'] = date('Y-H-d H:i:s',$re['v_start_time']);
-                $re['v_end_time'] = date('Y-H-d H:i:s',$re['v_end_time']);
+                $re['v_start_time'] = date('Y-m-d H:i:s',$re['v_start_time']);
+                $re['v_end_time'] = date('Y-m-d H:i:s',$re['v_end_time']);
             }
             $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $res);
             return json($result);
@@ -69,8 +69,8 @@ class Visitor extends Adminbase
         $join  = [['user u', 'v.v_user_id = u.user_id', 'LEFT']];
         $res   = db('visitor')->alias('v')->join($join)->where('v_id',$v_id)->find();
 
-        $res['v_start_time'] = date('Y-H-d H:i:s',$res['v_start_time']);
-        $res['v_end_time'] = date('Y-H-d H:i:s',$res['v_end_time']);
+        $res['v_start_time'] = date('Y-m-d H:i:s',$res['v_start_time']);
+        $res['v_end_time'] = date('Y-m-d H:i:s',$res['v_end_time']);
         $this->assign('Info',$res);
         return $this->fetch();
 
@@ -97,8 +97,8 @@ class Visitor extends Adminbase
             $v_id = $this->request->param('v_id');
             $join  = [['user u', 'v.v_user_id = u.user_id', 'LEFT']];
             $res   = db('visitor')->alias('v')->join($join)->where('v_id',$v_id)->find();
-            $res['v_start_time'] = date('Y-H-d H:i:s',$res['v_start_time']);
-            $res['v_end_time'] = date('Y-H-d H:i:s',$res['v_end_time']);
+            $res['v_start_time'] = date('Y-m-d H:i:s',$res['v_start_time']);
+            $res['v_end_time'] = date('Y-m-d H:i:s',$res['v_end_time']);
             $this->assign('Info',$res);
             $user = Db('user')->field('user_id,user_name')->select();
             $this->assign('User',$user);

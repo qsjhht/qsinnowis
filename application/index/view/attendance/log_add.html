@@ -3,14 +3,33 @@
 {block name="main"}
 <link rel="stylesheet" href="/static/css/equipment.css">
 <link rel="stylesheet" href="/static/css/eqpt.css">
+<style>
+    .Nav{
+    position: relative;
+    height: 10px;
+    line-height: 10px;
+    border-bottom: 1px solid #048ab6;
+    padding-left: 20px;
+    }
+    .layui-form-item{
+        height: auto;
+    }
+    .heightr{
+        height: 50px;
+        padding: 5px 0px;
+    }
+    .layui-textarea {
+        min-height: 30px;
+    }
 
+</style>
 <div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px;background-image: url('/static/image/bgSmall.png')">
     <!--设备台账-->
     <div class="layerMiddle divCenter">
         <div class="layerNav">
             <div class="floatLeft">
                 <i class="layui-icon">&#xe653;</i> &nbsp;
-                新增访客信息
+                新增值班记录
             </div>
         </div>
         <div class="scrollber" >
@@ -38,46 +57,41 @@
                 <div class="layui-show-md-inline-block">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">计划名称</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="p_name" placeholder="计划名称" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label" style="float: left">值班室</label>
-                            <select name="duty_id" lay-verify="required">
-                                <option value="">请选择</option>
-                                {volist name="Duty" id="vo"}
-                                <option value="{$vo.d_id}">{$vo.d_name}</option>
-                                {/volist}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">值班人员</label>
-                            <div class="layui-input-block overauto">
-                                {volist name="User" id="vo"}
-                                <input type="checkbox" name="user[{$vo.user_id}]" title="{$vo.user_name}">
-                                {/volist}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label"   style="float: left">计划日期</label>
-                            <input type="text" lay-verify="required" name="date_range" class="layui-input" id="test5" placeholder="" class="layui-input">
+                            <label class="layui-form-label"   style="float: left">值班日期</label>
+                            <input type="text" lay-verify="required" name="d_date" class="layui-input" id="test5" placeholder="" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <div class="layui-inline">
                             <label class="layui-form-label"   style="float: left">值班时间</label>
-                            <input type="text" lay-verify="required" name="time_range" class="layui-input" id="test6" placeholder="" class="layui-input">
+                            <input type="text" lay-verify="required" name="d_time" class="layui-input" id="test6" placeholder="" class="layui-input">
                         </div>
                     </div>
+
+                    <div class="Nav"></div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">交班人员</label>
+                            <div class="layui-input-block overauto">
+                                {volist name="User" id="vo"}
+                                <input type="checkbox" name="current[{$vo.userid}]" title="{$vo.nickname}">
+                                {/volist}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Nav"></div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">接班人员</label>
+                            <div class="layui-input-block overauto">
+                                {volist name="User" id="vo"}
+                                <input type="checkbox" name="next[{$vo.userid}]" title="{$vo.nickname}">
+                                {/volist}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Nav"></div>
 
                     <!--底部信息-->
                     <!--<div class="layui-form-item" style="display: none">
@@ -90,9 +104,23 @@
                         </div>
                     </div>-->
                     <div class="layui-form-item">
-                        <label class="layui-form-label">备注信息</label>
-                        <div class="layui-input-block" style="width: 650px">
-                            <textarea name="p_remark"  placeholder="请输入" class="layui-textarea"></textarea>
+                        <label class="layui-form-label">交接事项</label>
+                        <div class="layui-input-block heightr" style="width: 650px">
+                            <textarea name="handover"  placeholder="待办事项交接" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">值班情况</label>
+                        <div class="layui-input-block heightr" style="width: 650px">
+                            <textarea name="details"  placeholder="值班情况描述" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应急事件</label>
+                        <div class="layui-input-block heightr" style="width: 650px">
+                            <textarea name="emergency"  placeholder="应急事件处理情况" class="layui-textarea"></textarea>
                         </div>
                     </div>
                 </div>
@@ -185,7 +213,7 @@
             elem: '#test5'
             ,type: 'date'
 //            ,showBottom:false
-            ,range: true
+//             ,range: true
             ,done: function(value){
                 console.log(value); //得到日期生成的值，如：2017-08-18
             }

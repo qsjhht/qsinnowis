@@ -26,14 +26,14 @@ let time = {
         }
     },
     crew:function(){
-        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:2px"/>在岗36人'
+        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:2px"/>在岗03人'
     }
 };
 let infoDate = document.getElementById('infoDate');
 let content = time.year()+'&nbsp;&nbsp;'+time.dayDate()+'&nbsp;&nbsp;|&nbsp;&nbsp;'+time.crew();
 infoDate.innerHTML = content;
 // 值班人员设置
-let duty = {
+/*let duty = {
     crew:'李勇',
     strip: '<div class="progress">'+
             '<div class="progressFro"></div>'+
@@ -45,7 +45,7 @@ let duty = {
     }
 }
 let infoDty = document.getElementById('infoDty');
-infoDty.innerHTML = duty.sum();
+infoDty.innerHTML = duty.sum();*/
 // 设备使用率
 let botUse = echarts.init(document.getElementById('botUse'));
 let useOption = {

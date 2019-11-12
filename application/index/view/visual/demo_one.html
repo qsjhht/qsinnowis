@@ -12,11 +12,22 @@
      <link rel="stylesheet" href="__STATIC__/new/gis/dist/iclient9-openlayers.css">
      <script src="__STATIC__/new/gis/dist/ol.js"></script>
      <script src="__STATIC__/new/gis/dist/iclient9-openlayers.js"></script>
+     <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+
+     <script src="/static/layui/layui.js"></script>
+     <script src="/static/js/jquery-1.7.1.min.js"></script>
      <style>
           .galRoad{text-align: center;font-size: 20px;padding-top: 30px}
           .section{text-align: center;font-size: 15px;height: 30px;border-bottom: 1px dashed #ffffff}
           .xianShiDiv{padding: 10px}
           .xianShiDiv span{color: aquamarine;padding-left:5px}
+          .div-center{
+               text-align: center;
+          }
+          .s-e{
+               font-size: 1.3rem;
+               padding: 1.5%;
+          }
      </style>
 </head>
 <body>
@@ -67,7 +78,19 @@
                          <li class="infoRunLi">天</li>
                     </ul>
                </div>
-               <div class="infoDate" id="infoDty"></div>
+               <div class="infoDate div-center" id="infoDty" style="font-size:1.3rem">
+                    {if $Uname != '' }
+                    值班：{$Uname}
+                    {else/}请先登录！
+                    {/if}
+                    <div id="stime" class="layui-inline s-e"></div>
+                    <div class="progress"><div class="progressFro"></div>
+                         <div class="layui-progress" lay-filter="demo">
+                              <div class="layui-progress-bar layui-bg-blue" lay-percent="0%"></div>
+                         </div>
+                    </div>
+                    <div id="etime" class="layui-inline s-e"></div>
+               </div>
           </div>
           <!-- 动力配电检测 -->
           <div class="contentEle mainBor" id="contentEle"></div>
@@ -179,21 +202,42 @@
      </div>
 </div>
 <script>
-    // ajax 安全运行时间
-    function safety() {
-        $.get('http://localhost:8888/bigdata/date', function(data) {
-            data = JSON.parse(data);
-            console.dir(data);
-            $('#units').html(data.units);
-            $('#tens').html(data.tens);
-            $('#hundreds').html(data.hundreds);
-            $('#thousands').html(data.thousands);
-        });
-    }
+    layui.use('element', function(){
+        var $ = layui.jquery
+            ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        //触发事件
+        element.progress('demo', '0%');
+        // ajax 安全运行时间
+        function safety() {
+            $.get('http://192.168.10.18/bigdata/date', function(data) {
+                data = JSON.parse(data);
+                console.dir(data);
+                $('#units').html(data.units);
+                $('#tens').html(data.tens);
+                $('#hundreds').html(data.hundreds);
+                $('#thousands').html(data.thousands);
+                $('#stime').html(data.stime);
+                $('#etime').html(data.etime);
+                element.progress('demo', data.per);
+            });
+            /*$.ajax({url:'http://localhost:8888/bigdata/date'
+                ,type: 'GET'
+               ,dataType:'json'
+                ,async:false
+                ,success:function(data){
+                    data = JSON.parse(data);
+                    console.dir(data);
+                    $('#units').html(data.units);
+                    $('#tens').html(data.tens);
+                    $('#hundreds').html(data.hundreds);
+                    $('#thousands').html(data.thousands);
+                }});*/
+        }
 
-    $(function(){
-        safety();
-        setInterval(safety,60000);
+        $(function(){
+            safety();
+            setInterval(safety,60000);
+        });
     });
 </script>
 <script src="__STATIC__/new/gis/QueryBySQL.js"></script>

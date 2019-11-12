@@ -45,8 +45,8 @@ class Enterprise extends Adminbase
         if ($this->request->isAjax()) {
             $limit = $this->request->param('limit/d', 10);
             $page = $this->request->param('page/d', 1);
-            $field = "e.co_id,e.co_name,e.co_linker,e.co_linker_post,e.en_start,e.en_end,e.co_phone,e.en_long,e.en_time,t.type_name,u.user_name";
-            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+            $field = "e.co_id,e.co_name,e.co_linker,e.co_linker_post,e.en_start,e.en_end,e.co_phone,e.en_long,e.en_time,t.type_name,u.nickname";
+            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['admin u', 'e.user_id = u.userid', 'LEFT']];
             $res   = db('enterprise')->alias('e')->field($field)->order('e.co_id', 'desc')->join($join)->page($page, $limit)->select();
             foreach ($res as &$re) {
                 $re['en_time'] = date('Y-H-d H:i:s',$re['en_time']);
@@ -105,7 +105,7 @@ class Enterprise extends Adminbase
             $co_type = Db('co_type')->select();
             $this->assign('Co_type',$co_type);
 
-            $user = Db('user')->field('user_id,user_name')->select();
+            $user = Db('admin')->field('userid,nickname')->select();
             $this->assign('User',$user);
             return $this->fetch();
         }
@@ -115,8 +115,8 @@ class Enterprise extends Adminbase
     public function info_details()
     {
         $co_id = $this->request->param('co_id');
-        $field = "e.co_id,e.co_name,e.co_linker,e.co_local,e.co_linker_post,e.en_start,e.en_end,e.co_legal,e.co_phone,e.en_remark,e.en_long,e.en_time,t.type_name,u.user_name";
-        $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+        $field = "e.co_id,e.co_name,e.co_linker,e.co_local,e.co_linker_post,e.en_start,e.en_end,e.co_legal,e.co_phone,e.en_remark,e.en_long,e.en_time,t.type_name,u.nickname";
+        $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['admin u', 'e.user_id = u.userid', 'LEFT']];
         $res   = db('enterprise')->alias('e')->where('co_id',$co_id)->field($field)->join($join)->find();
 
         $res['en_time'] = date('Y-H-d H:i:s',$res['en_time']);
@@ -161,8 +161,8 @@ class Enterprise extends Adminbase
             }$this->error('编辑企业信息失败！');
         }else{
             $co_id = $this->request->param('co_id');
-            $field = "e.co_id,e.co_name,e.co_linker,e.co_local,e.co_type,e.co_linker_post,e.en_start,e.en_end,e.co_legal,e.co_phone,e.en_remark,e.en_long,e.en_time,t.type_name,u.user_name,u.user_id";
-            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+            $field = "e.co_id,e.co_name,e.co_linker,e.co_local,e.co_type,e.co_linker_post,e.en_start,e.en_end,e.co_legal,e.co_phone,e.en_remark,e.en_long,e.en_time,t.type_name,u.nickname,u.userid";
+            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['admin u', 'e.user_id = u.userid', 'LEFT']];
             $res   = db('enterprise')->alias('e')->where('co_id',$co_id)->field($field)->join($join)->find();
 
             $res['en_time'] = date('Y-H-d H:i:s',$res['en_time']);
@@ -194,7 +194,7 @@ class Enterprise extends Adminbase
             $this->assign('Sitesdata', $sites_data);
             $co_type = Db('co_type')->select();
             $this->assign('Co_type',$co_type);
-            $user = Db('user')->field('user_id,user_name')->select();
+            $user = Db('admin')->field('userid,nickname')->select();
             $this->assign('User',$user);
             $this->assign('Info',$res);
             return $this->fetch();
@@ -219,8 +219,8 @@ class Enterprise extends Adminbase
         if ($this->request->isAjax()) {
             $limit = $this->request->param('limit/d', 10);
             $page = $this->request->param('page/d', 1);
-            $field = "e.wo_id,e.co_name,e.wo_name,e.wo_linker,e.co_linker,e.en_start,e.en_end,e.co_phone,e.en_long,t.type_name,u.user_name,e.wo_plan,wo_real";
-            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+            $field = "e.wo_id,e.co_name,e.wo_name,e.wo_linker,e.co_linker,e.en_start,e.en_end,e.co_phone,e.en_long,t.type_name,u.nickname,e.wo_plan,wo_real";
+            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['admin u', 'e.user_id = u.userid', 'LEFT']];
             $res   = db('enterprise_work')->alias('e')->field($field)->order('e.wo_id', 'desc')->join($join)->page($page, $limit)->select();
             foreach ($res as &$re) {
                 $starts = trim($re['en_start'],'-');
@@ -273,7 +273,7 @@ class Enterprise extends Adminbase
             $co_type = Db('co_type')->select();
             $this->assign('Co_type',$co_type);
 
-            $user = Db('user')->field('user_id,user_name')->select();
+            $user = Db('admin')->field('userid,nickname')->select();
             $this->assign('User',$user);
             return $this->fetch();
         }
@@ -285,8 +285,8 @@ class Enterprise extends Adminbase
     public function work_details()
     {
         $wo_id = $this->request->param('wo_id');
-        $field = "e.wo_id,e.co_name,e.wo_name,e.co_linker,e.co_linker_post,e.wo_linker,e.wo_phone,e.wo_linker_post,e.wo_num,e.wo_plan,e.wo_real,e.en_start,e.en_end,e.co_phone,e.wo_remark,e.en_long,t.type_name,u.user_name";
-        $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+        $field = "e.wo_id,e.co_name,e.wo_name,e.co_linker,e.co_linker_post,e.wo_linker,e.wo_phone,e.wo_linker_post,e.wo_num,e.wo_plan,e.wo_real,e.en_start,e.en_end,e.co_phone,e.wo_remark,e.en_long,t.type_name,u.nickname";
+        $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['admin u', 'e.user_id = u.userid', 'LEFT']];
         $res   = db('enterprise_work')->alias('e')->where('wo_id',$wo_id)->field($field)->join($join)->find();
 
 
@@ -323,8 +323,8 @@ class Enterprise extends Adminbase
             }$this->error('修改实际施工时间失败！');
         }else{
             $wo_id = $this->request->param('wo_id');
-            $field = "e.wo_id,e.co_name,e.wo_name,e.co_linker,e.co_linker_post,e.wo_linker,e.wo_phone,e.wo_linker_post,e.wo_num,e.wo_plan,e.wo_real,e.en_start,e.en_end,e.co_phone,e.wo_remark,e.en_long,t.type_name,u.user_name";
-            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['user u', 'e.user_id = u.user_id', 'LEFT']];
+            $field = "e.wo_id,e.co_name,e.wo_name,e.co_linker,e.co_linker_post,e.wo_linker,e.wo_phone,e.wo_linker_post,e.wo_num,e.wo_plan,e.wo_real,e.en_start,e.en_end,e.co_phone,e.wo_remark,e.en_long,t.type_name,u.nickname";
+            $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['admin u', 'e.user_id = u.userid', 'LEFT']];
             $res   = db('enterprise_work')->alias('e')->where('wo_id',$wo_id)->field($field)->join($join)->find();
 
 

@@ -26,6 +26,9 @@ class Role extends Adminbase
             $page = $this->request->param('page/d', 1);
             $total = $this->RoleModel->count();
             $data = $this->RoleModel->page($page, $limit)->select();
+            foreach ($data as &$da) {
+                $da['user_num'] = db('admin')->where('roleid',$da['role_id'])->count();
+            }
             $data=json_decode($data,false);
             $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $data);
             return json($result);

@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>document</title>
     <link rel="stylesheet" href="__STATIC__/new/evironment/evironment.css">
+    <link rel="stylesheet" href="__STATIC__/new/itemJS/evironment.js">
     <link rel="stylesheet" href="__STATIC__/new/evironment/common.css">
     <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
     <script src="__STATIC__/js/echarts.min.js"></script>
@@ -178,12 +179,12 @@
     <div class="evirMain evirMain1" style="flex-wrap:wrap">
         <div class="evirMainSele">
             <select class="evirSelect" id="seleTwo">
-                <option value="1">温度</option>
-                <option value="2">湿度</option>
-                <option value="3">氧气</option>
-                <option value="4">甲烷</option>
-                <option value="5">硫化氢</option>
-                <option value="6">水位</option>
+                <option value="T">温度</option>
+                <option value="M">湿度</option>
+                <option value="O2">氧气</option>
+                <option value="CH4">甲烷</option>
+                <option value="H2S">硫化氢</option>
+                <option value="LT">水位</option>
             </select>
             <div class="display evirSelect">
                 <div class="evirSele"><i class="icon-chart-01"></i></div>
@@ -210,6 +211,8 @@
 <script src="__STATIC__/layui/layui.js"></script>
 
 <script>
+    var zone1 = '';
+    let evirImg = document.getElementsByClassName('evirImg');
     layui.config({
         base: '__STATIC__/interact/js/',
     })
@@ -218,13 +221,27 @@
             interact = layui.interact,
             $ = layui.jquery,
             form = layui.form;
-
         var site_data = JSON.parse($('#sitesdata').val());
+        form.on('switch(switchTest)',function(){
+            if(this.checked ? true : false == true){
+                evirImg[0].classList.add('evirImgKey')
+            }else if(this.checked ? trun : false == false){
+                evirImg[0].classList.remove('evirImgKey')
+            }
+        })
+        form.on('switch(switch)',function(){
+            if(this.checked ? true : false == true){
+                evirImg[1].classList.add('evirImgKey')
+            }else if(this.checked ? trun : false == false){
+                evirImg[1].classList.remove('evirImgKey')
+            }
+        })
         interact.render({
             elem : '.test',
             // url : '{:url("index/patrol/sitesdata")}',
             title : '防火分区：',
             data : site_data,
+            selected: [5,14,0],
             // name : ['street','cang','site'],
              hint : ['请选择街道','请选择舱室','请选择防火分区']
         });
@@ -237,45 +254,143 @@
                 //console.dir(data.text);
                 //第一次 选择 创建定时器 获取实时数据
                 if(typeof(zone) == 'undefined'){
+                    arrDate = [];
+                    arrData = [];
                     zone = data.text;
+                    zone1 = zone;
                     real_time(zone);
-                    Interval = window.setInterval("real_time(zone)",5000);
+                    realtimes(zone);
+                    lastdata(zone);
+                    myContainer.setOption({
+                        xAxis:{
+                            data:arrDate
+                        },
+                        series:[{
+                            name:'成交',
+                            data:arrData
+                        }]
+                    });
+                    // realtimes();
+                    Interval = window.setInterval("real_time(zone)",60000);
+                    Reallog = setInterval(function(){
+                        lastdata(zone);
+                        zone1 = zone;
+                        myContainer.setOption({
+                            xAxis:{
+                                data:arrDate
+                            },
+                            series:[{
+                                name:'成交',
+                                data:arrData
+                            }]
+                        });
+                    },60000)
+
                 }else{
+                    arrDate = [];
+                    arrData = [];
                     // 删除旧定时器
                     window.clearInterval(Interval);
+                    window.clearInterval(Reallog);
+
                     zone = data.text;
                     real_time(zone);
-                    Interval = window.setInterval("real_time(zone)",5000);
+                    realtimes(zone);
+                    lastdata(zone);
+                    zone1 = zone;
+                    myContainer.setOption({
+                        xAxis:{
+                            data:arrDate
+                        },
+                        series:[{
+                            name:'成交',
+                            data:arrData
+                        }]
+                    });
+                    Interval = window.setInterval("real_time(zone)",60000);
+                    Reallog = setInterval(function(){
+                        lastdata(zone);
+                        myContainer.setOption({
+                            xAxis:{
+                                data:arrDate
+                            },
+                            series:[{
+                                name:'成交',
+                                data:arrData
+                            }]
+                        });
+                    },60000)
                 }
             }
         })
 
+    // 监控种类
+        let seleTwo = document.getElementById('seleTwo');
+        seleTwo.onchange = function(){
+            arrDate = [];
+            arrData = [];
+            console.log(this.name);
+            console.log(zone1);
+            if(zone1 !== ''){
+                window.clearInterval(Reallog);
+                realtimes(zone1,this.value);
+                lastdata(zone1,this.value);
+                myContainer.setOption({
+                    title:{
+                        text:$(this).find("option:selected").text()+'监测'
+                    },
+                    xAxis:{
+                        data:arrDate
+                    },
+                    series:[{
+                        name:'成交',
+                        data:arrData
+                    }]
+                });
+                Reallog = setInterval(function(){
+                    lastdata(zone1,this.value);
+                    myContainer.setOption({
+                        title:{
+                            text:$(this).find("option:selected").text()+'监测'
+                        },
+                        xAxis:{
+                            data:arrDate
+                        },
+                        series:[{
+                            name:'成交',
+                            data:arrData
+                        }]
+                    });
+                },60000)
+            }
 
+        }
 
     });
     function real_time(zone){
         var zones = zone.replace('/','');
         var realtime_IP = $('#realtime_IP').val();
-        //console.dir(zones);
+        // console.dir(zones);
         $.ajax({
-            url:realtime_IP+"/real/real_time?zone="+zones,
-            // url:"http://localhost:8888/real/real_time?zone="+zone,
+            // url:realtime_IP+"/real/real_time?zone="+zones,
+            url:"http://localhost:8888/real/real_time?zone="+zones,
             async:false,
             success:function(result){
                 result = JSON.parse(result);
-                console.dir(result);
-                /*$(".contentDiv").each(function(){
-
-                    console.dir( $(this).dataset());
-                });*/
+                // console.dir(result);
+                var res={};
+                $.each(result,function(key,value){    //objTmp对象数据
+                    value = parseFloat(value);
+                    res[key] = value.toFixed(2);
+                });
+                // console.dir(res);
                 let list = document.querySelectorAll('.contentDiv');
-                //console.dir(list);
                 for(var i = 0; i < list.length; i++){
                     var key = list[i].dataset.name+'_'+zones;
                     var ids = list[i].dataset.name;
                     //console.dir(key);
-                    if(typeof(result[key]) !== 'undefined'){
-                        document.getElementById(ids).innerText = result[key];
+                    if(typeof(res[key]) !== 'undefined'){
+                        document.getElementById(ids).innerText = res[key];
                     }else{
                         document.getElementById(ids).innerText = '----';
                     }
@@ -314,36 +429,49 @@
     var datas,lastdata;
     arrDate = [];
     arrData = [];
-    function realtimes() {
+    function realtimes(zone,name) {
+        zone=zone||'XC13/S';
+        name=name||'T';
+        var zone = zone.replace('/','');
         var realtime_IP = $('#realtime_IP').val();
         // console.dir(realtime_IP);
+        console.dir(zone);
+        console.dir(name);
         $.ajax({
-            url:realtime_IP+"/real/real_times?name=QS_O2_XC13S",
-            // url:"http://localhost:8888/real/real_times?name=QS_O2_XC13S",
+            // url:realtime_IP+"/real/real_times?name=QS_O2_XC13S",
+            url:"http://localhost:8888/real/real_times?zone="+zone+"&name="+name,
             async:false,
             success:function(result){
-                let jsonObj = $.parseJSON(result);
-                objToArray(jsonObj);
-                console.dir(arrDate);
-            }
-        });
-    }
-    function lastdata() {
-        var realtime_IP = $('#realtime_IP').val();
-        // console.dir(realtime_IP);
-        $.ajax({
-            url:realtime_IP+"/real/get_last_real?name=QS_O2_XC13S",
-            // url:"http://localhost:8888/real/get_last_real?name=QS_O2_XC13S",
-            async:false,
-            success:function(result){
-                console.dir(result);
                 let jsonObj = $.parseJSON(result);
                 objToArray(jsonObj,true);
                 console.dir(arrDate);
             }
         });
     }
-    realtimes();
+    function lastdata(zone,name) {
+        zone=zone||'XC13/S';
+        name=name||'T';
+        var zone = zone.replace('/','');
+        var realtime_IP = $('#realtime_IP').val();
+        console.dir(zone);
+        console.dir(name);
+        // console.dir(realtime_IP);
+        $.ajax({
+            // url:realtime_IP+"/real/get_last_real?name=QS_O2_XC13S",
+            // url:"http://localhost:8888/real/get_last_real?name=QS_O2_XC13S",
+            url:"http://localhost:8888/real/get_last_real?zone="+zone+"&name="+name,
+            async:false,
+            success:function(result){
+
+                // console.dir(result);
+                // console.dir(name);
+                let jsonObj = $.parseJSON(result);
+                objToArray(jsonObj,true);
+                console.dir(arrDate);
+            }
+        });
+    }
+    // realtimes();
 
 
    /* var arr = [];
@@ -410,43 +538,23 @@
             smooth:true, //数据光滑过度
             symbol:'none', //下一个数据点
             stack:'a',
-            areaStyle:{
-                normal:{
-                }
-            },
+            // areaStyle: {normal : {
+            //         color:'#8cd5c2', //改变折线点的颜色
+            //         lineStyle:{
+            //             color:'#8cd5c2' //改变折线颜色
+            //         }
+            //     }},
+            // itemStyle : {
+            //     normal : {
+            //         lineStyle:{
+            //             color:'#ffffff'
+            //         }
+            //     }
+            // },
             data:arrData
         }]
     });
-    setInterval(function(){
-        //addData(true);
-        //console.dir(data);
-        /*$.ajax({
-            //url:realtime_IP+"/real/real_time?zone="+zone,
-            url:"http://localhost:8888/real/real_times?name=QS_LT_XC13S",
-            async:false,
-            success:function(result){
 
-                result = JSON.parse(result);
-                console.dir(result);
-            }
-        });*/
-        /*realtimes();
-        let jsonObj = $.parseJSON(datas);
-        objToArray(jsonObj);
-        console.dir(arrDate);
-        console.dir(arrData);*/
-        lastdata();
-        //console.dir(lastdata);
-        myContainer.setOption({
-            xAxis:{
-                data:arrDate
-            },
-            series:[{
-                name:'成交',
-                data:arrData
-            }]
-        });
-    },5000)
 
 
 

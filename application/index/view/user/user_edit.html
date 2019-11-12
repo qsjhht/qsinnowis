@@ -8,36 +8,37 @@
 <div class="layui-card">
     <div class="layui-card-body">
         <form class="layui-form form-horizontal" action="" method="post">
+            <input type="hidden" name="userid" class="layui-input" value="{$details['userid']}">
             <div class="layui-form-item">
-                <label class="layui-form-label">用户头像</label>
-                <div>
-                    <img src="{$details['user_icon']}" alt="" />
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="username" autocomplete="off" value="{$details['username']}"  placeholder="登录名" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">用户名称</label>
+                <label class="layui-form-label">用户昵称</label>
                 <div class="layui-input-inline w400" >
-                    <input type="text" name="user_name" autocomplete="off" value="{$details['user_name']}"  placeholder="部门名称" class="layui-input">
+                    <input type="text" name="nickname" autocomplete="off" value="{$details['nickname']}"  placeholder="用户昵称" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">用户手机</label>
                 <div class="layui-input-inline w400" >
-                    <input type="text" name="user_phone" autocomplete="off" value="{$details['user_phone']}"  placeholder="部门名称" class="layui-input">
+                    <input type="text" name="phone" autocomplete="off" value="{$details['phone']}"  placeholder="用户手机" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">性别</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="user_sex" value="1" title="男" {if $details.user_sex=="0"}checked{/if}>
-                    <input type="radio" name="user_sex" value="2" title="女" {if $details.user_sex=="1"}checked{/if}>
+                    <input type="radio" name="sex" value="1" title="男" {if $details.sex=="1"}checked{/if}>
+                    <input type="radio" name="sex" value="0" title="女" {if $details.sex=="0"}checked{/if}>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">所属部门</label>
                 <div class="layui-input-block">
-                    <input type="text" name="label" required="" value="{$details['dept_name']}" lay-verify="required" placeholder="请选择上级部门" readonly="" autocomplete="off" class="layui-input eletxea w400">
-                    <input type="text" name="user_dept_id"  class="layui-input" style="display: none">
+                    <input type="text" name="label" required="" value="{$details.dept_name}" lay-verify="required" placeholder="请选择上级部门" readonly="" autocomplete="off" class="layui-input eletxea w400">
+                    <input type="text" name="user_dept_id" value="{$details.deptid}" class="layui-input" style="display: none">
                     <div class="eleTree ele5 w400" lay-filter="data5"></div>
                 </div>
             </div>
@@ -45,16 +46,16 @@
             <div class="layui-form-item" style="width: 450px;">
                 <label class="layui-form-label">所属角色</label>
                 <div class="layui-input-block">
-                    <select name="user_role_id" lay-verify="required">
+                    <select name="roleid" lay-verify="required">
                         {volist name="Role" id="vo"}
-                        <option value="{$vo.role_id}" {if $details.user_role_id==$vo.role_id}selected{/if}>{$vo.role_name}</option>
+                        <option value="{$vo.role_id}" {if $details.roleid==$vo.role_id}selected{/if}>{$vo.role_name}</option>
                         {/volist}
                     </select>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn ajax-post" lay-submit="" lay-filter="demo1">立即提交</button>
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>
@@ -112,6 +113,35 @@
             }
         });
 
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            //alert('adsfdfs');
+            //console.dir(data.field);
+            //alert('adsfdfs');
+            $.ajax({
+                url: '{:url("index/user/user_edit_ajax")}',
+                method:'post',
+                data:data.field,
+                dataType:'JSON',
+                success:function(res){
+                    console.dir(res);
+                    if(res.code == '1'){
+                        layer.alert(res.msg);
+                        //parent.closeIframe(res.msg);
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        window.parent.location.reload();//刷新父页面
+                        parent.layer.close(index);//关闭弹出层
+
+                    }else{
+                        return false;
+                    }
+                },
+                error:function (res) {
+                    layer.alert(res.msg);
+                    return false;
+                }
+            }) ;
+        });
         //监听返回按钮
         /*$('#go_back').on('click', function()
         {

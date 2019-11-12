@@ -49,42 +49,11 @@ class User extends Adminbase
     }
     public function user_add()
     {
-        if ($this->request->isPost()) {
-            Db::transaction(function () {
-                $data['username'] = $this->request->param('username');
-                $data['phone'] = $this->request->param('phone');
-                $data['sex'] = $this->request->param('sex');
-                $data['last_login_time'] = time();
-                $data['nickname'] = $this->request->param('nickname');
-                $data['deptid'] = $this->request->param('user_dept_id');
-                $data['roleid'] = $this->request->param('roleid');
-//                $data['user_icon'] = $this->default_icon;
-                $data['password'] = $this->default_pwd;
-                //$user_id = Db('user')->insertGetId($data);
-                $user_id = $this->AdminUser->createManager($data);
-                $this->return_msg('0','新增用户成功！');
-               // return $data;
-                /*//拼接url 发送get请求
-                $arr['userName'] = $data['username'];
-                $arr['userId'] = $user_id;
-                $arr['type'] = 'add';
-                $arr = json_encode($arr);
-                $res = $this->get_url($arr,$this->url);*/
-
-                /*if($user_id){
-                    return json_encode($data);
-                    $this->success('新增用户成功！');
-                }else {
-                    $this->error('远程新增失败，请稍后同步！');
-                }*/
-            });
-            //$this->error('新增用户失败！');
-        }else{
             $fieldrole  = "role_id,role_name";
             $role = Db('role')->field($fieldrole)->select();
             $this->assign('Role',$role);
             return $this->fetch();
-        }
+
     }
 
     public function user_add_ajax()
@@ -93,7 +62,7 @@ class User extends Adminbase
             $data['username'] = $this->request->param('username');
             $data['phone'] = $this->request->param('phone');
             $data['sex'] = $this->request->param('sex');
-            $data['last_login_time'] = time();
+//            $data['last_login_time'] = time();
             $data['nickname'] = $this->request->param('nickname');
             $data['deptid'] = $this->request->param('user_dept_id');
             $data['roleid'] = $this->request->param('roleid');
@@ -101,46 +70,54 @@ class User extends Adminbase
             $data['password'] = $this->default_pwd;
             //$user_id = Db('user')->insertGetId($data);
             $user_id = $this->AdminUser->createManager($data);
-            $this->return_msg('0','新增用户成功！');
+
+            if($user_id){
+                $this->return_msg('1','新增用户成功！');
+            }
+            $this->return_msg('0','新增用户失败!');
+
             // return $data;
-            /*//拼接url 发送get请求
-            $arr['userName'] = $data['username'];
+            //拼接url 发送get请求
+            /*$arr['userName'] = $data['username'];
             $arr['userId'] = $user_id;
             $arr['type'] = 'add';
             $arr = json_encode($arr);
-            $res = $this->get_url($arr,$this->url);*/
+            $res = $this->get_url($arr,$this->url);
 
-            /*if($user_id){
+            if($res){
                 return json_encode($data);
-                $this->success('新增用户成功！');
+                $this->return_msg('0','新增用户成功！');
             }else {
-                $this->error('远程新增失败，请稍后同步！');
+                $this->return_msg('0','远程新增失败，请稍后同步！');
             }*/
         });
-        $this->return_msg('1','shibai！');
+        $this->return_msg('0','新增用户失败！');
         //$this->error('新增用户失败！');
     }
     public function user_details()
     {
-        $user_id = $this->request->param('user_id');
-        $field = "u.user_id,u.user_name,u.user_phone,u.user_icon,u.user_sex,r.role_name,d.dept_name";
-        $join  = [['role r', 'u.user_role_id = r.role_id', 'LEFT'], ['dept d', 'u.user_dept_id = d.dept_id', 'LEFT']];
-        $details   = db('user')->alias('u')->field($field)->order('u.user_id', 'desc')->join($join)->where('user_id',$user_id)->find();
+        $userid = $this->request->param('userid');
+
+        $field = "u.userid,u.username,u.phone,u.nickname,u.sex,r.role_name,d.dept_name";
+        $join  = [['role r', 'u.roleid = r.role_id', 'LEFT'], ['dept d', 'u.deptid = d.dept_id', 'LEFT']];
+        $details   = db('admin')->alias('u')->field($field)->order('u.userid', 'desc')->join($join)->where('userid',$userid)->find();
+
         $this->assign('details',$details);
         return $this->fetch();
     }
+
     public function user_edit()
     {
-        if ($this->request->isPost()) {
+        /*if ($this->request->isPost()) {
             Db::transaction(function () {
-                $user_id = $this->request->param('user_id');
-                $data['user_name'] = $this->request->param('user_name');
-                $data['user_phone'] = $this->request->param('user_phone');
-                $data['user_dept_id'] = $this->request->param('user_dept_id');
-                $data['user_role_id'] = $this->request->param('user_role_id');
-                Db('user')->where('user_id',$user_id)->update($data);
-                $arr['userName'] = $data['user_name'];
-                $arr['userId'] = $user_id;
+                $userid = $this->request->param('userid');
+                $data['username'] = $this->request->param('username');
+                $data['phone'] = $this->request->param('phone');
+                $data['deptid'] = $this->request->param('user_dept_id');
+                $data['roleid'] = $this->request->param('roleid');
+                Db('admin')->where('userid',$userid)->update($data);
+                $arr['userName'] = $data['username'];
+                $arr['userId'] = $userid;
                 $arr['type'] = 'update';
                 $arr = json_encode($arr);
                 $res = $this->get_url($arr,$this->url);
@@ -149,12 +126,39 @@ class User extends Adminbase
                 }
             });
             $this->error('编辑用户失败！');
-        }
+        }*/
+        /*if ($this->request->isPost()) {
+        Db::transaction(function () {
 
-        $user_id = $this->request->param('user_id');
-        $field = "u.user_id,u.user_name,u.user_phone,u.user_icon,u.user_dept_id,u.user_role_id,u.user_sex,r.role_name,d.dept_name";
-        $join  = [['role r', 'u.user_role_id = r.role_id', 'LEFT'], ['dept d', 'u.user_dept_id = d.dept_id', 'LEFT']];
-        $details   = db('user')->alias('u')->field($field)->order('u.user_id', 'desc')->join($join)->where('user_id',$user_id)->find();
+            $userid = $this->request->param('userid');
+            $data['userid'] = $userid;
+            $data['username'] = $this->request->param('username');
+            $data['phone'] = $this->request->param('phone');
+            $data['sex'] = $this->request->param('sex');
+            $data['nickname'] = $this->request->param('nickname');
+            $data['deptid'] = $this->request->param('user_dept_id');
+            $data['roleid'] = $this->request->param('roleid');
+            $data['password'] = '';
+
+
+            $arr['userName'] = $data['username'];
+            $arr['userId'] = $userid;
+            $arr['type'] = 'update';
+            $arr = json_encode($arr);
+            $res = $this->get_url($arr,$this->url);
+            if( $this->AdminUser->editManager($data)){
+                return json_encode($data);
+                $this->return_msg('0','编辑用户成功！');
+            }else {
+                $this->return_msg('0','远程变更失败，请稍后同步！');
+            }
+        });
+        }*/
+
+        $userid = $this->request->param('userid');
+        $field = "u.userid,u.username,u.phone,u.nickname,u.deptid,u.roleid,u.sex,r.role_name,d.dept_name";
+        $join  = [['role r', 'u.roleid = r.role_id', 'LEFT'], ['dept d', 'u.deptid = d.dept_id', 'LEFT']];
+        $details   = db('admin')->alias('u')->field($field)->join($join)->where('userid',$userid)->find();
 
         $fieldrole  = "role_id,role_name";
         $role = Db('role')->field($fieldrole)->select();
@@ -162,26 +166,63 @@ class User extends Adminbase
         $this->assign('details',$details);
         return $this->fetch();
     }
+
+    public function user_edit_ajax()
+    {
+        Db::transaction(function () {
+
+            $userid = $this->request->param('userid');
+            $data['userid'] = $userid;
+            $data['username'] = $this->request->param('username');
+            $data['phone'] = $this->request->param('phone');
+            $data['sex'] = $this->request->param('sex');
+            $data['nickname'] = $this->request->param('nickname');
+            $data['deptid'] = $this->request->param('user_dept_id');
+            $data['roleid'] = $this->request->param('roleid');
+            $data['password'] = '';
+
+
+
+            if( $this->AdminUser->editManager($data)){
+                $this->return_msg('1','编辑用户成功！');
+                $arr['userName'] = $data['username'];
+                $arr['userId'] = $userid;
+                $arr['type'] = 'update';
+                $arr = json_encode($arr);
+                $res = $this->get_url($arr,$this->url);
+                //return json_encode($data);
+                $this->return_msg('1','编辑用户成功！');
+            }else {
+                $this->return_msg('0','远程变更失败，请稍后同步！');
+            }
+        });
+        $this->return_msg('0',"编辑用户失败！");
+    }
+
     public function user_del(){
-        $user_id = (int)$this->request->param('user_id/d');
-        if (empty($user_id)) {
-            $this->error('ID错误');
+        $userid = (int)$this->request->param('userid/d');
+        if (empty($userid)) {
+            $this->return_msg('0','ID错误');
         }
         /*$result = Db::name('eqpt_management')->where(["parentid" => $id])->find();
         if ($result) {
             $this->error("含有子菜单，无法删除！");
         }*/
-        if ($this->UserModel->where('user_id', $user_id)->delete()) {
-            $arr['userId'] = $user_id;
+
+        if ($this->AdminUser->deleteManager($userid)) {
+            $this->return_msg('1','删除用户成功！');
+            $arr['userId'] = $userid;
             $arr['type'] = 'delete';
 
             $arr = json_encode($arr);
             $res = $this->get_url($arr,$this->url);
             if($res['flag']){
-                $this->success('删除用户成功！');
+                $this->return_msg('1','删除用户成功！');
+            }else {
+                $this->return_msg('0','远程删除失败，请稍后同步！');
             }
         } else {
-            $this->error("删除用户失败！");
+            $this->return_msg('0',"删除用户失败！");
         }
     }
     public function get_tree_data()

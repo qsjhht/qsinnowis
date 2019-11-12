@@ -63,7 +63,7 @@ class AdminUser extends Model
             unset($data['password']);
             unset($data['encrypt']);
         } else {
-            $passwordinfo = encrypt_password($data['password']); //对密码进行处理
+            $passwordinfo = $this->encrypt_password($data['password']); //对密码进行处理
             $data['encrypt'] = $passwordinfo['encrypt'];
             $data['password'] = $passwordinfo['password'];
         }

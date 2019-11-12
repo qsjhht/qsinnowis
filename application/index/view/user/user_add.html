@@ -129,23 +129,22 @@
             url: '{:url("index/user/user_add_ajax")}',
             method:'post',       
             data:data.field,        
-            dataType:'JSON',         
+            dataType:'JSON',
             success:function(res){
-                if(res.code='0'){    
-                layer.alert(res.msg);  
+                if(res.code=='1'){
+
                     //parent.closeIframe(res.msg);
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                     window.parent.location.reload();//刷新父页面
                     parent.layer.close(index);//关闭弹出层
 
                 }                
                 else{
-                    layer.alert('sss')  
                     return false;
                 }
             },              
             error:function (res) {
                 console.dir(res.code);
-                 layer.alert(res.code)
                     return false;
             }           
                }) ;         
