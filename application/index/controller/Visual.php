@@ -16,26 +16,26 @@ class Visual extends Adminbase
 {
     public function index()
     {
-        $range = db('work_plan')->field('time_range')->select();
-        foreach ($range as $ra) {
-            $j = date("H:i:s");
-
-            $h = strtotime($j);
-
-            $time = explode(' - ', $ra['time_range']);
-
-
-            $z = strtotime($time['0']);//获得指定分钟时间戳，00:00
-            if($time['1'] == '00:00:00'){
-                $time['1'] = '24:00:00';
+        $res   = db('patrol_log')->order('log_date', 'desc')->field('log_date,p_time,user_ids,str_name')->limit('10')->select();
+        if($res){
+            foreach ($res as &$re) {
+                $re['user_names'] = '';
+                $userstr = trim($re['user_ids'],',');
+                $userarr = explode(',',$userstr);
+                $users = db('admin')->field('nickname')->where('userid','in',$userarr)->select();
+                foreach ($users as $vo) {
+                    $re['user_names'] .= $vo['nickname'].',';
+                }
+                $re['user_names'] = trim($re['user_names'],',');
+                $re['date_time'] = $re['log_date'] .' '. $re['p_time'];
             }
-            $x = strtotime($time['1']);//获得指定分钟时间戳，00:29
-
-            if ($h > $z && $h < $x) {
-                $this->assign('S_time', date('H:i',$z));
-                $this->assign('E_time', date('H:i',$x));
-            }
+            $this->assign('Patrols', $res);
+        }else{
+            $this->assign('Patrols', '');
         }
+        $this->assign('Onpatrol', '');
+
+
             $this->assign('Uname', $this->_userinfo['nickname']);
             return $this->fetch();
     }
@@ -63,6 +63,24 @@ class Visual extends Adminbase
     }
     public function demoThree()
     {
+        $res   = db('patrol_log')->order('log_date', 'desc')->field('log_date,p_time,user_ids,str_name')->limit('10')->select();
+        if($res){
+            foreach ($res as &$re) {
+                $re['user_names'] = '';
+                $userstr = trim($re['user_ids'],',');
+                $userarr = explode(',',$userstr);
+                $users = db('admin')->field('nickname')->where('userid','in',$userarr)->select();
+                foreach ($users as $vo) {
+                    $re['user_names'] .= $vo['nickname'].',';
+                }
+                $re['user_names'] = trim($re['user_names'],',');
+                $re['date_time'] = $re['log_date'] .' '. $re['p_time'];
+            }
+            $this->assign('Patrols', $res);
+        }else{
+            $this->assign('Patrols', '');
+        }
+        $this->assign('Onpatrol', '');
         return $this->fetch();
     }
 }

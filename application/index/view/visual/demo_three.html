@@ -73,6 +73,15 @@
         width: 100%;
         height: 100%;
     }
+    .two{
+        visibility: hidden;
+    }
+    #one{
+        color: #FFFFFF;
+    }
+    #two{
+        color: #FFFFFF;
+    }
 
 
 
@@ -139,57 +148,17 @@
             </div>
             <!--入廊企业-->
             <div class="contentFirm mainBor">
-                <p class="robot">入廊企业</p>
-                <div class="firmContent">
-                    <!-- 左边  -->
-                    <div class="firmLeft">
-                        <div class="firmConLeft" style="padding-top:0">
-                            <div class='firmConText' style="text-align:right">
-                                <span>中国电信石家庄分公司</span>
-                            </div>
-                            <div class='firmConMain' style='text-align:right'>
-                                <span style="font-size:12px">5.3km</span>
-                                <div class="firmConBack display" style='width:26px;background-color:#00e7ff'></div>
-                            </div>
-                        </div>
-                        <div class="firmConLeft">
-                            <div class='firmConText' style="text-align:right">
-                                <span>正定新区惠新供热有限责任公司</span>
-                            </div>
-                            <div class='firmConMain' style='text-align:right'>
-                                <span>16km</span>
-                                <div class="firmConBack display"  style='width:80px;background-color:#00e7ff'></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 分界线 -->
-                    <div class="firmMiddle"></div>
-                    <!-- 右边 -->
-                    <div class="firmRight">
-                        <div class="firmConLeft">
-                            <div class='firmConText'>
-                                <span>正定县供电分公司</span>
-                            </div>
-                            <div class='firmConMain'>
-                                <div class="firmConBack display" style='width:26px;background-color:#00e7ff'></div>
-                                <div class='firmConBack display' style='width:17px;background-color:#06c0d6'></div>
-                                <div class='firmConBack display' style='width:80px;background-color:#0d8599'></div>
-                                <span>24.8km</span>
-                            </div>
-                        </div>
-                        <div class="firmConLeft">
-                            <div class='firmConText'>
-                                <span>石家庄正定新区水务有限公司</span>
-                            </div>
-                            <div class='firmConMain'>
-                                <div class="firmConBack display" style='width:80px;background-color:#00e7ff'></div>
-                                <div class="firmConBack display" style='width:80px;background-color:#06c0d6'></div>
-                                <span>32km</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="borTitle">
+                    环境监测
+                    <select onchange="select(this.value)">
+                        <option value="1">温度</option>
+                        <option value="2">湿度</option>
+                        <option value="3">氧气</option>
+                        <option value="4">硫化氢</option>
+                        <option value="5">甲烷</option>
+                    </select>
                 </div>
-                <div id="firmConTop"></div>
+                <div class="borCont" id="borCont" style="height: 28.5vh"></div>
             </div>
         </div>
         <!--摄像头-->
@@ -235,30 +204,27 @@
     <div class="mainBot">
         <!-- 环境监测 -->
         <div class="borLeft mainBor" >
-            <div class="borTitle">
-                环境监测
-                <select onchange="select(this.value)">
-                    <option value="1">温度</option>
-                    <option value="2">湿度</option>
-                    <option value="3">氧气</option>
-                    <option value="4">硫化氢</option>
-                    <option value="5">甲烷</option>
-                </select>
+
+            <div class="firmContent" style="width: 100%;height:100%;">
+
+                <div id="main" style="width: 100%;height:100%;margin-right: 10vh;"></div>
             </div>
-            <div class="borCont" id="borCont"></div>
         </div>
         <div class="borRight">
             <!-- 巡查巡检 -->
-            <div class="contentRobot mainBor">
+            <!--<div class="contentRobot mainBor">
                 <div class="robot">
                     巡查巡检
                     <ul class="borUl">
                         <li class="borPatrol borUlClass" onclick="stocks()">已完成</li>
                         <li class="borPatrol" onclick="underway()">进行中</li>
                         <li class="borPatrol" onclick="contract()">待执行</li>
+                        <li class="borPatrol borUlClass"><a href="#" id="one">已完成</a></li>
+                        <li class="borPatrol"><a href="#" id="two">进行中</a></li>
+                        <li class="borPatrol" onclick="contract()">待执行</li>
                     </ul>
                 </div>
-                <div class="robotTob scrollber">
+                <div class="robotTob scrollber one">
                     <table class="robotToble">
                         <tr>
                             <th>2019-08-13 09:30</th>
@@ -282,6 +248,52 @@
                         </tr>
                     </table>
                 </div>
+            </div>-->
+            <div class="contentRobot mainBor">
+                <div class="robot">
+                    巡查巡检
+                    <ul class="borUl">
+                        <li class="borPatrol borUlClass"><a href="#" id="one">已完成</a></li>
+                        <li class="borPatrol"><a href="#" id="two">进行中</a></li>
+                        <!--<li class="borPatrol" onclick="contract()">待执行</li>-->
+                    </ul>
+                </div>
+                <div class="robotTob scrollber one">
+                    <table class="robotToble">
+                        {if $Patrols}
+                        {volist name="Patrols" id="vo"}
+                        <tr>
+                            <th>{$vo.date_time}</th>
+                            <th>{$vo.str_name}</th>
+                            <th>{$vo.user_names}</th>
+                        </tr>
+                        {/volist}
+                        {else/}
+                        <tr>
+                            <th>暂无数据</th>
+                        </tr>
+                        {/if}
+
+
+                    </table>
+                </div>
+                <div class="robotTob scrollber two" style="height: 82px">
+                    <table class="robotToble">
+                        {if $Onpatrol}
+                        {volist name="Patrols" id="vo"}
+                        <tr>
+                            <th>{$vo.date_time}</th>
+                            <th>{$vo.str_name}</th>
+                            <th>{$vo.user_names}</th>
+                        </tr>
+                        {/volist}
+                        {else/}
+                        <tr>
+                            <th>暂无数据</th>
+                        </tr>
+                        {/if}
+                    </table>
+                </div>
             </div>
             <!--入廊企业-->
             <div class="contentFirm mainBor" id="contentFirm"></div>
@@ -291,6 +303,144 @@
 <script src="__STATIC__/new/itemJS/demoThree.js"></script>
 <script>
 
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var labelRight = {
+        normal: {
+            position: 'right'
+        }
+    };
+    var labelleft = {
+        normal: {
+            position: 'left'
+        }
+    };
+
+    option = {
+        title: {
+            text: '入廊企业',
+            textStyle:{
+                color:'#00ffff',
+                fontWeight:'normal',
+                fontSize:16
+            },
+            padding:[15,10]
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+
+            bottom: 30
+        },
+        xAxis: {
+            type : 'value',
+            position: 'top',
+            splitLine: {lineStyle:{type:'dashed'}},
+            show:false
+        },
+        yAxis: {
+            type : 'category',
+            axisLine: {show: false},
+            axisLabel: {show: false},
+            axisTick: {show: false},
+            splitLine: {show: false},
+            data : [ '中国电信正定分公司 8.996km','中国联通集团 8.2km', '正定县供电分公司 34.867km', '中国移动通信集团 10.5km', '广电集团有限公司 10.2km', '新奥燃气有限公司 5.6km', '正定新区水务有限公司 21.705km', '石家庄正定新区惠新供热有限公司 12.234km', '石家庄市供电公司 14.394km']
+        },
+        tooltip:{
+
+        },
+        formatter: function (params) {
+            // console.dir(params);
+            var res  =  params.name;
+            res += '<style>td{padding:5px;}</style><table>';
+            // res += '<tr><td>'+params.seriesName+'</td><td>'+params.value;
+            res += '</table>';
+            // res += '<style>td{padding:5px;}</style><table>';
+            // for(var i=0;i<params.length-1;i++){
+            //     res += '<tr><td>'+params.seriesName+'</td><td>'+params[i].value;
+            //     res += '</td><td>'+params.data.datas[0];
+            // }
+            // res += '<tr><td>'+params[params.length-1].seriesName+'</td><td>'+params[params.length-1].value+'</td></tr>';
+            // res += '</table>';
+            return res;
+
+        },
+        series : [
+            {
+                name:'长度',
+                type:'bar',
+                stack: '总量',
+                barWidth: 20,
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(1, 0, 0, 0,
+                            [{
+                            offset: 0,
+                            color: "#1268f3" // 0% 处的颜色
+                        }, {
+                            offset: 0.6,
+                            color: "#08a4fa" // 60% 处的颜色
+                        }, {
+                            offset: 1,
+                            color: "#01ccfe" // 100% 处的颜色
+                        }], false),
+                        label: {
+                            show: false, //开启显示
+                            position: 'top', //在上方显示
+                            textStyle: { //数值样式
+                                color: 'white',
+                                fontSize: 16
+                            }
+                        }
+                    }
+
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{b}'
+                    }
+                },
+
+                data:[
+                    {value: -8.996, label: labelRight},
+                    {value: 8.2, label: labelleft},
+                    {value: -34.867, label: labelRight},
+                    {value: 10.5, label: labelleft},
+                    {value: -10.2, label: labelRight},
+                    {value: 5.6, label: labelleft},
+                    {value: -21.705, label: labelRight},
+                    {value: 12.234, label: labelleft},
+                    {value: -14.394, label: labelRight},
+                ]
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+
+
+    $('.borUl li a').click(function(){
+        $('.borUl li').removeClass('borUlClass');
+        $(this).parent().addClass('borUlClass');
+        var id= $(this).attr('id');
+        if ( id == 'one')
+        {
+            $('.two').css("visibility","hidden");
+            $('.one').css("display","block");
+            $(".one").css("visibility","visible");
+        }
+        if ( id == 'two')
+        {
+            $('.one').css("visibility","hidden");
+            $('.one').css("display","none");
+            $('.two').css("visibility","visible");
+        }
+    })
     if (H5siOS() === true
         || H5sSafariBrowser() === true)
     {

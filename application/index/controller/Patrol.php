@@ -73,7 +73,7 @@ class Patrol extends Adminbase
         if ($this->request->isAjax()) {
             $limit = $this->request->param('limit/d', 10);
             $page = $this->request->param('page/d', 1);
-            $res   = db('patrol_log')->order('log_id', 'desc')->page($page, $limit)->select();
+            $res   = db('patrol_log')->order('log_date', 'desc')->page($page, $limit)->select();
 
             foreach ($res as &$re) {
                 $re['user_names'] = '';
