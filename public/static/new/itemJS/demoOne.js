@@ -26,7 +26,7 @@ let time = {
         }
     },
     crew:function(){
-        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:2px"/>在岗03人'
+        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:2px"/>在岗15人'
     }
 };
 let infoDate = document.getElementById('infoDate');
