@@ -358,7 +358,7 @@ class Attendance extends Adminbase
             $limit = $this->request->param('limit/d', 10);
             $page = $this->request->param('page/d', 1);
 
-            $res   = db('duty_log')->order('d_id', 'desc')->page($page, $limit)->select();
+            $res   = db('duty_log')->order('d_date', 'desc')->page($page, $limit)->select();
             foreach ($res as &$re) {
                 $re['currents_name'] = '';
                 $re['nexts_name'] = '';

@@ -1,5 +1,11 @@
 ﻿// 管廊信息
 let date = new Date();
+
+var d0 = new Date(date.getTime() - 24*60*60*1000*2);
+var d1 = new Date(date.getTime() - 24*60*60*1000*3);
+var d2 = new Date(date.getTime() - 24*60*60*1000*5);
+var d3 = new Date(date.getTime() - 24*60*60*1000*7);
+
 let time = {
     year : function(){
         return date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ date.getDate()+'日'
@@ -26,7 +32,7 @@ let time = {
         }
     },
     crew:function(){
-        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:2px"/>在岗15人'
+        return '<img src="../../../static/new/image/user-fill.png" width:="30" height="26" style="position:relative;top:-1px"/>在岗15人'
     }
 };
 let infoDate = document.getElementById('infoDate');
@@ -273,20 +279,23 @@ for(var a = 0 ;a<callGrade.length;a++){
         callGrade[a].style.color = '#32a5cf'
     }
 }
-let getYear = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (date.getDate()-1)+'日'
+let getYear = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d0.getDate())+'日';
+let getYear1 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d1.getDate())+'日';
+let getYear2 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d2.getDate())+'日';
+let getYear3 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d3.getDate())+'日';
 callTime[0].innerHTML = getYear+' '+'5:30';
 callTime[1].innerHTML = getYear+' '+'5:30';
 callTime[2].innerHTML = getYear+' '+'5:33';
-callTime[3].innerHTML = getYear+' '+'12:30';
-callTime[4].innerHTML = getYear+' '+'12:30';
-callTime[5].innerHTML = getYear+' '+'13:05';
-callTime[6].innerHTML = getYear+' '+'13:32';
-callTime[7].innerHTML = getYear+' '+'13:32';
-callTime[8].innerHTML = getYear+' '+'14:14';
-callTime[9].innerHTML = getYear+' '+'15:21';
-callTime[10].innerHTML = getYear+' '+'15:21';
-callTime[11].innerHTML = getYear+' '+'16:11';
-callTime[12].innerHTML = getYear+' '+'19:37';
+callTime[3].innerHTML = getYear1+' '+'12:30';
+callTime[4].innerHTML = getYear1+' '+'12:30';
+callTime[5].innerHTML = getYear1+' '+'13:05';
+callTime[6].innerHTML = getYear2+' '+'13:32';
+callTime[7].innerHTML = getYear2+' '+'13:32';
+callTime[8].innerHTML = getYear2+' '+'14:14';
+callTime[9].innerHTML = getYear3+' '+'15:21';
+callTime[10].innerHTML = getYear3+' '+'15:21';
+callTime[11].innerHTML = getYear3+' '+'16:11';
+callTime[12].innerHTML = getYear3+' '+'19:37';
 
 
 

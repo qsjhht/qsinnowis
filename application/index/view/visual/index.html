@@ -96,6 +96,16 @@
           .section{text-align: center;font-size: 15px;height: 30px;border-bottom: 1px dashed #ffffff}
           .xianShiDiv{padding: 10px}
           .xianShiDiv span{color: aquamarine;padding-left:5px}
+          .borTitle select{
+               height: 20px;
+               padding: 0 1%;
+          }
+          button, input, optgroup, option, select, textarea{
+               font-size: 30%;
+          }
+          .callTab {
+               height: 17vh;
+          }
      </style>
 </head>
 <body class="backg">
@@ -201,7 +211,7 @@
                     <div class="contentTop mainBor marginTop">
                         <div class="borTitle" style="font-size:16px">
                             环境监测
-                            <select style="width: 105px;" onchange="select(this.value)">
+                            <select style="width: 65px;" onchange="select(this.value)">
                                 <option value="1">温度</option>
                                 <option value="2">湿度</option>
                                 <option value="3">氧气</option>
@@ -240,8 +250,8 @@
                               <table class="robotToble">
                                    <tr>
                                         <th class="robotClass">已完成</th>
-                                        <th>09:30 —— 11:30</th>
-                                        <th>管廊一号线巡检</th>
+                                        <th id="date1"></th>
+                                        <th>新城大街</th>
                                         <th>挂轨机器人</th>
                                         <th >
                                              <!--<img src="../image/vidicon-fill.png" width="18" height="20" alt="/">-->
@@ -249,8 +259,8 @@
                                    </tr>
                                    <tr>
                                         <th class="robotClass">进行中</th>
-                                        <th>13:30 —— 15:30</th>
-                                        <th>管廊一号线巡检</th>
+                                        <th id="date2"></th>
+                                        <th>新城大街</th>
                                         <th>挂轨机器人</th>
                                         <th onclick="aaa()" class="vidicon">
                                              <img src="__STATIC__/new/image/vidicon-fill.png" width="18" height="20" alt="/">
@@ -258,8 +268,8 @@
                                    </tr>
                                    <tr>
                                         <th class="robotClass">待执行</th>
-                                        <th>15:30 —— 15:30</th>
-                                        <th>管廊一号线巡检</th>
+                                        <th  id="date3"></th>
+                                        <th>新城大街</th>
                                         <th>挂轨机器人</th>
                                         <th>
                                              <!--<img src="../image/vidicon-fill.png" width="18" height="20" alt="/">-->
@@ -290,81 +300,81 @@
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>水泵报警</th>
-                                        <th>YBY01-YBY21</th>
+                                        <th>XC01/S</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>开启水泵</th>
-                                        <th>YBY01-YBY21</th>
+                                        <th>XC01/S</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>关闭水泵</th>
-                                        <th>YBY01-YBY21</th>
+                                        <th>XC01/S</th>
                                    </tr>
 
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>风机报警</th>
-                                        <th>XC01-XC21</th>
+                                        <th>XC15/D</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>开启风机</th>
-                                        <th>XC01-XC21</th>
+                                        <th>XC15/D</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>关闭风机</th>
-                                        <th>XC01-XC21</th>
+                                        <th>XC15/D</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>风机报警</th>
-                                        <th>SP01-SP16</th>
+                                        <th>XC12/D</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>开启风机</th>
-                                        <th>SP01-SP16</th>
+                                        <th>XC12/D</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>关闭风机</th>
-                                        <th>SP01-SP16</th>
+                                        <th>XC12/D</th>
                                    </tr>
 
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>风机报警</th>
-                                        <th>SP01-SP16</th>
+                                        <th>XC10/S</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>开启风机</th>
-                                        <th>SP01-SP16</th>
+                                        <th>XC10/S</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">普通</th>
                                         <th>关闭风机</th>
-                                        <th>SP01-SP16</th>
+                                        <th>XC10/S</th>
                                    </tr>
                                    <tr>
                                         <th class="callTime"></th>
                                         <th class="callGrade">设备</th>
                                         <th>设备离线</th>
-                                        <th>YBYB01-YBYB07</th>
+                                        <th>YBY07/S</th>
                                    </tr>
                                    </tbody>
                               </table>
@@ -374,9 +384,9 @@
 
                <div class='bottomDle mainBor'>
 
-                   <div class="firmContent" style="height: 100%">
+                   <div class="firmContent" style="width: 100%;height:100%;">
 
-                       <div id="main" style="width: 100%;height:100%;"></div>
+                       <div id="main" style="width: 100%;height:100%;margin-right: 2.5vh"></div>
                    </div>
                </div>
                <div class='bottomRight'>
@@ -502,7 +512,7 @@
                                  position: 'top', //在上方显示
                                  textStyle: { //数值样式
                                      color: 'white',
-                                     fontSize: 10
+                                     fontSize: 14
                                  }
                              }
                          }

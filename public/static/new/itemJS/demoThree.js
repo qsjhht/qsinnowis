@@ -1,6 +1,27 @@
 ﻿
     // 数据
 let date = new Date();
+var preDate = new Date(date.getTime() - 24*60*60*1000);
+var nextDate = new Date(date.getTime() + 24*60*60*1000);
+    let time = {
+        year1 : function(){
+            return preDate.getFullYear()+'-'+(preDate.getMonth()+1)+'-'+ preDate.getDate()
+        },
+        year2 : function(){
+            return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+ date.getDate()
+        },
+        year3 : function(){
+            return nextDate.getFullYear()+'-'+(nextDate.getMonth()+1)+'-'+ nextDate.getDate()
+        },
+    };
+
+    let date1 = document.getElementById('date1');
+    let date2 = document.getElementById('date2');
+    let date3 = document.getElementById('date3');
+    date1.innerHTML = time.year1();
+    date2.innerHTML = time.year2();
+    date3.innerHTML = time.year3();
+
 let data = {
     getYear:date.getFullYear(),//年份
     getMonth:date.getMonth()+1,//月份
