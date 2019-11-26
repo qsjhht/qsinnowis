@@ -222,6 +222,7 @@
             $ = layui.jquery,
             form = layui.form;
         var site_data = JSON.parse($('#sitesdata').val());
+        // console.dir(site_data);
         form.on('switch(switchTest)',function(){
             if(this.checked ? true : false == true){
                 evirImg[0].classList.add('evirImgKey')
@@ -261,6 +262,7 @@
                     real_time(zone);
                     realtimes(zone);
                     lastdata(zone);
+                    $("#seleTwo").val('T');
                     myContainer.setOption({
                         xAxis:{
                             data:arrDate
@@ -292,7 +294,7 @@
                     // 删除旧定时器
                     window.clearInterval(Interval);
                     window.clearInterval(Reallog);
-
+                    $("#seleTwo").val('T');
                     zone = data.text;
                     real_time(zone);
                     realtimes(zone);

@@ -15,6 +15,13 @@ class Bigdata extends Common
     protected function initialize()
     {
         parent::initialize();
+        $this->secret_arr = array(
+            'HKCJ' => 'zhengdingguanlang'
+            ,'RYRQ' => 'zhengdingguanlang'
+            ,'MJ' => 'zhengdingguanlang'
+            ,'ZHZM' => 'zhengdingguanlang'
+            ,'YK' => 'zhengdingguanlang'
+        );
     }
     public function date()
     {
@@ -57,5 +64,55 @@ class Bigdata extends Common
      $txt =  json_encode($arr,JSON_UNESCAPED_UNICODE);
      echo $txt;
     }
+
+    public function Real_alarm()
+    {
+//        $this->params['app_key'] = $this->request->param('app_key');
+//        $this->params['format'] = $this->request->param('format');
+//        $this->params['sign'] = $this->request->param('sign');
+//        $this->params['cate_code'] = $this->request->param('cate_code');
+//        $this->params['time'] = $this->request->param('time');
+//        $this->params['alarm_type'] = $this->request->param('alarm_type');
+//        $this->params['alarm_code'] = $this->request->param('alarm_code');
+//        $this->params['alarm_manage'] = $this->request->param('alarm_manage');
+//        $this->params['alarm_site'] = $this->request->param('alarm_site');
+        $signs = $this->params['sign'];
+        unset($this->params['sign']);
+        $callback = $this->asc_sort($this->params);
+
+        $sign = strtoupper(md5($callback));
+//        dump($sign);
+//        $this->params['sign'];
+        if ($sign !== $signs){
+            $this->return_msg(400, '参数错误!','');
+        }
+
+        $this->params['alarm_time'] = strtotime($this->params['alarm_time']);
+        $res = Db('alarmrecs')->strict(false)->insert($this->params);
+        if($res){
+            $this->return_msg(200, '实时报警上传成功!', '');
+        }
+        $this->return_msg(400, '实时报警上传失败!', '');
+//        dump($callback);
+//
+    }
+
+
+    public function asc_sort($params = array())
+    {
+        if (!empty($params)){
+            $p = ksort($params);
+            if($p){
+                $str = $this->secret_arr[$this->params['app_key']];
+                foreach ($params as $k => $val) {
+                    $str .= $k . $val;
+                }
+                $strs = $str.$this->secret_arr[$this->params['app_key']];
+                return $strs;
+            }
+        }
+        return false;
+    }
+
 
 }

@@ -50,7 +50,17 @@ class Common extends Controller
             ),
             'real_times' => array(
             ),
-
+            'real_alarm' => array(
+                'cate_code' => 'require|number',  //cate编号 对应系统和设备类别
+                'alarm_time' => 'require', //报警时间
+                'alarm_type' => 'require|number',  //报警类型
+                'alarm_code' => 'require|number', //报警编码  对应报警内容
+                'alarm_manage' => 'require|number',  //处置方法  对应各自系统
+                'eqpt_site' => 'require',  //报警位置  文字说明
+                'app_key' => 'require',  //报警位置  文字说明
+                'format' => 'require',  //报警位置  文字说明
+                'sign' => 'require',
+            )
         ),
 
     );
@@ -58,7 +68,7 @@ class Common extends Controller
     protected $rule_img = array('imgs' => 'require'); 
     protected function initialize()
     {
-        //parent::init();  //tp5.1 继承controller后 系统自动完成请求对象注入 直接使用￥this->request
+        //parent::init();  //tp5.1 继承controller后 系统自动完成请求对象注入 直接使用$this->request
         //$this->request = Request::instance();
         //$this->check_time($this->request->only(['time']));
         //$this->check_token($this->request->param());

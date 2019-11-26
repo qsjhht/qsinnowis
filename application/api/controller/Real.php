@@ -123,7 +123,7 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT top 50 * FROM history where TagName like 'WIN-JR1ULRL6E5T_".$pars."' order by DataTime desc";
+        $sql="SELECT top 200 * FROM history where TagName like '%".$pars."' and DataTime > '2010-10-10' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -172,7 +172,7 @@ class Real extends Common
         {
             exit("连接失败: " . $conn);
         }
-        $sql="SELECT * FROM realtime where TagName like 'WIN-JR1ULRL6E5T_".$pars."'";
+        $sql="SELECT * FROM realtime where TagName like '%".$pars."'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
