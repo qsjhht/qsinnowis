@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="__STATIC__/new/evironment/common.css">
     <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
     <script src="__STATIC__/js/echarts.min.js"></script>
+    <!--<script src="__STATIC__/new/js/index.js"></script>-->
     <!-- 图标 -->
     <link rel="stylesheet" href="__STATIC__/new/style.css">
     <link rel="stylesheet" href="__STATIC__/new/demo.css">
@@ -33,7 +34,14 @@
     div.layui-input-inline{
         margin-right: 15px!important;
     }
-
+    .settling{
+        /*padding:10px;*/
+        /*border:1px solid red;*/
+        /*background-color:black;*/
+        height:40vh;
+        width: 100%;
+        margin-top:20px;
+    }
 </style>
 <body class="backg" style="overflow: auto">
 
@@ -186,7 +194,7 @@
                 <option value="H2S">硫化氢</option>
                 <option value="LT">水位</option>
             </select>
-            <div class="display evirSelect">
+            <!--<div class="display evirSelect">
                 <div class="evirSele"><i class="icon-chart-01"></i></div>
                 <ul class="evirUl">
                     <li><i class="icon-chart-01"></i></li>
@@ -194,17 +202,15 @@
                     <li><i class="icon-chart-03"></i></li>
                     <li><i class="icon-chart-04"></i></li>
                 </ul>
-            </div>
+            </div>-->
         </div>
         <div id="container" class="evirEchart"></div>
         <!--<div id="container" style="width:100%;height:100%;"></div>-->
+        <div class="settling" id="settling1"></div>
+        <div class="settling" id="settling2"></div>
+        <div class="settling" id="settling3"></div>
+        <div class="settling" id="settling4"></div>
 
-        <div class="evirMain evirMain1" id="evirSett1">
-
-        </div>
-        <div class="evirMain evirMain1" id="evirSett2">
-
-        </div>
     </div>
 </body>
 
@@ -255,6 +261,10 @@
                 //console.dir(data.text);
                 //第一次 选择 创建定时器 获取实时数据
                 if(typeof(zone) == 'undefined'){
+                    let did = 'hk20190521047-1'; //采集箱
+                    let num = 0   // 参数 0 || 1  采集箱
+                    zone_evir(did,num);
+
                     arrDate = [];
                     arrData = [];
                     zone = data.text;
@@ -264,11 +274,44 @@
                     lastdata(zone);
                     $("#seleTwo").val('T');
                     myContainer.setOption({
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        toolbox: {
+                            show: true,
+                            right:'10%',
+                            top:'5%',
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: 'none'
+                                },
+                                // dataView: {readOnly: false},
+                                magicType: {type: ['line', 'bar']},
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            iconStyle: {
+                                color:
+                                    '#fff'
+                                ,
+                                borderColor:'#00FFFF'
+
+                            }
+                        },
+
                         xAxis:{
+                            axisLabel:{
+                               interval:9,//间隔多少个坐标显示
+                                formatter: function (value, index) {
+                                    // 格式化成月/日，只在第一个刻度显示年份
+                                    return value.substr(11,5);
+                                }
+                            },
                             data:arrDate
                         },
+
                         series:[{
-                            name:'成交',
+                            // name:'成交',
                             data:arrData
                         }]
                     });
@@ -279,10 +322,17 @@
                         zone1 = zone;
                         myContainer.setOption({
                             xAxis:{
+                                axisLabel:{
+                                   interval:9,//间隔多少个坐标显示
+                                    formatter: function (value, index) {
+                                        // 格式化成月/日，只在第一个刻度显示年份
+                                        return value.substr(11,5);
+                                    }
+                                },
                                 data:arrDate
                             },
                             series:[{
-                                name:'成交',
+                                // name:'成交',
                                 data:arrData
                             }]
                         });
@@ -302,10 +352,17 @@
                     zone1 = zone;
                     myContainer.setOption({
                         xAxis:{
+                            axisLabel:{
+                               interval:9,//间隔多少个坐标显示
+                                formatter: function (value, index) {
+                                    // 格式化成月/日，只在第一个刻度显示年份
+                                    return value.substr(11,5);
+                                }
+                            },
                             data:arrDate
                         },
                         series:[{
-                            name:'成交',
+                            // name:'成交',
                             data:arrData
                         }]
                     });
@@ -314,10 +371,17 @@
                         lastdata(zone);
                         myContainer.setOption({
                             xAxis:{
+                                axisLabel:{
+                                   interval:9,//间隔多少个坐标显示
+                                    formatter: function (value, index) {
+                                        // 格式化成月/日，只在第一个刻度显示年份
+                                        return value.substr(11,5);
+                                    }
+                                },
                                 data:arrDate
                             },
                             series:[{
-                                name:'成交',
+                                // name:'成交',
                                 data:arrData
                             }]
                         });
@@ -342,10 +406,17 @@
                         text:$(this).find("option:selected").text()+'监测'
                     },
                     xAxis:{
+                        axisLabel:{
+                           interval:9,//间隔多少个坐标显示
+                            formatter: function (value, index) {
+                                // 格式化成月/日，只在第一个刻度显示年份
+                                return value.substr(11,5);
+                            }
+                        },
                         data:arrDate
                     },
                     series:[{
-                        name:'成交',
+                        // name:'成交',
                         data:arrData
                     }]
                 });
@@ -356,10 +427,17 @@
                             text:$(this).find("option:selected").text()+'监测'
                         },
                         xAxis:{
+                            axisLabel:{
+                               interval:9,//间隔多少个坐标显示
+                                formatter: function (value, index) {
+                                    // 格式化成月/日，只在第一个刻度显示年份
+                                    return value.substr(11,5);
+                                }
+                            },
                             data:arrDate
                         },
                         series:[{
-                            name:'成交',
+                            // name:'成交',
                             data:arrData
                         }]
                     });
@@ -406,7 +484,7 @@
     var container = document.getElementById('container');
     var myContainer = echarts.init(container);
 
-    var base = + new Date(2018,9,30);
+    /*var base = + new Date(2018,9,30);
     var oneDay = 24*3600*1000;
     var date = [];
     var data = [Math.random()*150];
@@ -427,7 +505,7 @@
 
     for (var i = 0; i < 100; i++) {
         addData();
-    }
+    }*/
     var datas,lastdata;
     arrDate = [];
     arrData = [];
@@ -518,6 +596,13 @@
         xAxis:{
             type:"category",
             boundaryGap:false,
+            axisLabel:{
+               interval:9,//间隔多少个坐标显示
+                formatter: function (value, index) {
+                    // 格式化成月/日，只在第一个刻度显示年份
+                    return value.substr(11,5);
+                }
+            },
             data:arrDate,
             axisLine:{
                 lineStyle:{
@@ -535,10 +620,10 @@
             }
         },
         series:[{
-            name:'成交',
+            // name:'成交',
             type:'line',
             smooth:true, //数据光滑过度
-            symbol:'none', //下一个数据点
+            // symbol:'none', //下一个数据点
             stack:'a',
             // areaStyle: {normal : {
             //         color:'#8cd5c2', //改变折线点的颜色
@@ -560,74 +645,175 @@
 
 
 
-    // -----------------------沉降系统----------------------------------
-    var evirSett1 = echarts.init(document.getElementById('evirSett1'));
-    evirSett1.setOption({
-        title:{
-            text:'沉降监测',
-            textStyle:{
-                color:'#00ffff',
-                fontWeight:'normal',
-                fontSize:16
+    //设置参数
+    let username = 'admin'; //账户名
+    let userpass = 'admin'; // 密码
+
+
+
+    let a = 2;
+
+    // let
+    let date = new Date()  //日期
+    let getDate = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+ date.getDate(); //当前日期
+
+    let data; // 数据
+    let oo;  //时间
+    let socketData; //socket 数据
+    let numData = new Array(); //数据
+    let stayguyData = new Array(); // 拉线
+    let angle_X = new Array(); //角度-X
+    let angle_Y = new Array(); //角度-Y
+
+
+    function zone_evir(did,num) {
+        // ajxa 使用
+        const XML = new XMLHttpRequest();
+        let url = `http://10.3.100.8:88/OpenPlatform/openApi?u=${username}&p=${userpass}&did=${did}&date=${getDate}`;
+        XML.open('POST',url,false);
+        XML.onreadystatechange = function(){
+            if (XML.readyState == 4 && XML.status == 200) { //回传成功
+                let evirData = JSON.parse(XML.responseText).result.data;
+                data = evirData.slice(evirData.length-800,evirData.length);
+                if(data[1].data.length == 10){
+                    num += 2
+                    console.log('10')
+                }else if(data[1].data.length == 4){
+                    console.log('4')
+                    a = 1;
+                    num = 0;
+                }
+            }else{
+                console.log('数据获取失败')
+            }
+        }
+        XML.send();
+        // 获取历史数据
+        for(let i in data){
+            oo = data[i].date.substring(11,20);
+            numData.push([oo,data[i].data[num].data]);
+            stayguyData.push([oo,data[i].data[num+(1*a)].data]);
+            angle_X.push([oo,data[i].data[num+(2*a)].data])
+            angle_Y.push([oo,data[i].data[num+(3*a)].data])
+        }
+
+
+        // webSocket  使用
+        wsUrl = 'ws://10.3.100.8:88/OpenPlatform/webSocket?projectId=211'
+        let ws = new WebSocket(wsUrl);
+        ws.onopen = function(){
+            console.log("client:打开链接");
+            ws.send('{"u":"admin", "p":"admin", "code": 201 }')
+        };
+        ws.onmessage = function(e){
+            socketData = JSON.parse(e.data);  //报错
+            if(socketData.deviceId == did){
+                oo = socketData.date.substring(11,20);
+                numData.push([oo,socketData.data[num].data]);
+                numData.shift();
+                evirEchart('settling1','沉降数据（mm）', numData);
+
+                stayguyData.push([oo,socketData.data[num+(1*a)].data]);
+                stayguyData.shift();
+                evirEchart('settling2','拉线数据（mm）',stayguyData);
+
+                angle_X.push([oo,socketData.data[num+(2*a)].data])
+                angle_X.shift();
+                evirEchart('settling3','倾角-X（度）',angle_X);
+
+                angle_Y.push([oo,socketData.data[num+(3*a)].data])
+                angle_Y.shift();
+                evirEchart('settling4','倾角-Y（度）',angle_Y)
+
+            }
+        };
+        // 断开按钮
+        // function err(){
+        //     ws.close();
+        // };
+        ws.onclose = function(){
+            console.log("webSocket 已经断开链接")
+        }
+        ws.onerror = (err)=>{
+            console.log("错误"+err)
+        }
+
+
+        evirEchart('settling1','沉降数据（mm）', numData);
+        evirEchart('settling2','拉线数据（mm）',stayguyData);
+        evirEchart('settling3','倾角-X（度）',angle_X);
+        evirEchart('settling4','倾角-Y（度）',angle_Y);
+    }
+
+    // evirEchart
+    function evirEchart(echaId,name,dataEvir){
+        settling = echarts.init(document.getElementById(echaId));
+        console.dir(settling);
+        settling.setOption({
+            tooltip: {
+                trigger: 'axis'
             },
-            padding:[15,10]
-        },
-        xAxis:{
-            type:'category',
-            axisLine:{
-                lineStyle:{
-                    color:'#e4e4e4'
+            toolbox: {
+                show: true,
+                right:'10%',
+                top:'5%',
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    // dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                },
+                iconStyle: {
+                    color:
+                        '#fff'
+                    ,
+                    borderColor:'#00FFFF'
+
                 }
-            }
-        },
-        yAxis:{
-            name:'拉线式位移（cm）',
-            type:'value',
-            axisLine:{
-                lineStyle:{
-                    color:'#e4e4e4'
+            },
+            title:{
+                text:name,
+                textStyle:{
+                    color:'#00ffff',
+                    fontWeight:'normal',
+                    fontSize:16
+                },
+                padding:[15,10]
+            },
+            xAxis:{
+                type:'category',
+                axisLine:{
+                    lineStyle:{
+                        color:'#e4e4e4'
+                    }
                 }
-            }
-        },
-        series:[{
-            data:[['11:21',0],['11:22',0],['11:23',0],['11:24',0],['11:25',0],['11:26',0],['11:27',0]],
-            type:'line'
-        }]
-    })
+            },
+            yAxis:{
+                name:name,
+                type:'value',
+                axisLine:{
+                    lineStyle:{
+                        color:'#e4e4e4'
+                    }
+                }
+            },
+            series:[{
+                data:dataEvir,
+                type:'line'
+            }]
+        })
+    }
 
 
-    var evirSett2 = echarts.init(document.getElementById('evirSett2'))
-    evirSett2.setOption({
-        title:{
-            text:'拉线式位移',
-            textStyle:{
-                color:'#00ffff',
-                fontWeight:400,
-                fontSize:16
-            }
-        },
-        xAxis:{
-            type:'category',
-            axisLine:{
-                lineStyle:{
-                    color:'#e4e4e4'
-                }
-            }
-        },
-        yAxis:{
-            name:'拉线式位移（cm）',
-            type:'value',
-            axisLine:{
-                lineStyle:{
-                    color:'#e4e4e4'
-                }
-            }
-        },
-        series:[{
-            data:[['13:10',0],['13:11',0],['13:12',0],['13:13',0],['13:14',0],['13:15',0],['13:16',0]],
-            type:'line'
-        }]
-    })
+
+
+
+
+
+
 
 </script>
 </body>
