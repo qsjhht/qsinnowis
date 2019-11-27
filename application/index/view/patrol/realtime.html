@@ -268,12 +268,13 @@
                 //第一次 选择 创建定时器 获取实时数据
                 if(typeof(zone) == 'undefined'){
 
-                    $(".settling").show();
-                    $(".evirEchart").show();
 
-                    let did = 'hk20190521047-1'; //采集箱
-                    let num = 0   // 参数 0 || 1  采集箱
-                    zone_evir(did,num);
+                    $(".evirEchart").show();
+                    $(".settling").show();
+                    let did = 'hk20190521026-1'; //采集箱
+                    let zonenum = '14';   // 防火分区？
+
+                    zone_evir(did,zonenum);
 
                     arrDate = [];
                     arrData = [];
@@ -525,8 +526,8 @@
         var zone = zone.replace('/','');
         var realtime_IP = $('#realtime_IP').val();
         // console.dir(realtime_IP);
-        console.dir(zone);
-        console.dir(name);
+        // console.dir(zone);
+        // console.dir(name);
         $.ajax({
             // url:realtime_IP+"/real/real_times?name=QS_O2_XC13S",
             url:"http://192.168.10.18/real/real_times?zone="+zone+"&name="+name,
@@ -534,7 +535,7 @@
             success:function(result){
                 let jsonObj = $.parseJSON(result);
                 objToArray(jsonObj,true);
-                console.dir(arrDate);
+                // console.dir(arrDate);
             }
         });
     }
@@ -543,8 +544,8 @@
         name=name||'T';
         var zone = zone.replace('/','');
         var realtime_IP = $('#realtime_IP').val();
-        console.dir(zone);
-        console.dir(name);
+        // console.dir(zone);
+        // console.dir(name);
         // console.dir(realtime_IP);
         $.ajax({
             // url:realtime_IP+"/real/get_last_real?name=QS_O2_XC13S",
@@ -557,7 +558,7 @@
                 // console.dir(name);
                 let jsonObj = $.parseJSON(result);
                 objToArray(jsonObj,true);
-                console.dir(arrDate);
+                // console.dir(arrDate);
             }
         });
     }
@@ -667,7 +668,11 @@
     let date = new Date()  //日期
     let getDate = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+ date.getDate(); //当前日期
 
-    let data; // 数据
+    let evirData; // 数据
+    var Datanum;
+    var stayguynum;
+    var Xnum;
+    var Ynum;
     let oo;  //时间
     let socketData; //socket 数据
     let numData = new Array(); //数据
@@ -675,8 +680,17 @@
     let angle_X = new Array(); //角度-X
     let angle_Y = new Array(); //角度-Y
 
+    function getArrayIndex(arr, obj) {
+        var i = arr.length;
+        while (i--) {
+            if (arr[i].code === obj) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
-    function zone_evir(did,num) {
+    function zone_evir(did,zonenum) {
         // ajxa 使用
         const XML = new XMLHttpRequest();
         let url = `http://10.3.100.8:88/OpenPlatform/openApi?u=${username}&p=${userpass}&did=${did}&date=${getDate}`;
@@ -684,7 +698,62 @@
         XML.onreadystatechange = function(){
             if (XML.readyState == 4 && XML.status == 200) { //回传成功
                 let evirData = JSON.parse(XML.responseText).result.data;
-                data = evirData.slice(evirData.length-800,evirData.length);
+                let device = JSON.parse(XML.responseText).result.device;
+
+                for(let i in device){
+                    if(device[i].name.search('#沉降'+zonenum) != -1){
+                        code = device[i].code;
+                        Datanum = getArrayIndex(evirData[0].data,code );
+                    }
+                    if(device[i].name.search('#拉线'+zonenum) != -1){
+                        code = device[i].code;
+                        stayguynum = getArrayIndex(evirData[0].data,code );
+                    }
+                    if(device[i].name.search('#倾角'+zonenum+'-X') != -1){
+                        code = device[i].code;
+                        Xnum = getArrayIndex(evirData[0].data,code );
+                    }
+                    if(device[i].name.search('#倾角'+zonenum+'-Y') != -1){
+                        code = device[i].code;
+                        Ynum = getArrayIndex(evirData[0].data,code );
+                    }
+                }
+                evirData = evirData.slice(evirData.length-720,evirData.length);
+                for(let i in evirData){
+
+                    oo = evirData[i].date.substring(11,20);
+                    if(Datanum >= 0){
+                        numData.push([oo,evirData[i].data[Datanum].data]);
+                    }
+                    if(stayguynum >= 0){
+                        stayguyData.push([oo,evirData[i].data[stayguynum].data]);
+                    }
+                    if(Xnum >= 0){
+                        angle_X.push([oo,evirData[i].data[Xnum].data]);
+                    }
+                    if(Ynum >= 0){
+                        angle_Y.push([oo,evirData[i].data[Ynum].data]);
+                    }
+                }
+                console.dir(Datanum)
+                console.dir(stayguynum)
+                console.dir(Xnum)
+                console.dir(Ynum)
+
+                /*var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+
+10#沉降19
+                if(!reg.test(device)){
+
+                }*/
+                // for(let i in evirData){
+                //     oo = data[i].date.substring(11,20);
+                //     numData.push([oo,data[i].data[num].data]);
+                //     stayguyData.push([oo,data[i].data[num+(1*a)].data]);
+                //     angle_X.push([oo,data[i].data[num+(2*a)].data])
+                //     angle_Y.push([oo,data[i].data[num+(3*a)].data])
+                // }
+                /*data = evirData.slice(evirData.length-800,evirData.length);
                 if(data[1].data.length == 10){
                     num += 2
                     console.log('10')
@@ -692,20 +761,23 @@
                     console.log('4')
                     a = 1;
                     num = 0;
-                }
+                }*/
             }else{
                 console.log('数据获取失败')
             }
         }
         XML.send();
+
+
+        // console.dir(data);
         // 获取历史数据
-        for(let i in data){
-            oo = data[i].date.substring(11,20);
-            numData.push([oo,data[i].data[num].data]);
-            stayguyData.push([oo,data[i].data[num+(1*a)].data]);
-            angle_X.push([oo,data[i].data[num+(2*a)].data])
-            angle_Y.push([oo,data[i].data[num+(3*a)].data])
-        }
+        // for(let i in data){
+        //     oo = data[i].date.substring(11,20);
+        //     numData.push([oo,data[i].data[num].data]);
+        //     stayguyData.push([oo,data[i].data[num+(1*a)].data]);
+        //     angle_X.push([oo,data[i].data[num+(2*a)].data])
+        //     angle_Y.push([oo,data[i].data[num+(3*a)].data])
+        // }
 
 
         // webSocket  使用
@@ -717,24 +789,43 @@
         };
         ws.onmessage = function(e){
             socketData = JSON.parse(e.data);  //报错
+
             if(socketData.deviceId == did){
                 oo = socketData.date.substring(11,20);
-                numData.push([oo,socketData.data[num].data]);
-                numData.shift();
-                evirEchart('settling1','沉降数据（mm）', numData);
+                console.dir(socketData);
+                console.dir(Datanum);
+                console.dir(stayguynum);
+                console.dir(Xnum);
+                console.dir(Ynum);
+                // console.dir(num);
+                // console.dir(socketData.data[num].data);
+                if(Datanum >= 0){
+                    numData.push([oo,socketData.data[Datanum].data]);
+                    numData.shift();
+                    evirEchart('settling1','沉降数据（mm）', numData);
+                }
 
-                stayguyData.push([oo,socketData.data[num+(1*a)].data]);
-                stayguyData.shift();
-                evirEchart('settling2','拉线数据（mm）',stayguyData);
 
-                angle_X.push([oo,socketData.data[num+(2*a)].data])
-                angle_X.shift();
-                evirEchart('settling3','倾角-X（度）',angle_X);
+                // console.dir(socketData.data[num].data);
+                // console.dir(socketData.data[num+(1*a)].data);
+                // console.dir(socketData.data[num+(2*a)].data);
+                // console.dir(socketData.data[num+(3*a)].data);
+                if(stayguynum >= 0){
+                    stayguyData.push([oo,socketData.data[stayguynum].data]);
+                    stayguyData.shift();
+                    evirEchart('settling2','拉线数据（mm）',stayguyData);
+                }
 
-                angle_Y.push([oo,socketData.data[num+(3*a)].data])
-                angle_Y.shift();
-                evirEchart('settling4','倾角-Y（度）',angle_Y)
-
+                if(Xnum >= 0){
+                    angle_X.push([oo,socketData.data[Xnum].data])
+                    angle_X.shift();
+                    evirEchart('settling3','倾角-X（度）',angle_X);
+                }
+                if(Ynum >= 0) {
+                    angle_Y.push([oo, socketData.data[Ynum].data])
+                    angle_Y.shift();
+                    evirEchart('settling4', '倾角-Y（度）', angle_Y)
+                }
             }
         };
         // 断开按钮
@@ -758,7 +849,7 @@
     // evirEchart
     function evirEchart(echaId,name,dataEvir){
         settling = echarts.init(document.getElementById(echaId));
-        console.dir(settling);
+        // console.dir(settling);
         settling.setOption({
             tooltip: {
                 trigger: 'axis'
