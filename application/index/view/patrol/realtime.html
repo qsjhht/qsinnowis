@@ -252,6 +252,9 @@
             // name : ['street','cang','site'],
              hint : ['请选择街道','请选择舱室','请选择防火分区']
         });
+
+            $(".settling").hide();
+            $(".evirEchart").hide();
         //监听选择select选择事件 使用lay-filter
         interact.on('interact(test)',function(data){
             //判断text是否含有中文
@@ -261,6 +264,10 @@
                 //console.dir(data.text);
                 //第一次 选择 创建定时器 获取实时数据
                 if(typeof(zone) == 'undefined'){
+
+                    $(".settling").show();
+                    $(".evirEchart").show();
+
                     let did = 'hk20190521047-1'; //采集箱
                     let num = 0   // 参数 0 || 1  采集箱
                     zone_evir(did,num);
@@ -395,8 +402,8 @@
         seleTwo.onchange = function(){
             arrDate = [];
             arrData = [];
-            console.log(this.name);
-            console.log(zone1);
+            // console.log(this.name);
+            // console.log(zone1);
             if(zone1 !== ''){
                 window.clearInterval(Reallog);
                 realtimes(zone1,this.value);
