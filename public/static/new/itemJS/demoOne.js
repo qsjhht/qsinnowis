@@ -263,6 +263,7 @@ let callOption = {
     }
 };
 callIcon.setOption(callOption);
+/*
 
 // 报警设置表格
 // 时间
@@ -298,6 +299,7 @@ callTime[11].innerHTML = getYear3+' '+'16:11';
 callTime[12].innerHTML = getYear3+' '+'19:37';
 
 
+*/
 
 
 

@@ -47,6 +47,14 @@ class Patrol extends Adminbase
         //dump($sites_data);
 
         $config['realtime_IP'] = Config::get('config.realtime_IP');
+        $sites_hk = Db('sites_hk')->where('hk_did','not null')->select();
+        $site_hk = array();
+        foreach ($sites_hk as $item) {
+//            $item['site_name'] =  $item[["hk_did"]];
+            $site_hk[$item['site_name']] = $item['hk_did'];
+        }
+
+        $this->assign('Sitehk', json_encode($site_hk));
         $this->assign('Sitesdata', $sites_data);
         $this->assign('Config', $config);
         return $this->fetch();

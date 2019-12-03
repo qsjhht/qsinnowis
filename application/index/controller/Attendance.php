@@ -56,6 +56,11 @@ class Attendance extends Adminbase
             foreach ($data['user'] as $id=>$d) {
                 $data['user_ids'] .= $id .',';
             }
+            $ranges = explode(' - ',$data['time_range']);
+            if($ranges['1'] == '00:00:00'){
+                $ranges['1'] = '24:00:00';
+                $data['time_range'] = implode(' - ',$ranges);
+            }
             $res = Db('work_plan')
                 ->strict(false)
                 ->insert($data);
@@ -101,6 +106,11 @@ class Attendance extends Adminbase
             $data['producer'] = $this->_userinfo['nickname'];
             foreach ($data['user'] as $id=>$d) {
                 $data['user_ids'] .= $id .',';
+            }
+            $ranges = explode(' - ',$data['time_range']);
+            if($ranges['1'] == '00:00:00'){
+                $ranges['1'] = '24:00:00';
+                $data['time_range'] = implode(' - ',$ranges);
             }
             $res = Db('work_plan')
                 ->where('p_id',$data['p_id'])
@@ -166,9 +176,7 @@ class Attendance extends Adminbase
 
 
             $z = strtotime($time['0']);//获得指定分钟时间戳，00:00
-            if($time['1'] == '00:00:00'){
-                $time['1'] = '24:00:00';
-            }
+
             $x = strtotime($time['1']);//获得指定分钟时间戳，00:29
 
             if ($h > $z && $h < $x) {
@@ -177,84 +185,161 @@ class Attendance extends Adminbase
                 $n_s_s = $x - 3600;
                 $n_s_e = $x + 3600;
 
-                $this->assign('Time_range', $time['0'] .'---'. $time['1']);
-                if(time() > $m_d_e){
-                    $this->assign('Start', $x);
-                }else{
-                    $this->assign('Start', $z);
-                }
+
+//                if(time() > $m_d_e){
+//                    $this->assign('Start', $x);
+//                }else{
+//                    $this->assign('Start', $z);
+//                }
             }
         }
 /*        $m_d_l = strtotime($d. '09:00:00');
 
         $n_s_l = strtotime($d. '17:00:00');*/
-            $this->assign('S_range', date("H:i:s",$m_d_s) .'---'. date("H:i:s",$m_d_e));
-            $this->assign('E_range', date("H:i:s",$n_s_s) .'---'. date("H:i:s",$n_s_e));
+//            $this->assign('S_range', date("H:i:s",$m_d_s) .'---'. date("H:i:s",$m_d_e));
+//            $this->assign('E_range', date("H:i:s",$n_s_s) .'---'. date("H:i:s",$n_s_e));
 //            dump(date("H:i:s",$m_d_s));
 //            dump(date("H:i:s",$m_d_e));
 //            dump(date("H:i:s",$n_s_s));
 //            dump(date("H:i:s",$n_s_e));
+//        $map1 = [
+//            ['u_id','=',$this->_userinfo['userid']],
+//            ['m_time', '> time', $d - 3600]
+//        ];
+//
+//        $map2 = [
+//            ['u_id','=',$this->_userinfo['userid']],
+//            ['n_time', '> time',  'today']
+//        ];
+//        $check = db('attendance')
+//            ->whereOr([ $map1, $map2 ])
+//            ->find();
+//        if($check){
+////            dump(date('Y-m-d H:i:s',$check['m_time']));
+////            dump(date('Y-m-d H:i:s',$check['n_time']));
+//
+//            if($check['m_time']){
+//                $first =  $check['m_time'];
+//                $check['m_time'] = date('Y-m-d H:i:s',$check['m_time']);
+//                $check['m_c'] = false;
+//            }else{
+//                $check['m_time'] = '未登记';
+//                if(time() > $m_d_s && time() < $m_d_e){
+//                    $check['m_c'] = true;
+//                }else{
+//                    $check['m_c'] = false;
+//                }
+//            }
+//            if($check['n_time']){
+//                $check['n_time'] = date('Y-m-d H:i:s',$check['n_time']);
+//                $check['n_c'] = false;
+//            }else{
+//                $check['n_time'] = '未登记';
+//                if(time() >  $check['start'] + 21600){
+//                    $check['n_c'] = true;
+//                }else{
+//                    $check['n_c'] = false;
+//                }
+//            }
+//        }else{
+
+//            $check['m_time'] = '未登记';
+//            $check['n_time'] = '未登记';
+//            if(!$this->_userinfo['userid']){
+//                $check['m_c'] = false;
+//                $check['n_c'] = false;
+//            }else{
+//                if((time() > $m_d_s && time() < $m_d_e) || (time() > $n_s_s && time() < $n_s_e)){
+//                    $check['m_c'] = true;
+//                }else{
+//                    $check['m_c'] = false;
+//                }
+
+//            if(time() > $n_s_s && time() < $n_s_e){
+//                $check['n_c'] = true;
+//            }else{
+//                $check['n_c'] = false;
+//            }
+//            }
+//
+//        }
+//        $this->assign('Info',$check);
+        $work_plan = Db('work_plan')->field('user_ids,time_range')->select();
+        $rang = '';
+        foreach ($work_plan as $wp) {
+           $wps =  explode(',',rtrim($wp['user_ids'],','));
+            foreach ($wps as $item) {
+                if ($item == $this->_userinfo['userid']){
+                    $rang = $wp['time_range'];
+                }
+           }
+        }
+
+
+        $rangs = explode(' - ',$rang);
+        $mtimer = explode(':',$rangs[0]);
+        $ntimer = explode(':',$rangs[1]);
+        $mtimer = mktime($mtimer[0],$mtimer[1],$mtimer[2]);
+        $ntimer = mktime($ntimer[0],$ntimer[1],$ntimer[2]);
+        $this->assign('Time_range', $rang);
+        $this->assign('S_range', date("H:i:s",$mtimer - 3600) .'---'. date("H:i:s",$mtimer + 3600));
+        $this->assign('E_range', date("H:i:s",$ntimer - 3600) .'---'. date("H:i:s",$ntimer + 3600));
+
+        // 查询
         $map1 = [
             ['u_id','=',$this->_userinfo['userid']],
-            ['m_time', '> time', $d - 3600]
+            ['m_time', 'between time', [$mtimer - 3600, $mtimer + 3600]]
         ];
 
         $map2 = [
             ['u_id','=',$this->_userinfo['userid']],
-            ['n_time', '> time',  'today']
+            ['m_time', 'between time', [$ntimer - 3600, $ntimer + 3600]]
         ];
         $check = db('attendance')
             ->whereOr([ $map1, $map2 ])
             ->find();
-        if($check){
-//            dump(date('Y-m-d H:i:s',$check['m_time']));
-//            dump(date('Y-m-d H:i:s',$check['n_time']));
 
+        if($check){
             if($check['m_time']){
-                $first =  $check['m_time'];
-                $check['m_time'] = date('Y-m-d H:i:s',$check['m_time']);
                 $check['m_c'] = false;
+                $check['m_time'] = date('Y-m-d H:i:s',$check['m_time']);
             }else{
-                $check['m_time'] = '未登记';
-                if(time() > $m_d_s && time() < $m_d_e){
+                $check['m_time'] = '未登记！';
+                if(time() > $mtimer - 3600 && time() < $mtimer + 3600){
                     $check['m_c'] = true;
                 }else{
                     $check['m_c'] = false;
                 }
             }
+
             if($check['n_time']){
-                $check['n_time'] = date('Y-m-d H:i:s',$check['n_time']);
                 $check['n_c'] = false;
+                $check['n_time'] = date('Y-m-d H:i:s',$check['n_time']);
             }else{
-                $check['n_time'] = '未登记';
-                if(time() >  $check['start'] + 21600){
+                $check['n_time'] = '未登记！';
+                if(time() > $ntimer - 3600 && time() < $ntimer + 3600){
                     $check['n_c'] = true;
                 }else{
                     $check['n_c'] = false;
                 }
             }
         }else{
-
-            $check['m_time'] = '未登记';
-            $check['n_time'] = '未登记';
-            if(!$this->_userinfo['userid']){
-                $check['m_c'] = false;
-                $check['n_c'] = false;
+            $check['m_time'] = '未登记！';
+            $check['n_time'] = '未登记！';
+            if(time() > $mtimer - 3600 && time() < $mtimer + 3600){
+                $check['m_c'] = true;
             }else{
-                if((time() > $m_d_s && time() < $m_d_e) || (time() > $n_s_s && time() < $n_s_e)){
-                    $check['m_c'] = true;
-                }else{
-                    $check['m_c'] = false;
-                }
-
-//            if(time() > $n_s_s && time() < $n_s_e){
-//                $check['n_c'] = true;
-//            }else{
-                $check['n_c'] = false;
-//            }
+                $check['m_c'] = false;
             }
-
+            if(time() > $ntimer - 3600 && time() < $ntimer + 3600){
+                $check['n_c'] = true;
+            }else{
+                $check['n_c'] = false;
+            }
         }
+
+
+
         $this->assign('Info',$check);
         return $this->fetch();
     }
@@ -278,14 +363,14 @@ class Attendance extends Adminbase
             ->find();
 
         $checks = $this->request->param('check');
-        $start = $this->request->param('start');
+//        $start = $this->request->param('start');
         if (empty($checks)) {
             $this->error('数据错误！');
         }
 
         if($checks == 'm_check'){
             $data['m_time'] = time();
-            $data['start'] = $start;
+//            $data['start'] = $start;
             $res = db('attendance')
                 ->strict(false)
                 ->insert($data);

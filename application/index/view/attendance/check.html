@@ -16,16 +16,14 @@
 
         <input type="hidden" id="u_id" class="layui-input" value="{$Uid}">
         <input type="hidden" id="u_name" class="layui-input" value="{$Uname}">
-        <input type="hidden" id="start" class="layui-input" value="{$Start}">
 
         <table lay-filter="parse-table-demo">
             <thead>
             <tr>
                 <th lay-data="{field:'order', width:300}">登记次序</th>
                 <th lay-data="{field:'type', width:300}">登记类型</th>
+                <th lay-data="{field:'time_range', width:300}">值班时间</th>
                 <th lay-data="{field:'d_line', Width: 300}">打卡规定时间</th>
-
-
                 <th lay-data="{field:'c_time', minWidth: 300}">登记时间</th>
 
             </tr>
@@ -34,6 +32,8 @@
             <tr>
                 <td>第一次登记</td>
                 <td>上班签到</td>
+
+                <td>{$Time_range}</td>
                 <td>{$S_range}</td>
 
                 <td>{$Info.m_time}</td>
@@ -43,6 +43,7 @@
             <tr>
                 <td>第二次登记</td>
                 <td>下班签到</td>
+                <td>{$Time_range}</td>
                 <td>{$E_range}</td>
 
                 <td>{$Info.n_time}</td>
@@ -114,9 +115,9 @@
             },
 
             m_check: function(){
-                var start = $('#start').val();
-                console.dir(start);
-                $.post('{:url("attendance/sign")}', { 'check': 'm_check', 'start': start}, function(data) {
+                // var start = $('#start').val();
+                // console.dir(start);
+                $.post('{:url("attendance/sign")}', { 'check': 'm_check'}, function(data) {
                     //layer.msg(data.msg);
                     if (data.code == 1) {
                         if (data.url) {

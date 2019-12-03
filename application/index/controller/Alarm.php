@@ -51,59 +51,101 @@ class Alarm extends Adminbase
         return $this->fetch();
     }
 
+    //    报警日志 新
+    public function logs()
+    {
+        /*$datas = Db('alarmlog')->order(array( 'id' => 'ESC'))->select();
+            //dump($resultcate);
+        return $this->fetch();*/
+        if ($this->request->isAjax()) {
+            $limit = $this->request->param('limit/d', 10);
+            $page = $this->request->param('page/d', 1);
+            $details = Db('alarmrecs')
+                ->alias('r')
+                ->join('alarmcode c','r.alarm_code = c.code','LEFT')
+                ->join('alarmtype t','r.alarm_type = t.type','LEFT')
+                ->join('alarmlvl l','r.alarmlevel = l.level','LEFT')
+                ->join('alarmmanage m','r.alarm_manage = m.manage_id','LEFT')
+                ->join('categorys s','r.cate_code = s.id','LEFT')
+//                ->join('eqpts e','r.equipment_code = e.eqpt_id'),e.eqpt_type,e.eqpt_site_detail r.eqpt_sys,
+                ->field('r.id,r.alarm_time,t.typecontent,r.alarm_code,r.eqpt_site,s.parentid,s.cate_name,c.codecontent,l.lvlcontent,m.manage_type,r.is_manage,r.rec_details')
+                ->order('r.alarm_time', 'desc')
+                ->page($page, $limit)
+                ->select();
+            //['alarmtime'] = date('Y-m-d H:i:s',$details['alarmtime']);
+            foreach ($details as &$detail) {
+                $cate_names =  db('categorys')->field('cate_name')->where('id',$detail['parentid'])->find();
+                $detail['parent'] = $cate_names['cate_name'];
+                $detail['alarm_time'] = date('Y-m-d H:i:s',$detail['alarm_time']);
+               /* if ($detail['is_manage']){
+                    $detail['is_manage'] = '已处置';
+                }else{
+                    $detail['is_manage'] = '未处置';
+                }*/
+            }
+
+            $total = Db('alarmrecs')->order(array( 'id' => 'ESC'))->count();
+            $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $details);
+            return json($result);
+        }
+        return $this->fetch();
+    }
+
 //    报警处置
     public function manage()
     {
-        $details = \db('alarmrec')
+        $rec_id = $this->request->param('rec_id');
+        $details = Db('alarmrecs')
             ->alias('r')
-            ->join('alarmcode c','r.alarmcode = c.code')
-            ->join('alarmtype t','r.alarmtype = t.type')
-            ->join('alarmlvl l','r.alarmlevel = l.level')
-            ->join('alarmmanage m','r.managetype = m.manage_id')
-            ->join('eqpts e','r.equipment_code = e.eqpt_id')
-            ->field('r.id,r.alarmtime,t.typecontent,r.eqpt_sys,e.eqpt_type,r.alarmcode,c.codecontent,l.lvlcontent,m.manage_type,r.is_manage,e.eqpt_site_detail,r.rec_details')
-            ->order('r.id', 'esc')
-            ->where('is_manage','0')
-            ->select();
-        foreach ($details as &$detail) {
-            $detail['alarmtime'] = date('Y-m-d H:i:s',$detail['alarmtime']);
-            if ($detail['is_manage']){
-                $detail['is_manage'] = '已处置';
-            }else{
-                $detail['is_manage'] = '未处置';
-            }
+            ->join('alarmcode c','r.alarm_code = c.code','LEFT')
+            ->join('alarmtype t','r.alarm_type = t.type','LEFT')
+            ->join('alarmlvl l','r.alarmlevel = l.level','LEFT')
+            ->join('alarmmanage m','r.alarm_manage = m.manage_id','LEFT')
+            ->join('categorys s','r.cate_code = s.id','LEFT')
+//                ->join('eqpts e','r.equipment_code = e.eqpt_id'),e.eqpt_type,e.eqpt_site_detail r.eqpt_sys,
+            ->field('r.id,r.alarm_time,t.typecontent,r.alarm_code,c.codecontent,r.eqpt_site,s.parentid,s.cate_name,l.lvlcontent,m.manage_type,r.is_manage,r.rec_details')
+            ->find($rec_id);
+
+
+        $details['alarm_time'] = date('Y-m-d H:i:s',$details['alarm_time']);
+        if ($details['is_manage']){
+            $details['is_manage'] = '已处置';
+        }else{
+            $details['is_manage'] = '未处置';
         }
+        $cate_names =  db('categorys')->field('cate_name')->where('id',$details['parentid'])->find();
+        $details['parent'] = $cate_names['cate_name'];
         $this->assign('details',$details);
+        dump($details);
         return $this->fetch();
     }
 
 //    日志详情
     public function details()
     {
-        $log_id = $this->request->param('log_id');
-        $rec_ids = \db('alarmlog')->alias('l')->find($log_id);
-        $details = \db('alarmrec')
+        $rec_id = $this->request->param('rec_id');
+        $details = Db('alarmrecs')
             ->alias('r')
-            ->join('alarmcode c','r.alarmcode = c.code')
-            ->join('alarmtype t','r.alarmtype = t.type')
-            ->join('alarmlvl l','r.alarmlevel = l.level')
-            ->join('alarmmanage m','r.managetype = m.manage_id')
-            ->join('eqpts e','r.equipment_code = e.eqpt_id')
-            ->field('r.alarmtime,t.typecontent,r.eqpt_sys,e.eqpt_type,r.alarmcode,c.codecontent,l.lvlcontent,m.manage_type,r.is_manage,e.eqpt_site_detail,r.rec_details')
-            ->order('r.id', 'desc')
-            ->where('r.id','in',$rec_ids['alarmrecs'])
-            ->select();
+            ->join('alarmcode c','r.alarm_code = c.code','LEFT')
+            ->join('alarmtype t','r.alarm_type = t.type','LEFT')
+            ->join('alarmlvl l','r.alarmlevel = l.level','LEFT')
+            ->join('alarmmanage m','r.alarm_manage = m.manage_id','LEFT')
+            ->join('categorys s','r.cate_code = s.id','LEFT')
+//                ->join('eqpts e','r.equipment_code = e.eqpt_id'),e.eqpt_type,e.eqpt_site_detail r.eqpt_sys,
+            ->field('r.id,r.alarm_time,t.typecontent,r.alarm_code,c.codecontent,r.eqpt_site,s.parentid,s.cate_name,l.lvlcontent,m.manage_type,r.is_manage,r.rec_details')
+            ->find($rec_id);
 
-        //['alarmtime'] = date('Y-m-d H:i:s',$details['alarmtime']);
-        foreach ($details as &$detail) {
-            $detail['alarmtime'] = date('Y-m-d H:i:s',$detail['alarmtime']);
-            if ($detail['is_manage']){
-                $detail['is_manage'] = '已处置';
-            }else{
-                $detail['is_manage'] = '未处置';
-            }
+
+        $details['alarm_time'] = date('Y-m-d H:i:s',$details['alarm_time']);
+        if ($details['is_manage']){
+            $details['is_manage'] = '已处置';
+        }else{
+            $details['is_manage'] = '未处置';
         }
+        $cate_names =  db('categorys')->field('cate_name')->where('id',$details['parentid'])->find();
+        $details['parent'] = $cate_names['cate_name'];
         $this->assign('details',$details);
+        dump($details);
         return $this->fetch();
     }
 
@@ -115,13 +157,24 @@ class Alarm extends Adminbase
         if(!$details){
             $details = '无';
         }
-        $res = Db('alarmrec')
-            ->where('id', $rec_id)
-            ->update([
-                'alarmtype' =>  $type,
-                'rec_details' =>  $details,
-                'is_manage'	=> '1'
-            ]);
+
+        if($type == '1000'){
+            $res = Db('alarmrecs')
+                ->where('id', $rec_id)
+                ->update([
+                    'rec_details' =>  $details,
+                    'is_manage'	=> '1'
+                ]);
+        }else{
+            $res = Db('alarmrecs')
+                ->where('id', $rec_id)
+                ->update([
+                    'alarm_type' =>  $type,
+                    'rec_details' =>  $details,
+                    'is_manage'	=> '1'
+                ]);
+        }
+
         if($res){
             $result = array("code" => 1,"msg" => '处理成功！');
         }else{

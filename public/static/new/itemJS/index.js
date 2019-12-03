@@ -802,23 +802,30 @@ for(var a = 0 ;a<callGrade.length;a++){
         callGrade[a].style.color = '#32a5cf'
     }
 }
-let getYear = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d0.getDate())+'日';
-let getYear1 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d1.getDate())+'日';
-let getYear2 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d2.getDate())+'日';
-let getYear3 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d3.getDate())+'日';
-callTime[0].innerHTML = getYear+' '+'5:30';
-callTime[1].innerHTML = getYear+' '+'5:30';
-callTime[2].innerHTML = getYear+' '+'5:33';
-callTime[3].innerHTML = getYear1+' '+'12:30';
-callTime[4].innerHTML = getYear1+' '+'12:30';
-callTime[5].innerHTML = getYear1+' '+'13:05';
-callTime[6].innerHTML = getYear2+' '+'13:32';
-callTime[7].innerHTML = getYear2+' '+'13:32';
-callTime[8].innerHTML = getYear2+' '+'14:14';
-callTime[9].innerHTML = getYear3+' '+'15:21';
-callTime[10].innerHTML = getYear3+' '+'15:21';
-callTime[11].innerHTML = getYear3+' '+'16:11';
-callTime[12].innerHTML = getYear3+' '+'19:37';
+// let getYear = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d0.getDate())+'日';
+// let getYear1 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d1.getDate())+'日';
+// let getYear2 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d2.getDate())+'日';
+// let getYear3 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d3.getDate())+'日';
+// callTime[0].innerHTML = getYear+' '+'5:30';
+// callTime[1].innerHTML = getYear+' '+'5:30';
+// callTime[2].innerHTML = getYear+' '+'5:33';
+// callTime[3].innerHTML = getYear1+' '+'12:30';
+// callTime[4].innerHTML = getYear1+' '+'12:30';
+// callTime[5].innerHTML = getYear1+' '+'13:05';
+// callTime[6].innerHTML = getYear2+' '+'13:32';
+// callTime[7].innerHTML = getYear2+' '+'13:32';
+// callTime[8].innerHTML = getYear2+' '+'14:14';
+// callTime[9].innerHTML = getYear3+' '+'15:21';
+// callTime[10].innerHTML = getYear3+' '+'15:21';
+// callTime[11].innerHTML = getYear3+' '+'16:11';
+// callTime[12].innerHTML = getYear3+' '+'19:37';
+
+$('.callTime').each(function(){
+
+    console.dir($(this).text());
+
+    $(this).text(DateToTime($(this).text()));
+});
 
 // 入廊企业
 let firmConMain = document.getElementsByClassName('firmConMain');
@@ -864,6 +871,37 @@ for(let h = 0; h<firmConMain.length; h++){
         firmConTop.style.display = 'none'
     }
 
+}
+
+function DateToTime(unixTime,type="Y-M-D H:i"){
+    var date = new Date(unixTime * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    var datetime = "";
+    datetime += date.getFullYear() + type.substring(1,2);
+    datetime += (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + type.substring(3,4);
+    datetime += (date.getDate() < 10 ? '0'+(date.getDate()) : date.getDate());
+    if (type.substring(5,6)) {
+        if (type.substring(5,6).charCodeAt() > 255) {
+            datetime += type.substring(5,6);
+            if (type.substring(7,8)) {
+                datetime += " " + (date.getHours() < 10 ? '0'+(date.getHours()) : date.getHours());
+                if (type.substring(9,10)) {
+                    datetime += type.substring(8,9) + (date.getMinutes() < 10 ? '0'+(date.getMinutes()) : date.getMinutes());
+                    if (type.substring(11,12)) {
+                        datetime += type.substring(10,11) + (date.getSeconds() < 10 ? '0'+(date.getSeconds()) : date.getSeconds());
+                    };
+                };
+            };
+        }else{
+            datetime += " " + (date.getHours() < 10 ? '0'+(date.getHours()) : date.getHours());
+            if (type.substring(8,9)) {
+                datetime += type.substring(7,8) + (date.getMinutes() < 10 ? '0'+(date.getMinutes()) : date.getMinutes());
+                if (type.substring(10,11)) {
+                    datetime += type.substring(9,10) + (date.getSeconds() < 10 ? '0'+(date.getSeconds()) : date.getSeconds());
+                };
+            };
+        };
+    };
+    return datetime;
 }
 
 

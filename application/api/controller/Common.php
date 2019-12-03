@@ -12,6 +12,21 @@ class Common extends Controller
     protected $validater; //用来严恒数据/参数
     protected $params; //过滤后符合要求的参数
     protected $rules = array(
+        'User'    => array(
+            'login'           => array(
+                'user_name' => 'require',
+                'user_pwd'  => 'require',
+            ),
+            'upload_head_img' => array(
+                'user_id'   => 'require|number',
+                //'user_icon' => 'require|image|fileSize:10000000|fileExt:jpg,png,bmp,jpeg',
+            ),
+            'change_pwd'      => array(
+                'user_name'    => 'require',
+                'user_ini_pwd' => 'require|length:32',
+                'user_pwd'     => 'require|length:32',
+            ),
+        ),
         'Patrol'    => array(
             'data' => array(
             ),
@@ -33,6 +48,8 @@ class Common extends Controller
             ),
             'real_times' => array(
             ),
+            'real_timest' => array(
+            ),
             'get_last_real' => array(
             ),
 
@@ -48,6 +65,15 @@ class Common extends Controller
         'Bigdata'    => array(
             'date' => array(
             ),
+            'get_data' => array(
+            ),
+            'get_sites' => array(
+            ),
+            'enter_datas' => array(
+            ),
+            'enter_details' => array(
+                'co_id' => 'require|number',  //企业id
+            ),
             'real_times' => array(
             ),
             'real_alarm' => array(
@@ -57,6 +83,7 @@ class Common extends Controller
                 'alarm_code' => 'require|number', //报警编码  对应报警内容
                 'alarm_manage' => 'require|number',  //处置方法  对应各自系统
                 'eqpt_site' => 'require',  //报警位置  文字说明
+                'zone' => 'require',  //报警位置  编号
                 'app_key' => 'require',  //报警位置  文字说明
                 'format' => 'require',  //报警位置  文字说明
                 'sign' => 'require',
@@ -104,7 +131,7 @@ class Common extends Controller
         $return_data['msg']  = $msg;
         $return_data['data'] = $data;
         // 返回信息并终止脚本
-        echo json_encode($return_data);die;
+        echo json_encode($return_data,JSON_UNESCAPED_UNICODE);die;
     }
     /**
      * 验证token(防止篡改数据)

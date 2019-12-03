@@ -101,6 +101,7 @@
      <div class="botUse mainBor" id="botUse"></div>
      <div class="botCall mainBor">
           <div class="callIcon" id="callIcon"></div>
+
           <div class="callUl">
                <div class="callTab scrollber">
                     <table class="callTable">
@@ -112,93 +113,98 @@
                               <th>位置</th>
                          </tr>
                          </tbody>
-                         <tbody>
+                         <tbody id="appends">
+                         {volist name="Alarms" id="vo"}
                          <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>水泵报警</th>
-                              <th>XC01/S</th>
+                              <th class='callTime'>{$vo.alarm_time}</th>
+                              <th class='callGrade'>{$vo.cate_code}</th>
+                              <th>{$vo.id}</th>
+                              <th>{$vo.alarm_time}</th>
                          </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>开启水泵</th>
-                              <th>XC01/S</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>关闭水泵</th>
-                              <th>XC01/S</th>
-                         </tr>
-
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>风机报警</th>
-                              <th>XC15/D</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>开启风机</th>
-                              <th>XC15/D</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>关闭风机</th>
-                              <th>XC15/D</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>风机报警</th>
-                              <th>XC12/D</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>开启风机</th>
-                              <th>XC12/D</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>关闭风机</th>
-                              <th>XC12/D</th>
-                         </tr>
-
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>风机报警</th>
-                              <th>XC10/S</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>开启风机</th>
-                              <th>XC10/S</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">普通</th>
-                              <th>关闭风机</th>
-                              <th>XC10/S</th>
-                         </tr>
-                         <tr>
-                              <th class="callTime"></th>
-                              <th class="callGrade">设备</th>
-                              <th>设备离线</th>
-                              <th>YBY07/S</th>
-                         </tr>
+                         {/volist}
                          </tbody>
                     </table>
                </div>
           </div>
      </div>
 </div>
+
+<script src="__STATIC__/new/gis/socket.io.js"></script>
+<script>
+    $('.callTime').each(function(){
+
+        console.dir($(this).text());
+
+        $(this).text(DateToTime($(this).text()));
+    });
+    // 连接服务端，workerman.net:2120换成实际部署web-msg-sender服务的域名或者ip
+    var socket = io('http://192.168.10.18:2120');
+    // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
+    var uid = '2333';
+    console.dir(uid);
+    // socket连接后以uid登录
+    socket.on('connect', function(){
+        socket.emit('login', uid);
+    });
+
+    // 后端推送来消息时
+    socket.on('new_msg', function(msg){
+        var arrs = "<tbody id='appends'>";
+        var objs =  eval('('+msg+')');
+
+        for (var i in objs) {
+            /*var o={};
+            o[i]=array[i];
+            arrDate.push(o);*/
+            var dates = DateToTime(objs[i].alarm_time);
+            arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +objs[i].cate_code+ "</th><th>" +objs[i].id+ "</th><th>" +objs[i].alarm_time+ "</th></tr>";
+            console.dir(objs[i]);
+        }
+        arrs += "</tbody>";
+
+
+
+        $("#appends").replaceWith(arrs);//重写如页面
+        console.log(arrs);
+        arrs = '';
+
+    });
+    // 后端推送来在线数据时
+    socket.on('update_online_count', function(online_stat){
+        console.log(online_stat);
+    });
+    function DateToTime(unixTime,type="Y-M-D H:i:s"){
+        var date = new Date(unixTime * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var datetime = "";
+        datetime += date.getFullYear() + type.substring(1,2);
+        datetime += (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + type.substring(3,4);
+        datetime += (date.getDate() < 10 ? '0'+(date.getDate()) : date.getDate());
+        if (type.substring(5,6)) {
+            if (type.substring(5,6).charCodeAt() > 255) {
+                datetime += type.substring(5,6);
+                if (type.substring(7,8)) {
+                    datetime += " " + (date.getHours() < 10 ? '0'+(date.getHours()) : date.getHours());
+                    if (type.substring(9,10)) {
+                        datetime += type.substring(8,9) + (date.getMinutes() < 10 ? '0'+(date.getMinutes()) : date.getMinutes());
+                        if (type.substring(11,12)) {
+                            datetime += type.substring(10,11) + (date.getSeconds() < 10 ? '0'+(date.getSeconds()) : date.getSeconds());
+                        };
+                    };
+                };
+            }else{
+                datetime += " " + (date.getHours() < 10 ? '0'+(date.getHours()) : date.getHours());
+                if (type.substring(8,9)) {
+                    datetime += type.substring(7,8) + (date.getMinutes() < 10 ? '0'+(date.getMinutes()) : date.getMinutes());
+                    if (type.substring(10,11)) {
+                        datetime += type.substring(9,10) + (date.getSeconds() < 10 ? '0'+(date.getSeconds()) : date.getSeconds());
+                    };
+                };
+            };
+        };
+        return datetime;
+    }
+</script>
+
 <script>
 
 

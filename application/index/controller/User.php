@@ -22,7 +22,7 @@ class User extends Adminbase
     protected function initialize()
     {
         parent::initialize();
-        $this->host = 'http://192.168.20.60:8080';
+        $this->host = 'http://192.168.10.21:8088';
         $this->url = $this->host .= "/RMD_PipeGallery/rmdBaseEquipmentController.do?addOrUpdateUser";
         $this->AdminUser = new AdminUser;
         $this->UserModel = new UserModel;

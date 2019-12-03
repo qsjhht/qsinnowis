@@ -9,20 +9,25 @@
 namespace app\api\controller;
 use think\Controller;
 use think\Db;
+use app\index\model\Patrol as PatrolModel;
 
 class Bigdata extends Common
 {
     protected function initialize()
     {
         parent::initialize();
+        $this->Patrol = new PatrolModel;
+
         $this->secret_arr = array(
-            'HKCJ' => 'zhengdingguanlang'
-            ,'RYRQ' => 'zhengdingguanlang'
-            ,'MJ' => 'zhengdingguanlang'
-            ,'ZHZM' => 'zhengdingguanlang'
-            ,'YK' => 'zhengdingguanlang'
+            'HKCJ' => 'zhengdingguanlang'   //浩坤沉降
+            ,'RYRQ' => 'zhengdingguanlang'  //人员入侵
+            ,'MJ' => 'zhengdingguanlang'    //门禁
+            ,'ZHZM' => 'zhengdingguanlang'  //智慧照明
+            ,'YK' => 'zhengdingguanlang'    //亚控
         );
     }
+
+    //获取日期等
     public function date()
     {
 
@@ -48,13 +53,35 @@ class Bigdata extends Common
             $time['1'] = '24:00:00';
         }
         $x = strtotime($time['1']);//获得指定分钟时间戳，00:29
-
+        $mtimes = '';
         if ($h > $z && $h < $x) {
+            $mtimes = $z;
             $arr['per'] = round((time() - $z)/($x - $z)*100,2)."%";
             $arr['stime'] = date('H:i',$z);
             $arr['etime'] = date('H:i',$x);
         }
     }
+        // 查询 打卡的运维组长
+        $ids = Db('admin')->field('userid,username')->where('roleid','3')->select();
+        $idss = '';
+        foreach ($ids as $id) {
+            $idss .= $id['userid'].',';
+        }
+        $idss = rtrim($idss,',');
+
+        $check = db('attendance')
+            ->alias('a')
+            ->join('admin u','a.u_id = u.userid')
+            ->field('u.nickname')
+            ->where('u_id','in',$idss)
+            ->where('m_time', 'between time', [$mtimes - 3600, $mtimes + 3600])
+            ->find();
+
+        if($check){
+            $arr['nickname'] = $check['nickname'];
+        }else{
+            $arr['nickname'] = '';
+        }
 
 
      $arr['units'] = substr($num,0,1);
@@ -65,6 +92,119 @@ class Bigdata extends Common
      echo $txt;
     }
 
+    //获取首页相关信息  百分比 开始 结束 运行时间 值班人数
+    public function get_data()
+    {
+        $this->start_date = Db('st_d_time')->limit(1)->field('start_time')->find();
+        //         $start_time = strtotime();
+        //$this->date_start = new \DateTime($this->start_date['start_time']);
+        //$days = $this->start_date['start_time']->diff($this->new_date)->days;
+        $days = floor(abs((time() - $this->start_date['start_time']) / 86400));
+        $num=str_pad($days,4,"0",STR_PAD_LEFT);
+
+        $range = db('work_plan')->field('time_range')->select();
+        $mtimes = '';
+        foreach ($range as $ra) {
+            $j = date("H:i:s");
+
+            $h = strtotime($j);
+
+            $time = explode(' - ', $ra['time_range']);
+
+
+            $z = strtotime($time['0']);//获得指定分钟时间戳，00:00
+
+            $x = strtotime($time['1']);//获得指定分钟时间戳，00:29
+
+            if ($h > $z && $h < $x) {
+                $arr['per'] = round((time() - $z)/($x - $z)*100,2)."%";
+                $mtimes = $z;
+                $arr['stime'] = date('H:i',$z);
+                $arr['etime'] = date('H:i',$x);
+                if($arr['etime'] == '00:00'){
+                    $arr['etime'] = '24:00';
+                }
+            }
+
+        }
+        // 查询 打卡的运维组长
+        $ids = Db('admin')->field('userid,username')->where('roleid','3')->select();
+        $idss = '';
+        foreach ($ids as $id) {
+            $idss .= $id['userid'].',';
+        }
+        $idss = rtrim($idss,',');
+
+        $check = db('attendance')
+            ->alias('a')
+            ->join('admin u','a.u_id = u.userid')
+            ->field('u.nickname')
+            ->where('u_id','in',$idss)
+            ->where('m_time', 'between time', [$mtimes - 3600, $mtimes + 3600])
+            ->find();
+
+        if($check){
+            $arr['nickname'] = $check['nickname'];
+        }else{
+            $arr['nickname'] = '';
+        }
+        $arr['date_num'] = $num;
+        $arr['person_num'] = '15';
+        if(!$range){
+            $this->return_msg(400, '获取失败!','');
+        }
+        $this->return_msg(200, '获取成功!',$arr);
+    }
+
+    //获取防火分区数据
+    public function get_sites()
+    {
+        $sites_data = $this->Patrol->getSites();
+        if(!$sites_data){
+            $this->return_msg(400, '获取失败!','');
+        }
+        $this->return_msg(200, '获取成功!',$sites_data);
+    }
+
+    //获取企业信息
+    public function enter_datas()
+    {
+        $res   = db('enterprise')->field('co_id,co_name,co_linker,co_phone')->order('co_id', 'desc')->select();
+        if(!$res){
+            $this->return_msg(400, '获取失败!','');
+        }
+        $this->return_msg(200, '获取成功!',$res);
+    }
+
+    //获取企业详细信息
+    public function enter_details()
+    {
+        $co_id = $this->request->param('co_id');
+
+        $field = "e.co_id,e.co_name,e.co_linker,e.co_local,e.co_linker_post,e.en_start,e.en_end,e.co_legal,e.co_phone,e.en_remark,e.en_long,e.en_time,t.type_name,u.nickname";
+        $join  = [['co_type t', 'e.co_type = t.co_type_id', 'LEFT'],['admin u', 'e.user_id = u.userid', 'LEFT']];
+        $res   = db('enterprise')->alias('e')->where('co_id',$co_id)->field($field)->join($join)->find();
+
+        $res['en_time'] = date('Y-H-d H:i:s',$res['en_time']);
+
+        $starts = trim($res['en_start'],'-');
+        $startarr = explode('-',$starts);
+        $startone = db('sites')->where('id',$startarr['1'])->field('site_name')->find();
+        $starttwo = db('sites')->where('id',$startarr['2'])->field('site_name')->find();
+        $res['en_start'] = $startone['site_name'] . $starttwo['site_name'];
+
+        $ends = trim($res['en_end'],'-');
+        $endarr = explode('-',$ends);
+        $endone = db('sites')->where('id',$endarr['1'])->field('site_name')->find();
+        $endtwo = db('sites')->where('id',$endarr['2'])->field('site_name')->find();
+        $res['en_end'] = $endone['site_name'] . $endtwo['site_name'];
+        if(!$res){
+            $this->return_msg(400, '获取失败!','');
+        }
+        $this->return_msg(200, '获取成功!',$res);
+    }
+
+    //实时报警上传接口  供子系统调用
     public function Real_alarm()
     {
 //        $this->params['app_key'] = $this->request->param('app_key');
@@ -76,25 +216,59 @@ class Bigdata extends Common
 //        $this->params['alarm_code'] = $this->request->param('alarm_code');
 //        $this->params['alarm_manage'] = $this->request->param('alarm_manage');
 //        $this->params['alarm_site'] = $this->request->param('alarm_site');
-        $signs = $this->params['sign'];
-        unset($this->params['sign']);
-        $callback = $this->asc_sort($this->params);
+        $signs = $this->params['sign']; //提前转储 sign
+        unset($this->params['sign']);   //生成sign前剔除 sign参数
+        unset($this->params['bigdata']);   //生成sign前剔除 sign参数
+        $callback = $this->asc_sort($this->params); //生成sign
 
-        $sign = strtoupper(md5($callback));
-//        dump($sign);
+
+        $sign = strtoupper(md5($callback)); //sign对比
 //        $this->params['sign'];
+//        dump($callback);
+//        dump($sign);
+//        dump($this->params);
         if ($sign !== $signs){
             $this->return_msg(400, '参数错误!','');
         }
 
+        if($this->params['alarm_manage'] == '3001' || $this->params['alarm_manage'] == '3005'){
+            $this->params['is_manage'] = '0';
+        }else{
+            $this->params['is_manage'] = '1';
+        }
         $this->params['alarm_time'] = strtotime($this->params['alarm_time']);
         $res = Db('alarmrecs')->strict(false)->insert($this->params);
         if($res){
-            $this->return_msg(200, '实时报警上传成功!', '');
+            $alarms = db('alarmrecs')->field('id,alarm_time,cate_code')->limit(10)->order('alarm_time desc,id desc')->select();
+            $this->send_ws($alarms);
+            $this->return_msg(200, '实时报警上传成功!', $alarms);
         }
         $this->return_msg(400, '实时报警上传失败!', '');
 //        dump($callback);
 //
+    }
+
+    public function send_ws($content){
+
+        // 返回信息并终止脚本
+        $content = json_encode($content,JSON_UNESCAPED_UNICODE);
+        $content =  str_replace('"',"'",$content);
+        // 推送的url地址，使用自己的服务器地址
+        $push_api_url = "http://192.168.10.18:2121/";
+        $post_data = array(
+            "type" => "publish",
+            "content" => $content,
+            "to" => '2333',
+        );
+        $ch = curl_init ();
+        curl_setopt ( $ch, CURLOPT_URL, $push_api_url );
+        curl_setopt ( $ch, CURLOPT_POST, 1 );
+        curl_setopt ( $ch, CURLOPT_HEADER, 0 );
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $post_data );
+        curl_setopt ($ch, CURLOPT_HTTPHEADER, array("Expect:"));
+        $return = curl_exec ( $ch );
+        curl_close ( $ch );
     }
 
 

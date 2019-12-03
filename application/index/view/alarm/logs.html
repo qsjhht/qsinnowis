@@ -13,7 +13,7 @@
     <!--标题-->
     <div class="middleNav">
         <i class="layui-icon">&#xe653;</i> &nbsp;
-        报警日志
+        报警记录
     </div>
 
 
@@ -44,34 +44,10 @@
 
         <table class="layui-table" id="ledger" lay-filter="eqpt_show"></table>
         <script type="text/html" id="barDemo">
-            {{#  if(d.is_manage ==0){ }}
-            <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger operBtn" lay-event="edit">报警处置</a>
-            {{# }if(d.is_manage ==1) { }}
-            <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
-            {{#  } }}
+            <!--   <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>-->
+            <a class="layui-btn layui-btn-xs operBtn" lay-event="details">查看详细信息</a>
             <!--<a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>-->
         </script>
-         <script type="text/html" id="formanage">
-              {{#  if(d.is_manage ==0){ }}
-              <span style="color: #FF5722;">未处置</span>
-              {{# }if(d.is_manage ==1) { }}
-              <span style="color: #00FFFF;">已处置</span>
-              {{#  } }}
-              <!--<a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>-->
-         </script>
-         <script type="text/html" id="forlvl">
-              {{#  if(d.lvlcontent =='普通'){ }}
-              <span style="color: #00F000;">普通</span>
-              {{# }  else if(d.lvlcontent =='严重'){ }}
-              <span style="color: #FFB800;">严重</span>
-              {{# } else if(d.lvlcontent =='紧急'){ }}
-              <span style="color: #FF5722;">紧急</span>
-              {{# } else if(d.lvlcontent =='设备'){ }}
-              <span style="color: #00FFFF;">设备</span>
-              {{#  } }}
-              <!--<a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>-->
-         </script>
     </div>
 </div>
 {/block}
@@ -115,9 +91,9 @@
             (data.field.normal == 'on') ? data.field.normal = '1' : data.field.normal = '0';
             (data.field.fault == 'on') ? data.field.fault = '2' : data.field.fault = '0';
             (data.field.scrap == 'on') ? data.field.scrap = '4' : data.field.scrap = '0';*/
-            // console.dir(data.field.keyword);
-            // console.dir(data.field.cate);
-            // console.dir(data.field.site);
+            console.dir(data.field.keyword);
+            console.dir(data.field.cate);
+            console.dir(data.field.site);
             table.reload('ledger', {
                 where: {
                     keyword:data.field.keyword
@@ -219,33 +195,25 @@
             }
             ,cols: [[
                 //,{field:'floor_id',title:'分层ID', width:110, sort: true}
-                {field:'alarm_time',width:'12%',align:'center',title:'报警日期'}
-                ,{field:'cate_name',width:'12%',align:'center',title:'设备'}
-                ,{field:'parent',width:'12%',align:'center',title:'系统'}
-                ,{field:'codecontent',width:'12%',align:'center',title:'报警内容'}
-                ,{field:'lvlcontent',width:'6%',align:'center',title:'报警级别',templet:'#forlvl'}
-                ,{field:'manage_type',width:'6%',align:'center',title:'处置方式'}
-                ,{field:'typecontent',width:'8%',align:'center',title:'报警类别'}
-                ,{field:'eqpt_site',width:'15%',align:'center',title:'设备位置'}
-                ,{field:'is_manage',width:'8%',align:'center',title:'处置状态',templet:'#formanage'}
+                {field:'date',title:'报警日期',width:'82%'}
+               /* ,{field:'alarmrecs',/!*width:250,*!/align:'center',title:'设备名称'}*/
                 ,{align:'center',title:'操作', toolbar: '#barDemo'}
             ]
             ] //设置表头
             //,…… //更多参数参考右侧目录：基本参数选项
-            // ,done:function(res,curr,count){
-            //     var img_show = null; // tips提示
-            //     $("td span p").hover(function(){
-            //         img_show = layer.tips('点击修改设备状态！', this,{
-            //             tips:[1, 'rgba(41,41,41,.8)']
-            //         });
-            //     },function(){
-            //         layer.close(img_show);
-            //     });
-            // }
+            ,done:function(res,curr,count){
+                var img_show = null; // tips提示
+                $("td span p").hover(function(){
+                    img_show = layer.tips('点击修改设备状态！', this,{
+                        tips:[1, 'rgba(41,41,41,.8)']
+                    });
+                },function(){
+                    layer.close(img_show);
+                });
+            }
         });
         table.on('tool(eqpt_show)', function(obj) {
             var data = obj.data;
-            // console.dir(data);
             if (obj.event === 'details') {
                 console.dir(data.id);
                 //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
@@ -257,32 +225,13 @@
                     fixed: true, //不固定
                     maxmin: true,
                     scrollbar:true,
-                    content: ['{:url("alarm/details")}' + "?rec_id=" + data.id, 'no'],
+                    content: ['{:url("alarm/details")}' + "?log_id=" + data.id, 'no'],
                     shade: [0.8, '#393D49']
                     /*cancel: function(){
                         //右上角关闭回调  刷新父页面
                         window.parent.location.reload();
                         //return false 开启该代码可禁止点击该按钮关闭
                     }*/
-                });
-            }else if (obj.event === 'edit') {
-                //console.dir(data);
-                //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
-                layer.open({
-                    title:"设备详情",
-                    title:false,
-                    type: 2,
-                    offset: ['15px', '60px'],
-                    area: ['1070px', '655px'],
-                    fixed: true, //不固定
-                    maxmin: false,
-                    content: ['{:url("alarm/manage")}' + "?rec_id=" + data.id, 'no'],
-                    shade: [0.8, '#393D49'],
-                    cancel: function(){
-                        //右上角关闭回调  刷新父页面
-                        window.parent.location.reload();
-                        //return false 开启该代码可禁止点击该按钮关闭
-                    }
                 });
             }
         });

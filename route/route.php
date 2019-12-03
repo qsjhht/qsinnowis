@@ -9,7 +9,10 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-// 用户注册
+//用户登录
+Route::post('user/login', 'api/user/login')->allowCrossDomain();
+
+
 Route::post('patrol/data', 'api/patrol/data')->allowCrossDomain();
 
 Route::get('patrol/eqpt_data', 'api/patrol/eqpt_data')->allowCrossDomain();
@@ -26,10 +29,17 @@ Route::get('patrol/get_user_position', 'api/patrol/get_user_position')->allowCro
 
 Route::get('real/real_time', 'api/real/real_time')->allowCrossDomain();
 Route::get('real/real_times', 'api/real/real_times')->allowCrossDomain();
+Route::get('real/real_timest', 'api/real/real_timest')->allowCrossDomain();
 Route::get('real/get_last_real', 'api/real/get_last_real')->allowCrossDomain();
 
 Route::get('bigdata/date', 'api/bigdata/date')->allowCrossDomain();
-Route::post('bigdata/real_alarm', 'api/bigdata/real_alarm')->allowCrossDomain();
+Route::get('bigdata/get_data', 'api/bigdata/get_data')->allowCrossDomain();
+Route::get('bigdata/get_sites', 'api/bigdata/get_sites')->allowCrossDomain();
+Route::get('bigdata/enter_datas', 'api/bigdata/enter_datas')->allowCrossDomain();
+Route::get('bigdata/enter_details', 'api/bigdata/enter_details')->allowCrossDomain();
+Route::post('bigdata/send_ws', 'api/bigdata/send_ws')->allowCrossDomain();
+
+Route::any('bigdata/real_alarm', 'api/bigdata/real_alarm')->allowCrossDomain();
 
 Route::get('master/last_alarm', 'api/master/last_alarm')->allowCrossDomain();
 Route::get('master/add_alarm', 'api/master/add_alarm')->allowCrossDomain();

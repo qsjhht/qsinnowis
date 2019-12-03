@@ -35,7 +35,8 @@ class Visual extends Adminbase
         }
         $this->assign('Onpatrol', '');
 
-
+        $alarms = db('alarmrecs')->field('id,alarm_time,cate_code')->limit(10)->order('alarm_time desc,id desc')->select();
+            $this->assign('Alarms', $alarms);
             $this->assign('Uname', $this->_userinfo['nickname']);
             return $this->fetch();
     }
@@ -55,6 +56,8 @@ class Visual extends Adminbase
     public function demoOne()
     {
         $this->assign('Uname', $this->_userinfo['nickname']);
+        $alarms = db('alarmrecs')->field('id,alarm_time,cate_code')->limit(10)->order('alarm_time desc,id desc')->select();
+        $this->assign('Alarms', $alarms);
         return $this->fetch();
     }
     public function demoTwo()
