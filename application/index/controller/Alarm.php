@@ -11,6 +11,7 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 use app\common\controller\Adminbase;
+use app\index\model\Role as RoleModel;
 
 
 class Alarm extends Adminbase
@@ -18,6 +19,7 @@ class Alarm extends Adminbase
     protected function initialize()
     {
         parent::initialize();
+        $this->RoleModel = new RoleModel;
     }
     //设备管理首页 模版继承 注入左侧导航
     public function index()
@@ -89,6 +91,86 @@ class Alarm extends Adminbase
             return json($result);
         }
         return $this->fetch();
+    }
+
+//    报警设置
+    public function alarm_set()
+    {
+         if ($this->request->isAjax()) {
+        $tree = new \util\Tree();
+        $tree->icon = array('&nbsp;&nbsp;&nbsp;│ ', '&nbsp;&nbsp;&nbsp;├─ ', '&nbsp;&nbsp;&nbsp;└─ ');
+        $tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+        $result = Db('categorys')
+            ->field('a.id,a.parentid,a.cate_name,a.alarm_lvl,l.lvlcontent')
+            ->alias('a')
+            ->join('alarmlvl l','a.alarm_lvl = l.level')
+            ->where('is_alarm = 1')
+            ->select();
+
+//        $result = Db::name('categorys')->order(array('listorder', 'id' => 'DESC'))->select();
+
+
+        $tree->init($result);
+
+        $_list = $tree->getTreeList($tree->getTreeArray(0), 'cate_name');
+
+        $total = count($_list);
+        $result = array("code" => 0, "count" => $total, "data" => $_list);
+        return json($result);
+         }
+        return $this->fetch();
+    }
+
+    //    修改级别
+    public function alarm_edit()
+    {
+        $haschild = $this->request->param('haschild');
+        $cate_id = $this->request->param('cate_id');
+        $cate_name =  db('categorys')->field('cate_name,alarm_lvl,id')->where('id',$cate_id)->find();
+        $alarm_lvl =  db('alarmlvl')->field('level,lvlcontent')->select();
+        $this->assign('haschild',$haschild);
+        $this->assign('cate_name',$cate_name);
+        $this->assign('alarm_lvl',$alarm_lvl);
+        return $this->fetch();
+    }
+
+    //    修改级别
+    public function alarm_edit_ajax()
+    {
+        $cateid = $this->request->param('cateid');
+        $lvl = $this->request->param('lvl');
+        $haschild = $this->request->param('haschild');
+        if(!$haschild){
+            $res = Db('categorys')
+                ->where('id',$cateid)
+                ->strict(false)
+                ->update(['alarm_lvl'=>$lvl]);
+        }else{
+            $res = Db('categorys')
+                ->where('id',$cateid)
+                ->strict(false)
+                ->update(['alarm_lvl'=>$lvl]);
+            $ress = Db('categorys')
+                ->where('parentid',$cateid)
+                ->strict(false)
+                ->update(['alarm_lvl'=>$lvl]);
+        }
+
+        if($res){
+            $result = array("code" => 1,"msg" => '处理成功！');
+        }else{
+            $result = array("code" => 1,"msg" => '处理失败！');
+        }
+        return json($result);
+
+    }
+
+
+    public function get_tree_data()
+    {
+        $auths = Db('categorys')->field('id,parentid,cate_name')->where('is_alarm = 1')->select();
+        $auths = $this->RoleModel->get_Tree($auths,'id','parentid','cate_name');
+        return $auths;
     }
 
 //    报警处置
