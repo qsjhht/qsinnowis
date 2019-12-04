@@ -68,9 +68,9 @@ return [
         // 数据库名
         'database'        => 'ZD_PIPE',
         // 用户名
-        'username'        => 'sa', //qs_user
+        'username'        => 'qs_users', //qs_user
         // 密码
-        'password'        => 'As123456', //'qs@123',
+        'password'        => '1qaz@WSXj', //'qs@123',
         // 端口
         'hostport'        => '1433',
     ],
