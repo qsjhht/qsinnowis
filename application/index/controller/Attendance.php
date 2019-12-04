@@ -293,7 +293,7 @@ class Attendance extends Adminbase
 
         $map2 = [
             ['u_id','=',$this->_userinfo['userid']],
-            ['m_time', 'between time', [$ntimer - 3600, $ntimer + 3600]]
+            ['n_time', 'between time', [$ntimer - 3600, $ntimer + 3600]]
         ];
         $check = db('attendance')
             ->whereOr([ $map1, $map2 ])
@@ -349,7 +349,7 @@ class Attendance extends Adminbase
     {
         $d = strtotime(date('Y-m-d',time()));
         $data['u_id'] = $this->_userinfo['userid'];
-                $map1 = [
+        $map1 = [
             ['u_id','=',$this->_userinfo['userid']],
             ['m_time', '> time', $d - 3600]
         ];
