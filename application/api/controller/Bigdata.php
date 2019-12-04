@@ -237,9 +237,11 @@ class Bigdata extends Common
             $this->params['is_manage'] = '1';
         }
         $this->params['alarm_time'] = strtotime($this->params['alarm_time']);
+        $lvl = db('categorys')->field('alarm_lvl')->where('id',$this->params['cate_code'])->find();
+        $this->params['alarmlevel'] = $lvl['alarm_lvl'];
         $res = Db('alarmrecs')->strict(false)->insert($this->params);
         if($res){
-            $alarms = db('alarmrecs')->field('id,alarm_time,cate_code')->limit(10)->order('alarm_time desc,id desc')->select();
+            $alarms = db('alarmrecs')->field('id,alarm_time,cate_code,alarmlevel')->limit(10)->order('alarm_time desc,id desc')->select();
             $this->send_ws($alarms);
             $this->return_msg(200, '实时报警上传成功!', $alarms);
         }
