@@ -146,8 +146,20 @@ class Bigdata extends Common
         if($check){
             $arr['nickname'] = $check['nickname'];
         }else{
-            $arr['nickname'] = '';
+            $checks = db('attendance')
+                ->alias('a')
+                ->join('admin u','a.u_id = u.userid')
+                ->field('u.nickname')
+//                ->where('u_id','in',$idss)
+                ->where('m_time', 'between time', [$mtimes - 3600, $mtimes + 3600])
+                ->find();
+            if ($checks){
+                $arr['nickname'] = '*'.$checks['nickname'];
+            }else{
+                $arr['nickname'] = '';
+            }
         }
+//        $person_num = db('attendance')->where('m_time', 'between time', [$mtimes - 3600, $mtimes + 3600])->count();
         $arr['date_num'] = $num;
         $arr['person_num'] = '15';
         if(!$range){
