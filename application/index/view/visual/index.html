@@ -92,6 +92,9 @@
                font-size: 1.3rem;
                padding: 1.5%;
           }
+          .progressFro{
+               padding: 1.5%;
+          }
           .galRoad{text-align: center;font-size: 20px;padding-top: 30px}
           .section{text-align: center;font-size: 15px;height: 30px;border-bottom: 1px dashed #ffffff}
           .xianShiDiv{padding: 10px}
@@ -128,10 +131,12 @@
                               </ul>
                          </div>
                          <div class="infoDate div-center" id="infoDty" style="font-size:1.3rem">
-                              {if $Uname != '' }
-                              值班：{$Uname}
-                              {else/}请先登录！
-                              {/if}
+                              <!--{if $Uname != '' }-->
+                              <!--值班：{$Uname}-->
+                              <!--{else/}请先登录！-->
+                              <!--{/if}-->
+                              <div class="layui-inline s-e" style="padding-right: 0"> 值班：</div>
+                              <div class="layui-inline s-e" style="padding-left: 0" id="nickname">－－</div>
                              <div id="stime" class="layui-inline s-e"></div>
                              <div class="progress"><div class="progressFro"></div>
                                  <div class="layui-progress" lay-filter="demo">
@@ -351,7 +356,7 @@
          var socket = io('http://192.168.10.18:2120');
          // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
          var uid = '2333';
-         console.dir(uid);
+         // console.dir(uid);
          // socket连接后以uid登录
          socket.on('connect', function(){
              socket.emit('login', uid);
@@ -517,16 +522,30 @@
              element.progress('demo', '0%');
              // ajax 安全运行时间
              function safety() {
-                 $.get('http://192.168.10.18/bigdata/date', function(data) {
+                 $.get('http://192.168.10.18/bigdata/get_data', function(data) {
                      data = JSON.parse(data);
-                     console.dir(data);
-                     $('#units').html(data.units);
-                     $('#tens').html(data.tens);
-                     $('#hundreds').html(data.hundreds);
-                     $('#thousands').html(data.thousands);
-                     $('#stime').html(data.stime);
-                     $('#etime').html(data.etime);
-                     element.progress('demo', data.per);
+                     if(data.code == '200'){
+                         datas = data.data;
+                         // console.dir(datas);
+                         $('#units').html(datas.date_num.substr(0,1));
+                         $('#tens').html(datas.date_num.substr(1,1));
+                         $('#hundreds').html(datas.date_num.substr(2,1));
+                         $('#thousands').html(datas.date_num.substr(3,1));
+                         if(datas.nickname !== ''){
+                             $('#nickname').html(datas.nickname);
+                         }
+                         if(datas.person_num !== ''){
+                             $('#person_num').html(datas.person_num);
+
+                         }
+                         $('#stime').html(datas.stime);
+                         $('#etime').html(datas.etime);
+                         element.progress('demo', datas.per);
+                     }else{
+                         $('#stime').html('--');
+                         $('#etime').html('--');
+                     }
+
                  });
                  /*$.ajax({url:'http://localhost:8888/bigdata/date'
                      ,type: 'GET'
