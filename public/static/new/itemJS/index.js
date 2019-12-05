@@ -43,7 +43,7 @@ let time = {
         }
     },
     crew:function(){
-        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:-1px"/>在岗15人'
+        return '<img src="../../../static/new/image/user-fill.png" width:="20" height="18" style="position:relative;top:-1px"/>在岗<li class="layui-inline" id="person_num">－－</li>人'
     }
 };
 let infoDate = document.getElementById('infoDate');
@@ -822,7 +822,7 @@ for(var a = 0 ;a<callGrade.length;a++){
 
 $('.callTime').each(function(){
 
-    console.dir($(this).text());
+    // console.dir($(this).text());
 
     $(this).text(DateToTime($(this).text()));
 });
