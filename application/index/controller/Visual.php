@@ -35,8 +35,15 @@ class Visual extends Adminbase
         }
         $this->assign('Onpatrol', '');
 
-        $alarms = db('alarmrecs')->field('id,alarm_time,cate_code')->limit(10)->order('alarm_time desc,id desc')->select();
-            $this->assign('Alarms', $alarms);
+        $alarms = db('alarmrecs')
+            ->alias('a')
+            ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
+            ->join('categorys c','a.cate_code = c.id','LEFT')
+            ->field('a.id,a.alarm_time,c.cate_name,a.zone,l.lvlcontent')
+            ->limit(10)
+            ->order('alarm_time desc,id desc')
+            ->select();
+        $this->assign('Alarms', $alarms);
             $this->assign('Uname', $this->_userinfo['nickname']);
             return $this->fetch();
     }
@@ -56,7 +63,14 @@ class Visual extends Adminbase
     public function demoOne()
     {
         $this->assign('Uname', $this->_userinfo['nickname']);
-        $alarms = db('alarmrecs')->field('id,alarm_time,cate_code')->limit(10)->order('alarm_time desc,id desc')->select();
+        $alarms = db('alarmrecs')
+            ->alias('a')
+            ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
+            ->join('categorys c','a.cate_code = c.id','LEFT')
+            ->field('a.id,a.alarm_time,c.cate_name,a.eqpt_site,l.lvlcontent')
+            ->limit(10)
+            ->order('alarm_time desc,id desc')
+            ->select();
         $this->assign('Alarms', $alarms);
         return $this->fetch();
     }

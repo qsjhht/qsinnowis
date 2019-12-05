@@ -122,9 +122,9 @@
                          {volist name="Alarms" id="vo"}
                          <tr>
                               <th class='callTime'>{$vo.alarm_time}</th>
-                              <th class='callGrade'>{$vo.cate_code}</th>
-                              <th>{$vo.id}</th>
-                              <th>{$vo.alarm_time}</th>
+                              <th class='callGrade'>{$vo.lvlcontent}</th>
+                              <th>{$vo.cate_name}</th>
+                              <th>{$vo.eqpt_site}</th>
                          </tr>
                          {/volist}
                          </tbody>
@@ -162,7 +162,7 @@
             o[i]=array[i];
             arrDate.push(o);*/
             var dates = DateToTime(objs[i].alarm_time);
-            arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +objs[i].cate_code+ "</th><th>" +objs[i].id+ "</th><th>" +objs[i].alarm_time+ "</th></tr>";
+            arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +objs[i].lvlcontent+ "</th><th>" +objs[i].cate_name+ "</th><th>" +objs[i].eqpt_site+ "</th></tr>";
             console.dir(objs[i]);
         }
         arrs += "</tbody>";

@@ -789,19 +789,19 @@ function aaa(){
 // -----------------------列表样式--------------------------
 // 时间
 let callTime = document.getElementsByClassName('callTime');
-let callGrade = document.getElementsByClassName('callGrade');
-for(var a = 0 ;a<callGrade.length;a++){
-    // callTime[a].innerHTML = time.year()+' '+(a+2)+':'+(a+5);
-    if(callGrade[a].innerHTML == '严重'){
-        callGrade[a].style.color = '#c23531'
-    }else if(callGrade[a].innerHTML == '紧急'){
-        callGrade[a].style.color = '#ca8622'
-    }else if(callGrade[a].innerHTML == '普通'){
-        callGrade[a].style.color = 'yellow'
-    }else if(callGrade[a].innerHTML == '设备'){
-        callGrade[a].style.color = '#32a5cf'
-    }
-}
+// let callGrade = document.getElementsByClassName('callGrade');
+// for(var a = 0 ;a<callGrade.length;a++){
+//     // callTime[a].innerHTML = time.year()+' '+(a+2)+':'+(a+5);
+//     if(callGrade[a].innerHTML == '严重'){
+//         callGrade[a].style.color = '#FFB800'
+//     }else if(callGrade[a].innerHTML == '紧急'){
+//         callGrade[a].style.color = '#FF5722'
+//     }else if(callGrade[a].innerHTML == '普通'){
+//         callGrade[a].style.color = '#00F000'
+//     }else if(callGrade[a].innerHTML == '设备'){
+//         callGrade[a].style.color = '#00FFFF'
+//     }
+// }
 // let getYear = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d0.getDate())+'日';
 // let getYear1 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d1.getDate())+'日';
 // let getYear2 = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+ (d2.getDate())+'日';

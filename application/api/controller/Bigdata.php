@@ -253,7 +253,15 @@ class Bigdata extends Common
         $this->params['alarmlevel'] = $lvl['alarm_lvl'];
         $res = Db('alarmrecs')->strict(false)->insert($this->params);
         if($res){
-            $alarms = db('alarmrecs')->field('id,alarm_time,cate_code,alarmlevel')->limit(10)->order('alarm_time desc,id desc')->select();
+            $alarms = db('alarmrecs')
+                ->alias('a')
+                ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
+                ->join('categorys c','a.cate_code = c.id','LEFT')
+                ->field('a.id,a.alarm_time,c.cate_name,a.zone,l.lvlcontent,a.eqpt_site')
+                ->limit(10)
+                ->order('alarm_time desc,id desc')
+                ->select();
+//            $alarms = db('alarmrecs')->field('id,alarm_time,cate_code,alarmlevel')->limit(10)->order('alarm_time desc,id desc')->select();
             $this->send_ws($alarms);
             $this->return_msg(200, '实时报警上传成功!', $alarms);
         }
