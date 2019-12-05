@@ -70,7 +70,7 @@ class Alarm extends Adminbase
                 ->join('alarmmanage m','r.alarm_manage = m.manage_id','LEFT')
                 ->join('categorys s','r.cate_code = s.id','LEFT')
 //                ->join('eqpts e','r.equipment_code = e.eqpt_id'),e.eqpt_type,e.eqpt_site_detail r.eqpt_sys,
-                ->field('r.id,r.alarm_time,t.typecontent,r.alarm_code,r.eqpt_site,s.parentid,s.cate_name,c.codecontent,l.lvlcontent,m.manage_type,r.is_manage,r.rec_details')
+                ->field('r.id,r.alarm_time,t.typecontent,r.alarm_code,r.eqpt_site,r.remark,s.parentid,s.cate_name,c.codecontent,l.lvlcontent,m.manage_type,r.is_manage,r.rec_details')
                 ->order('r.alarm_time', 'desc')
                 ->page($page, $limit)
                 ->select();
@@ -214,7 +214,7 @@ class Alarm extends Adminbase
             ->join('alarmmanage m','r.alarm_manage = m.manage_id','LEFT')
             ->join('categorys s','r.cate_code = s.id','LEFT')
 //                ->join('eqpts e','r.equipment_code = e.eqpt_id'),e.eqpt_type,e.eqpt_site_detail r.eqpt_sys,
-            ->field('r.id,r.alarm_time,t.typecontent,r.alarm_code,c.codecontent,r.eqpt_site,s.parentid,s.cate_name,l.lvlcontent,m.manage_type,r.is_manage,r.rec_details')
+            ->field('r.id,r.alarm_time,t.typecontent,r.alarm_code,c.codecontent,r.remark,r.eqpt_site,s.parentid,s.cate_name,l.lvlcontent,m.manage_type,r.is_manage,r.rec_details')
             ->find($rec_id);
 
 
