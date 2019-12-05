@@ -60,6 +60,14 @@
               {{#  } }}
               <!--<a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>-->
          </script>
+         <script type="text/html" id="forcontent">
+              {{#  if(d.remark !== null){ }}
+              {{d.remark}}
+              {{# } else{ }}
+              {{d.codecontent}}
+              {{#  } }}
+              <!--<a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>-->
+         </script>
          <script type="text/html" id="forlvl">
               {{#  if(d.lvlcontent =='普通'){ }}
               <span style="color: #00F000;">普通</span>
@@ -222,7 +230,7 @@
                 {field:'alarm_time',width:'12%',align:'center',title:'报警日期'}
                 ,{field:'cate_name',width:'12%',align:'center',title:'设备'}
                 ,{field:'parent',width:'12%',align:'center',title:'系统'}
-                ,{field:'codecontent',width:'12%',align:'center',title:'报警内容'}
+                ,{field:'codecontent',width:'12%',align:'center',title:'报警内容',templet:'#forcontent'}
                 ,{field:'lvlcontent',width:'6%',align:'center',title:'报警级别',templet:'#forlvl'}
                 ,{field:'manage_type',width:'6%',align:'center',title:'处置方式'}
                 ,{field:'typecontent',width:'8%',align:'center',title:'报警类别'}
