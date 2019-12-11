@@ -526,14 +526,14 @@
                         document.getElementById(ids).innerText = '----';
                     }
                 }
-                if(m == 0){
-                    $(".evirEchart").show();
-                    $(".evirSelect").show();
-                }else if(m == 6){
+                if(m == 6){
                     $(".evirEchart").hide();
                     $(".evirSelect").hide();
-                }
-                console.dir(m);
+                }else{
+                    $(".evirEchart").show();
+                    $(".evirSelect").show();
+                    }
+                // console.dir(m);
                 //console.dir(result.PV_CH4_SL1SX01);
             }
         });
