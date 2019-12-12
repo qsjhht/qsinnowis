@@ -36,7 +36,10 @@ class Patrol extends Common
     //接收 巡检开始 信息 insert or delete
     public function data()
     {
-        $data = input('post.');
+//        $data = input('post.');
+//        $data = input('post.');
+        $data = $this->params;
+//        dump($data);die;
        /*$data['header']['accept'] =  $this->request->header('accept');
        $data['header']['accept-encoding'] =  $this->request->header('accept-encoding');
        $data['header']['user-agent'] =  $this->request->header('user-agent');*/
@@ -45,7 +48,7 @@ class Patrol extends Common
 
 
         //$myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
-        unset($data['/patrol/data']);
+//        unset($data['/patrol/data']);
         $txt =  json_encode($data,JSON_UNESCAPED_UNICODE);
         $str =  str_replace('"',"'",$txt);
 
@@ -177,7 +180,7 @@ class Patrol extends Common
         $post_data = array(
             "type" => "publish",
             "content" => $txt,
-            "to" => $to_uid,
+            "to" => '222',
         );
         $ch = curl_init ();
         curl_setopt ( $ch, CURLOPT_URL, $push_api_url );
@@ -208,4 +211,29 @@ class Patrol extends Common
         $output = json_decode($return,true);
         return $return;
     }
+
+    public function patrol_logs()
+    {
+        $datas = Db::connect('sqlsrv_config')
+            ->table('check_record_ending')
+            ->select();
+        echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
+    }
+
+    public function patrols()
+    {
+        $datas = Db::connect('sqlsrv_config')
+            ->table('check_record_not_Start')
+            ->select();
+        echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
+    }
+
+    public function patroling()
+    {
+        $datas = Db::connect('sqlsrv_config')
+            ->table('check_record_starting')
+            ->select();
+        echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
+    }
+
 }
