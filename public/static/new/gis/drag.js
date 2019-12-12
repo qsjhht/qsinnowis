@@ -248,16 +248,16 @@ socket.on('connect', function(){
         success:function(result){
             
         var obj = eval('('+result+')');
-        console.log(obj);
+        // console.log(obj);
         // 没有正在巡检任务
         if(obj.code){
-            console.log(obj.msg);
+            // console.log(obj.msg);
         // 有正在巡检任务
         }else{
             
             var objs = obj.replace(/\'/g,'"');
             var objs =  eval('('+objs+')');
-            console.dir(objs);
+            // console.dir(objs);
             // 获取巡检信息 转换成obj
             data = objs.routeList;
             //console.dir(data);
@@ -278,7 +278,7 @@ socket.on('connect', function(){
            //将 定时器添加到数组中 待删除 
             time = checkCode + 'time';
             arr[time] = window.setInterval("real_time(user_id)",5000);
-            console.dir('1111111111111');
+            // console.dir('1111111111111');
             // console.log(data);
         }     
         
@@ -325,7 +325,7 @@ function real_time(user_id){
                     map.removeLayer(arr[point]);
                     arr[point] = addPointLayer(points);
                     map.addLayer(arr[point]);
-                    console.dir(arr);
+                    // console.dir(arr);
                     // 没有 新建
                } else {
                     map.removeLayer(arr[point]);
@@ -350,16 +350,17 @@ function real_time(user_id){
 // 后端推送来消息时
 socket.on('new_msg', function(msg){
 
-    console.log('后端推送点消息')
+    console.log('后端推送点消息');
+    // console.dir(msg);
     data = eval('('+msg+')').routeList;
     flag = eval('('+msg+')').flag;
     user_id = eval('('+msg+')').qs_u_ids;
     //结束巡检
     if(flag === '0'){
-        console.log('结束巡检')
+        console.log('结束巡检');
         checkCode = eval('('+msg+')').checkCode;
 
-        console.log(eval('('+msg+')'))
+        // console.log(eval('('+msg+')'));
 
         
         time = checkCode + 'time';
@@ -377,7 +378,7 @@ socket.on('new_msg', function(msg){
 
         // 开始巡检
     }else if(flag === '1'){
-        console.log('开始巡检')
+        console.log('开始巡检');
         checkCode = eval('('+msg+')').checkRecordInfo.checkCode;
         arr[checkCode] = aaalayer(data);
         //console.log(point);
@@ -393,8 +394,7 @@ socket.on('new_msg', function(msg){
          user_id = objs.qs_u_ids;
          time = checkCode + 'time';
          arr[time] = window.setInterval("real_time(user_id)",5000);
-         console.dir(arr);
-
+         // console.dir(arr);
     }
     //console.dir(arr[checkCode]);
 
@@ -489,14 +489,14 @@ function bbblayer(data){
 map.on('click', function (e) {
     var coordinate = e.coordinate;
     if(typeof(feature)== 'undefined'){
-        console.dir('asdf');
+        // console.dir('asdf');
         $('#popup').css('display','none');
     }
     map.forEachFeatureAtPixel(e.pixel, function (feature) {
         $('#popup').css('display','block');
         mapService(coordinate);
-        console.log(e.coordinate);
-        console.log(feature.getProperties());
+        // console.log(e.coordinate);
+        // console.log(feature.getProperties());
         // vectorTileStyles.dispatchEvent({type: 'featureSelected',
         //     selectedId: feature.getProperties().id,
         //     layerName: feature.getProperties().layerName
