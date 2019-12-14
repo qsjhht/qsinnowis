@@ -214,24 +214,33 @@ class Patrol extends Common
 
     public function patrol_logs()
     {
+        $limit = $this->request->param('limit/d', 10);
+        $page = $this->request->param('page/d', 1);
         $datas = Db::connect('sqlsrv_config')
             ->table('check_record_ending')
+            ->page($page, $limit)
             ->select();
         echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
     }
 
     public function patrols()
     {
+        $limit = $this->request->param('limit/d', 10);
+        $page = $this->request->param('page/d', 1);
         $datas = Db::connect('sqlsrv_config')
             ->table('check_record_not_Start')
+            ->page($page, $limit)
             ->select();
         echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
     }
 
     public function patroling()
     {
+        $limit = $this->request->param('limit/d', 10);
+        $page = $this->request->param('page/d', 1);
         $datas = Db::connect('sqlsrv_config')
             ->table('check_record_starting')
+            ->page($page, $limit)
             ->select();
         echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
     }
