@@ -135,11 +135,11 @@ body{
 .callTab{
     margin:4vh auto;
     width:90%;
-    height:185px;
-    overflow-y: auto;
+    /*overflow-y: auto;*/
 }
 .callTable{
     width:100%;
+    table-layout: fixed;
 }
 .callTable tbody tr{
     height:25px;

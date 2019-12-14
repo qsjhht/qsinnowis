@@ -214,8 +214,78 @@ setInterval(function(){
     })
 },15000);
 
-// 报警类型
-let callIcon = echarts.init(document.getElementById('callIcon'));
+
+
+let alarmnum = $('#alarmnum').val();
+alarmnum = JSON.parse(alarmnum);
+
+
+console.dir(alarmnum);
+console.dir(typeof (alarmnum));
+
+alarmoption = {
+    title : {
+        text:'报警数据',
+        textStyle:{
+            color:'#00ffff',
+            fontWeight:'normal',
+            fontSize:16
+        },
+        padding:[15,10]
+    },
+
+    color:['#c23531','#d48265','#91c7ae', '#c4ccd3', '#91c7ae','#749f83','#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        type: 'scroll',
+        orient: 'vertical',
+        right: 10,
+        top: 20,
+        bottom: 20,
+        // data: ["严重","紧急","普通","设备"],
+        textStyle:{
+            color:'#0ff',
+        },
+        right:'-1%',
+        itemWidth :20,
+        itemHeight:11,
+    },
+
+    series : [
+        {
+            name: '报警类型',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['50%', '56%'],
+            // roseType:true,
+            data: alarmnum,
+            label:{            //饼图图形上的文本标签
+                show : true,
+                // formatter: "{b} : {c} ({d}%)"
+                formatter: "{b} :  {c}  \n ({d}%)",
+                fontSize:15
+            },
+
+            labelLine : {
+                show : true   //隐藏标示线
+            },
+            itemStyle: {
+
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+
+
+
 let callOption = {
     title:{
         text:'报警数据',
@@ -230,14 +300,18 @@ let callOption = {
         trigger: 'axis'
     },
     xAxis:{
-        name:'类型',
+        // name:'类型',
         type:'category',
-        data:['严重','紧急','普通','设备'],
+        // data:['严重','紧急','普通','设备'],
         axisLine:{
             lineStyle:{
                 color:'#FFFFFF'
             }
         },
+    },
+    grid: {
+        bottom: 25,
+        right: 10
     },
     yAxis:{
         name:'数量',
@@ -259,10 +333,10 @@ let callOption = {
         itemStyle:{
             color:'#00FFFF'
         },
-        data:[0,0,4,1]
+        data:alarmnum
     }
 };
-callIcon.setOption(callOption);
+callIcon.setOption(alarmoption);
 /*
 
 // 报警设置表格
