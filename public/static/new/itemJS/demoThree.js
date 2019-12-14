@@ -493,16 +493,16 @@ for(var i =0 ;i<robotClass.length ; i++ ){
 
 
 // 巡查巡检
-    let borPatrol = document.getElementsByClassName('borPatrol');
-    for(let t = 0 ; t<borPatrol.length ; t++){
-        borPatrol[t].index = t;
-        borPatrol[t].onclick = function(){
-            for(var s = 0; s<3;s++){
-                this.parentNode.children[s].classList.remove('borUlClass');
-            }
-            this.classList.add('borUlClass');
-        }
-    }
+//     let borPatrol = document.getElementsByClassName('borPatrol');
+//     for(let t = 0 ; t<borPatrol.length ; t++){
+//         borPatrol[t].index = t;
+//         borPatrol[t].onclick = function(){
+//             for(var s = 0; s<3;s++){
+//                 this.parentNode.children[s].classList.remove('borUlClass');
+//             }
+//             this.classList.add('borUlClass');
+//         }
+//     }
 // 入廊企业
 let firmConMain = document.getElementsByClassName('firmConMain');
 let firmConTop = document.getElementById('firmConTop');

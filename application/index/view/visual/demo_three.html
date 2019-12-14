@@ -73,15 +73,6 @@
         width: 100%;
         height: 100%;
     }
-    .two{
-        visibility: hidden;
-    }
-    #one{
-        color: #FFFFFF;
-    }
-    #two{
-        color: #FFFFFF;
-    }
 
 
 
@@ -253,19 +244,54 @@
                 <div class="robot">
                     巡查巡检
                     <ul class="borUl">
-                        <li class="borPatrol borUlClass"><a href="#" id="one">已完成</a></li>
-                        <li class="borPatrol"><a href="#" id="two">进行中</a></li>
-                        <!--<li class="borPatrol" onclick="contract()">待执行</li>-->
+                        <li class="borPatrol borUlClass" id="one">已完成</li>
+                        <li class="borPatrol" id="two">进行中</li>
+                        <li class="borPatrol" id="three">待执行</li>
                     </ul>
                 </div>
-                <div class="robotTob scrollber one">
+                <div class="patrolTob scrollber one isshow">
+                    <table class="robotToble">
+                        {if $Patrol_logs}
+                        {volist name="Patrol_logs" id="vo"}
+                        <tr>
+                            <th>{$vo.check_start_time} -- {$vo.check_end_time}</th>
+                            <th>{$vo.name}</th>
+                            <th>{$vo.check_user}</th>
+                        </tr>
+                        {/volist}
+                        {else/}
+                        <tr>
+                            <th>暂无数据</th>
+                        </tr>
+                        {/if}
+
+                    </table>
+                </div>
+                <div class="patrolTob scrollber two">
+                    <table class="robotToble">
+                        {if $Patroling}
+                        {volist name="Patroling" id="vo"}
+                        <tr>
+                            <th>{$vo.check_start_time}</th>
+                            <th>{$vo.name}</th>
+                            <th>{$vo.check_user}</th>
+                        </tr>
+                        {/volist}
+                        {else/}
+                        <tr>
+                            <th>暂无数据</th>
+                        </tr>
+                        {/if}
+                    </table>
+                </div>
+                <div class="patrolTob scrollber three">
                     <table class="robotToble">
                         {if $Patrols}
                         {volist name="Patrols" id="vo"}
                         <tr>
-                            <th>{$vo.date_time}</th>
-                            <th>{$vo.str_name}</th>
-                            <th>{$vo.user_names}</th>
+                            <th>{$vo.create_date}</th>
+                            <th>{$vo.name}</th>
+                            <th>{$vo.check_user}</th>
                         </tr>
                         {/volist}
                         {else/}
@@ -275,26 +301,10 @@
                         {/if}
 
 
-                    </table>
-                </div>
-                <div class="robotTob scrollber two" style="height: 82px">
-                    <table class="robotToble">
-                        {if $Onpatrol}
-                        {volist name="Patrols" id="vo"}
-                        <tr>
-                            <th>{$vo.date_time}</th>
-                            <th>{$vo.str_name}</th>
-                            <th>{$vo.user_names}</th>
-                        </tr>
-                        {/volist}
-                        {else/}
-                        <tr>
-                            <th>暂无数据</th>
-                        </tr>
-                        {/if}
                     </table>
                 </div>
             </div>
+
             <!--入廊企业-->
             <div class="contentFirm mainBor" id="contentFirm"></div>
         </div>
@@ -424,21 +434,24 @@
     myChart.setOption(option);
 
 
-    $('.borUl li a').click(function(){
-        $('.borUl li').removeClass('borUlClass');
-        $(this).parent().addClass('borUlClass');
+    $('.borPatrol').click(function(){
         var id= $(this).attr('id');
+        $('.borPatrol').removeClass('borUlClass');
+        $(this).addClass('borUlClass');
         if ( id == 'one')
         {
-            $('.two').css("visibility","hidden");
-            $('.one').css("display","block");
-            $(".one").css("visibility","visible");
+            $('.patrolTob').removeClass('isshow');
+            $(".one").addClass('isshow');
         }
         if ( id == 'two')
         {
-            $('.one').css("visibility","hidden");
-            $('.one').css("display","none");
-            $('.two').css("visibility","visible");
+            $('.patrolTob').removeClass('isshow');
+            $(".two").addClass('isshow');
+        }
+        if ( id == 'three')
+        {
+            $('.patrolTob').removeClass('isshow');
+            $(".three").addClass('isshow');
         }
     })
     if (H5siOS() === true

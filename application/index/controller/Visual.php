@@ -135,24 +135,47 @@ class Visual extends Adminbase
     }
     public function demoThree()
     {
-        $res   = db('patrol_log')->order('log_date', 'desc')->field('log_date,p_time,user_ids,str_name')->limit('10')->select();
-        if($res){
-            foreach ($res as &$re) {
-                $re['user_names'] = '';
-                $userstr = trim($re['user_ids'],',');
-                $userarr = explode(',',$userstr);
-                $users = db('admin')->field('nickname')->where('userid','in',$userarr)->select();
-                foreach ($users as $vo) {
-                    $re['user_names'] .= $vo['nickname'].',';
-                }
-                $re['user_names'] = trim($re['user_names'],',');
-                $re['date_time'] = $re['log_date'] .' '. $re['p_time'];
-            }
-            $this->assign('Patrols', $res);
-        }else{
-            $this->assign('Patrols', '');
+//        $res   = db('patrol_log')->order('log_date', 'desc')->field('log_date,p_time,user_ids,str_name')->limit('10')->select();
+//        if($res){
+//            foreach ($res as &$re) {
+//                $re['user_names'] = '';
+//                $userstr = trim($re['user_ids'],',');
+//                $userarr = explode(',',$userstr);
+//                $users = db('admin')->field('nickname')->where('userid','in',$userarr)->select();
+//                foreach ($users as $vo) {
+//                    $re['user_names'] .= $vo['nickname'].',';
+//                }
+//                $re['user_names'] = trim($re['user_names'],',');
+//                $re['date_time'] = $re['log_date'] .' '. $re['p_time'];
+//            }
+//            $this->assign('Patrols', $res);
+//        }else{
+//            $this->assign('Patrols', '');
+//        }
+//        $this->assign('Onpatrol', '');
+        $patrol_logs = Db::connect('sqlsrv_config')
+            ->table('check_record_ending')
+            ->select();
+        foreach ($patrol_logs as &$patrol_log) {
+            $patrol_log['check_end_time'] = substr($patrol_log['check_end_time'],11);
         }
-        $this->assign('Onpatrol', '');
+        $this->assign('Patrol_logs', $patrol_logs);
+
+        $patrols = Db::connect('sqlsrv_config')
+            ->table('check_record_not_Start')
+            ->select();
+        $this->assign('Patrols', $patrols);
+
+        $patroling = Db::connect('sqlsrv_config')
+            ->table('check_record_starting')
+            ->select();
+        $this->assign('Patroling', $patroling);
+
+
+//        dump($patrol_logs);
+//        dump($patrols);
+//        dump($patroling);
+//        die;
         return $this->fetch();
     }
 }
