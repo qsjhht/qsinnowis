@@ -44,8 +44,35 @@ class Visual extends Adminbase
             ->order('alarm_time desc,id desc')
             ->select();
         $this->assign('Alarms', $alarms);
-            $this->assign('Uname', $this->_userinfo['nickname']);
-            return $this->fetch();
+
+        $nums = db('alarmrecs')
+            ->alias('a')
+            ->join('alarmlvl l','a.alarmlevel = l.level')
+            ->field('l.lvlcontent,count(a.id) count')
+            ->group('alarmlevel')
+            ->select();
+        $cates = db('alarmlvl')->field('lvlcontent')->select();
+        foreach ($nums as $num) {
+            $numarr[] = $num['lvlcontent'];
+            $numdata[$num['lvlcontent']] = $num['count'];
+        }
+        // 判断赋值  生成二维数组
+        foreach ($cates as $cate) {
+            $arr = [];
+            if(in_array($cate['lvlcontent'],$numarr)){
+                $arr['name'] = $cate['lvlcontent'];
+                $arr['value'] = $numdata[$cate['lvlcontent']];
+
+            }else{
+                $arr['name'] = $cate['lvlcontent'];
+                $arr['value'] = 0;
+            }
+            $alarmnum[] = $arr;
+        }
+
+        $alarmnum = json_encode($alarmnum,256);
+        $this->assign('Alarmnum', $alarmnum);
+        return $this->fetch();
     }
 
     public function map()
@@ -62,7 +89,6 @@ class Visual extends Adminbase
     }
     public function demoOne()
     {
-        $this->assign('Uname', $this->_userinfo['nickname']);
         $alarms = db('alarmrecs')
             ->alias('a')
             ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
@@ -72,6 +98,35 @@ class Visual extends Adminbase
             ->order('alarm_time desc,id desc')
             ->select();
         $this->assign('Alarms', $alarms);
+
+        $nums = db('alarmrecs')
+            ->alias('a')
+            ->join('alarmlvl l','a.alarmlevel = l.level')
+            ->field('l.lvlcontent,count(a.id) count')
+            ->group('alarmlevel')
+            ->select();
+        $cates = db('alarmlvl')->field('lvlcontent')->select();
+        foreach ($nums as $num) {
+            $numarr[] = $num['lvlcontent'];
+            $numdata[$num['lvlcontent']] = $num['count'];
+        }
+        // 判断赋值  生成二维数组
+        foreach ($cates as $cate) {
+            $arr = [];
+            if(in_array($cate['lvlcontent'],$numarr)){
+                $arr['name'] = $cate['lvlcontent'];
+                $arr['value'] = $numdata[$cate['lvlcontent']];
+
+            }else{
+                $arr['name'] = $cate['lvlcontent'];
+                $arr['value'] = 0;
+            }
+            $alarmnum[] = $arr;
+        }
+
+        $alarmnum = json_encode($alarmnum,256);
+        $this->assign('Alarmnum', $alarmnum);
+
         return $this->fetch();
     }
     public function demoTwo()

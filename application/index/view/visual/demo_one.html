@@ -31,6 +31,27 @@
           .progressFro{
                padding: 1.5%;
           }
+
+          thead tr {
+              background: rgba(47,69,84,0.3);
+          }
+          .callTab thead tr th {
+              color: #00ffff;
+          }
+          .callTab thead,.callTab tbody tr {
+              display: table;
+              width: 100%;
+              table-layout: fixed;
+              height: 30px;
+          }
+          .callTab tbody {
+              display: block;
+              height:  20.3vh;
+              overflow-y: scroll;
+          }
+          ::-webkit-scrollbar{
+              display: none;
+          }
      </style>
 </head>
 <body>
@@ -82,10 +103,7 @@
                     </ul>
                </div>
                <div class="infoDate div-center" id="infoDty" style="font-size:1.3rem">
-                    <!--{if $Uname != '' }-->
-                    <!--值班：{$Uname}-->
-                    <!--{else/}请先登录！-->
-                    <!--{/if}-->
+                    <input type="hidden" id="alarmnum" name="p_id" class="layui-input" value="{$Alarmnum}">
                     <div class="layui-inline s-e" style="padding-right: 0"> 值班：</div>
                     <div class="layui-inline s-e" style="padding-left: 0" id="nickname">－－</div>
                     <div id="stime" class="layui-inline s-e"></div>
@@ -110,14 +128,14 @@
           <div class="callUl">
                <div class="callTab scrollber">
                     <table class="callTable">
-                         <tbody>
+                         <thead>
                          <tr>
                               <th>时间</th>
                               <th>级别</th>
                               <th>名称</th>
                               <th>位置</th>
                          </tr>
-                         </tbody>
+                         </thead>
                          <tbody id="appends">
                          {volist name="Alarms" id="vo"}
                          <tr>
@@ -142,6 +160,9 @@
 
         $(this).text(DateToTime($(this).text()));
     });
+
+    // 报警类型
+    var callIcon = echarts.init(document.getElementById('callIcon'));
     // 连接服务端，workerman.net:2120换成实际部署web-msg-sender服务的域名或者ip
     var socket = io('http://192.168.10.18:2120');
     // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
@@ -157,21 +178,30 @@
         var arrs = "<tbody id='appends'>";
         var objs =  eval('('+msg+')');
 
-        for (var i in objs) {
+        let alarms = objs.alarms;
+        let alarmnum= objs.alarmnum;
+        for (var i in alarms) {
             /*var o={};
             o[i]=array[i];
             arrDate.push(o);*/
-            var dates = DateToTime(objs[i].alarm_time);
-            arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +objs[i].lvlcontent+ "</th><th>" +objs[i].cate_name+ "</th><th>" +objs[i].eqpt_site+ "</th></tr>";
-            console.dir(objs[i]);
+            var dates = DateToTime(alarms[i].alarm_time);
+            arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +alarms[i].lvlcontent+ "</th><th>" +alarms[i].cate_name+ "</th><th>" +alarms[i].eqpt_site+ "</th></tr>";
+            console.dir(alarms[i]);
         }
         arrs += "</tbody>";
-
-
-
         $("#appends").replaceWith(arrs);//重写如页面
-        console.log(arrs);
+        // console.log(arrs);
         arrs = '';
+
+        let alarmoption = {
+            series : [
+                {
+                    data: alarmnum,
+                }
+            ]
+        };
+
+        callIcon.setOption(alarmoption);
 
     });
     // 后端推送来在线数据时
