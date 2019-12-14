@@ -25,6 +25,10 @@ Route::get('patrol/get_patrol_json', 'api/patrol/get_patrol_json')->allowCrossDo
 
 Route::get('patrol/get_user_position', 'api/patrol/get_user_position')->allowCrossDomain();
 
+Route::get('patrol/patrol_logs', 'api/patrol/patrol_logs')->allowCrossDomain();
+Route::get('patrol/patrols', 'api/patrol/patrols')->allowCrossDomain();
+Route::get('patrol/patroling', 'api/patrol/patroling')->allowCrossDomain();
+
 
 
 Route::get('real/real_time', 'api/real/real_time')->allowCrossDomain();
@@ -38,6 +42,8 @@ Route::get('bigdata/get_sites', 'api/bigdata/get_sites')->allowCrossDomain();
 Route::get('bigdata/enter_datas', 'api/bigdata/enter_datas')->allowCrossDomain();
 Route::get('bigdata/enter_details', 'api/bigdata/enter_details')->allowCrossDomain();
 Route::post('bigdata/send_ws', 'api/bigdata/send_ws')->allowCrossDomain();
+Route::get('bigdata/alarms_list', 'api/bigdata/alarms_list')->allowCrossDomain();
+Route::get('bigdata/alarms_chart', 'api/bigdata/alarms_chart')->allowCrossDomain();
 
 Route::any('bigdata/real_alarm', 'api/bigdata/real_alarm')->allowCrossDomain();
 

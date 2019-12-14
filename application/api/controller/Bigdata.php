@@ -261,13 +261,85 @@ class Bigdata extends Common
                 ->limit(10)
                 ->order('alarm_time desc,id desc')
                 ->select();
+
+            $alarmdata['alarms'] = $alarms;
+
+            $nums = db('alarmrecs')
+                ->alias('a')
+                ->join('alarmlvl l','a.alarmlevel = l.level')
+                ->field('l.lvlcontent,count(a.id) count')
+                ->group('alarmlevel')
+                ->select();
+            $cates = db('alarmlvl')->field('lvlcontent')->select();
+            foreach ($nums as $num) {
+                $numarr[] = $num['lvlcontent'];
+                $numdata[$num['lvlcontent']] = $num['count'];
+            }
+            // 判断赋值  生成二维数组
+            foreach ($cates as $cate) {
+                $arr = [];
+                if(in_array($cate['lvlcontent'],$numarr)){
+                    $arr['name'] = $cate['lvlcontent'];
+                    $arr['value'] = $numdata[$cate['lvlcontent']];
+
+                }else{
+                    $arr['name'] = $cate['lvlcontent'];
+                    $arr['value'] = 0;
+                }
+                $alarmnum[] = $arr;
+            }
+            $alarmdata['alarmnum'] = $alarmnum;
 //            $alarms = db('alarmrecs')->field('id,alarm_time,cate_code,alarmlevel')->limit(10)->order('alarm_time desc,id desc')->select();
-            $this->send_ws($alarms);
+            $this->send_ws($alarmdata);
             $this->return_msg(200, '实时报警上传成功!', $alarms);
         }
         $this->return_msg(400, '实时报警上传失败!', '');
 //        dump($callback);
 //
+    }
+
+    public function alarms_list()
+    {
+        $limit = $this->request->param('limit/d', 10);
+        $page = $this->request->param('page/d', 1);
+        $alarms = db('alarmrecs')
+            ->alias('a')
+            ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
+            ->join('categorys c','a.cate_code = c.id','LEFT')
+            ->field('a.id,a.alarm_time,a.cate_code,c.cate_name,a.eqpt_site,a.zone,l.lvlcontent')
+            ->page($page, $limit)
+            ->order('alarm_time desc')
+            ->select();
+        $this->return_msg(200,'报警列表获取成功！',$alarms);
+    }
+
+    public function alarms_chart()
+    {
+        $nums = db('alarmrecs')
+            ->alias('a')
+            ->join('alarmlvl l','a.alarmlevel = l.level')
+            ->field('l.lvlcontent,count(a.id) count')
+            ->group('alarmlevel')
+            ->select();
+        $cates = db('alarmlvl')->field('lvlcontent')->select();
+        foreach ($nums as $num) {
+            $numarr[] = $num['lvlcontent'];
+            $numdata[$num['lvlcontent']] = $num['count'];
+        }
+        // 判断赋值  生成二维数组
+        foreach ($cates as $cate) {
+            $arr = [];
+            if(in_array($cate['lvlcontent'],$numarr)){
+                $arr['name'] = $cate['lvlcontent'];
+                $arr['value'] = $numdata[$cate['lvlcontent']];
+
+            }else{
+                $arr['name'] = $cate['lvlcontent'];
+                $arr['value'] = 0;
+            }
+            $alarmnum[] = $arr;
+        }
+        $this->return_msg(200,'报警图表数据获取成功！',$alarmnum);
     }
 
     public function send_ws($content){

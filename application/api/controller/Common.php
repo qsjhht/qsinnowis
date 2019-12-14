@@ -42,6 +42,12 @@ class Common extends Controller
             ),
             'get_user_position' => array(
             ),
+            'patrol_logs' => array(
+            ),
+            'patrols' => array(
+            ),
+            'patroling' => array(
+            ),
         ),
         'Real'    => array(
             'real_time' => array(
@@ -87,7 +93,11 @@ class Common extends Controller
                 'app_key' => 'require',  //报警位置  文字说明
                 'format' => 'require',  //报警位置  文字说明
                 'sign' => 'require',
-            )
+            ),
+            'alarms_list' => array(
+            ),
+            'alarms_chart' => array(
+            ),
         ),
 
     );
