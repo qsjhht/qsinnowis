@@ -129,6 +129,21 @@
           ::-webkit-scrollbar{
               display: none;
           }
+
+          .patrolTob{
+              width:90%;
+              height:10vh;
+              margin:0 auto;
+              position:relative;
+              top:-10px;
+              overflow-y: auto;
+              visibility: hidden;
+              display: none;
+          }
+          .isshow{
+              visibility: visible;
+              display: block;
+          }
      </style>
 </head>
 <body class="backg">
@@ -340,28 +355,32 @@
                    </div>
                </div>
                <div class='bottomRight'>
-                    <div class="contentTop2 mainBor">
-                         <div class="robot">
-                              巡查巡检
-                              <ul class="borUl">
-                                   <li class="borPatrol borUlClass" onclick="stocks()">已完成</li>
-                                   <li class="borPatrol" onclick="underway()">进行中</li>
-                                   <!--<li class="borPatrol" onclick="contract()">待执行</li>-->
-                              </ul>
-                         </div>
-                         <div class="robotTob scrollber" style="height: 82px">
-                             <table class="robotToble">
-                                 {volist name="Patrols" id="vo"}
-                                 <tr>
-                                     <th>{$vo.log_date}</th>
-                                     <th>{$vo.str_name}</th>
-                                     <th>{$vo.user_names}</th>
-                                 </tr>
-                                 {/volist}
+                   <div class="contentRobot mainBor">
+                       <div class="robot">
+                           巡查巡检
+                           <ul class="borUl">
+                               <li class="borPatrol borUlClass" id="one">已完成</li>
+                               <li class="borPatrol" id="two">进行中</li>
+                               <li class="borPatrol" id="three">待执行</li>
+                           </ul>
+                       </div>
+                       <div class="patrolTob scrollber one isshow">
+                           <table class="robotToble" id="patrol_logs">
 
-                             </table>
-                         </div>
-                    </div>
+
+                           </table>
+                       </div>
+                       <div class="patrolTob scrollber two">
+                           <table class="robotToble" id="patroling">
+
+                           </table>
+                       </div>
+                       <div class="patrolTob scrollber three">
+                           <table class="robotToble" id="patrols">
+
+                           </table>
+                       </div>
+                   </div>
                     <div class="contentBottom2 mainBor marginTop" id="botUse"></div>
                </div>
           </div>
@@ -369,6 +388,114 @@
      </div>
      <script src="__STATIC__/new/gis/socket.io.js"></script>
      <script>
+         patrol_reload();
+        //巡查巡检 标签切换
+         $('.borPatrol').click(function(){
+
+             var id= $(this).attr('id');
+             $('.borPatrol').removeClass('borUlClass');
+             $(this).addClass('borUlClass');
+             if ( id == 'one')
+             {
+                 $('.patrolTob').removeClass('isshow');
+                 $(".one").addClass('isshow');
+             }
+             if ( id == 'two')
+             {
+                 $('.patrolTob').removeClass('isshow');
+                 $(".two").addClass('isshow');
+             }
+             if ( id == 'three')
+             {
+                 $('.patrolTob').removeClass('isshow');
+                 $(".three").addClass('isshow');
+             }
+         });
+
+         //ajax 获取 巡检数据 局部更新数据
+        function patrol_reload() {
+            console.dir('reload');
+            $.post('http://192.168.10.18/patrol/patrol_reload',/* { 'patrols_limit': 1,'patrol_logs_limit':1},*/ function(data) {
+                //layer.msg(data.msg);
+                data = JSON.parse(data);
+                if (data.code == 200) {
+                    // console.dir(data.data.patrols);
+
+
+                    let patrol_logs = data.data.patrol_logs;
+                    let patroling = data.data.patroling;
+                    let patrols = data.data.patrols;
+
+                    let patrols_arr = "<table class='robotToble' id='patrols'>";
+                    let patroling_arr = "<table class='robotToble' id='patroling'>";
+                    let patrol_logs_arr = "<table class='robotToble' id='patrol_logs'>";
+                    if(patrols.length !== 0){
+                        // console.dir(objs);
+                        for (var i in patrols) {
+                            patrols_arr +=  "<tr><th>" +patrols[i].create_date.substr(5,11)+ "</th><th>" +patrols[i].name+ "</th><th>" +patrols[i].check_user+  "</th></tr>";
+                            // console.dir(alarms[i]);
+                        }
+                    }else{
+                        patrols_arr += "<tr><th>暂无数据</th></tr>";
+                    }
+                    if(patroling.length !== 0){
+                        // console.dir(objs);
+                        for (var i in patroling) {
+                            patroling_arr +=  "<tr><th>" +patrol_logs[i].check_start_time.substr(5,11)+ "</th><th>" +patroling[i].name+  "</th><th>" +patroling[i].check_user+  "</th></tr>";
+                            // console.dir(alarms[i]);
+                        }
+                    }else{
+                        patroling_arr += "<tr><th>暂无数据</th></tr>";
+                    }
+                    if(patrol_logs.length !== 0){
+                        // console.dir(objs);
+                        for (var i in patrol_logs) {
+                            patrol_logs_arr +=  "<tr><th>" +patrol_logs[i].check_start_time.substr(5,11)+ "</th><th>" +patrol_logs[i].name+  "</th><th>" +patrol_logs[i].check_user+  "</th></tr>";
+                        }
+                    }else{
+                        patrol_logs_arr += "<tr><th>暂无数据</th></tr>";
+                    }
+
+                    patrols_arr += "</table>";
+                    patroling_arr += "</table>";
+                    patrol_logs_arr += "</table>";
+                    $("#patrols").replaceWith(patrols_arr);//重写如页面
+                    $("#patroling").replaceWith(patroling_arr);//重写如页面
+                    $("#patrol_logs").replaceWith(patrol_logs_arr);//重写如页面
+
+                    // console.dir(patrols_arr);
+                    // console.dir(patroling_arr);
+                    // console.dir(patrol_logs_arr);
+                    // console.dir(objs);
+
+
+
+
+
+
+                    // if (data.url) {
+                    //     layer.msg(data.msg + ' 页面即将自动跳转~');
+                    // } else {
+                    //     layer.msg(data.msg);
+                    // }
+                    // setTimeout(function() {
+                    //     if (data.url) {
+                    //         location.href = data.url;
+                    //     } else {
+                    //         location.reload();
+                    //     }
+                    // }, 1500);
+                } else {
+                    console.dir(data.msg);
+                    // layer.msg(data.msg + ' 页面即将自动刷新~');
+                    // setTimeout(function() {
+                    //     location.reload();
+                    // }, 1000);
+                }
+
+            });
+        }
+
 
          // 报警类型
          var callIcon = echarts.init(document.getElementById('callIcon'));
@@ -383,37 +510,39 @@
              socket.emit('login', uid);
          });
          // 后端推送来消息时
-         // 后端推送来消息时
          socket.on('new_msg', function(msg){
-             var arrs = "<tbody id='appends'>";
-             var objs =  eval('('+msg+')');
-             // console.dir(objs);
-             let alarms = objs.alarms;
-             let alarmnum= objs.alarmnum;
-             for (var i in alarms) {
-                 /*var o={};
-                 o[i]=array[i];
-                 arrDate.push(o);*/
-                 var dates = DateToTime(alarms[i].alarm_time);
-                 arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +alarms[i].lvlcontent+ "</th><th>" +alarms[i].cate_name+ "</th><th>" +alarms[i].zone+ "</th></tr>";
-                 // console.dir(alarms[i]);
+             let objs =  eval('('+msg+')');
+             if(objs.reload){
+                 patrol_reload();
+             }else{
+                 let arrs = "<tbody id='appends'>";
+                 // console.dir(objs);
+                 let alarms = objs.alarms;
+                 let alarmnum= objs.alarmnum;
+                 for (var i in alarms) {
+                     /*var o={};
+                     o[i]=array[i];
+                     arrDate.push(o);*/
+                     var dates = DateToTime(alarms[i].alarm_time);
+                     arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +alarms[i].lvlcontent+ "</th><th>" +alarms[i].cate_name+ "</th><th>" +alarms[i].zone+ "</th></tr>";
+                     // console.dir(alarms[i]);
+                 }
+                 arrs += "</tbody>";
+
+                 $("#appends").replaceWith(arrs);//重写如页面
+                 // console.log(arrs);
+                 arrs = '';
+
+                 let alarmoption = {
+                     series : [
+                         {
+                             data: alarmnum,
+                         }
+                     ]
+                 };
+
+                 callIcon.setOption(alarmoption);
              }
-             arrs += "</tbody>";
-
-             $("#appends").replaceWith(arrs);//重写如页面
-             // console.log(arrs);
-             arrs = '';
-
-             let alarmoption = {
-                 series : [
-                     {
-                         data: alarmnum,
-                     }
-                 ]
-             };
-
-             callIcon.setOption(alarmoption);
-
          });
          // 后端推送来在线数据时
          socket.on('update_online_count', function(online_stat){
@@ -578,7 +707,7 @@
                      }
 
                  });
-                 /*$.ajax({url:'http://localhost:8888/bigdata/date'
+                 /*$.ajax({url:'http://10.3.100.8/bigdata/date'
                      ,type: 'GET'
                     ,dataType:'json'
                      ,async:false
@@ -656,7 +785,7 @@
              protocol: window.location.protocol, //'http:' or 'https:'
              host: '192.168.10.18:8080', //'localhost:8080'
              rootpath:'/', // '/' or window.location.pathname
-             token:'9d51',
+             token:'2a1a',
              streamprofile: 'sub',
              hlsver:'v1', //v1 is for ts, v2 is for fmp4
              session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
