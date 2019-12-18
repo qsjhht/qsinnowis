@@ -250,56 +250,18 @@
                     </ul>
                 </div>
                 <div class="patrolTob scrollber one isshow">
-                    <table class="robotToble">
-                        {if $Patrol_logs}
-                        {volist name="Patrol_logs" id="vo"}
-                        <tr>
-                            <th>{$vo.check_start_time} -- {$vo.check_end_time}</th>
-                            <th>{$vo.name}</th>
-                            <th>{$vo.check_user}</th>
-                        </tr>
-                        {/volist}
-                        {else/}
-                        <tr>
-                            <th>暂无数据</th>
-                        </tr>
-                        {/if}
+                    <table class="robotToble"  id="patrol_logs">
+
 
                     </table>
                 </div>
                 <div class="patrolTob scrollber two">
-                    <table class="robotToble">
-                        {if $Patroling}
-                        {volist name="Patroling" id="vo"}
-                        <tr>
-                            <th>{$vo.check_start_time}</th>
-                            <th>{$vo.name}</th>
-                            <th>{$vo.check_user}</th>
-                        </tr>
-                        {/volist}
-                        {else/}
-                        <tr>
-                            <th>暂无数据</th>
-                        </tr>
-                        {/if}
+                    <table class="robotToble" id="patroling">
+
                     </table>
                 </div>
                 <div class="patrolTob scrollber three">
-                    <table class="robotToble">
-                        {if $Patrols}
-                        {volist name="Patrols" id="vo"}
-                        <tr>
-                            <th>{$vo.create_date}</th>
-                            <th>{$vo.name}</th>
-                            <th>{$vo.check_user}</th>
-                        </tr>
-                        {/volist}
-                        {else/}
-                        <tr>
-                            <th>暂无数据</th>
-                        </tr>
-                        {/if}
-
+                    <table class="robotToble" id="patrols">
 
                     </table>
                 </div>
@@ -311,8 +273,9 @@
     </div>
 </body>
 <script src="__STATIC__/new/itemJS/demoThree.js"></script>
+<script src="__STATIC__/new/gis/socket.io.js"></script>
 <script>
-
+    patrol_reload();
     var myChart = echarts.init(document.getElementById('main'));
 
     var labelRight = {
@@ -454,6 +417,113 @@
             $(".three").addClass('isshow');
         }
     })
+
+    // 连接服务端，workerman.net:2120换成实际部署web-msg-sender服务的域名或者ip
+    var socket = io('http://192.168.10.18:2120');
+    // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
+    var uid = '2333';
+    // console.dir(uid);
+    // socket连接后以uid登录
+    socket.on('connect', function(){
+        socket.emit('login', uid);
+    });
+    // 后端推送来消息时
+    socket.on('new_msg', function(msg){
+        let objs =  eval('('+msg+')');
+        if(objs.reload){
+            patrol_reload();
+        }else{
+        }
+    });
+    // 后端推送来在线数据时
+    socket.on('update_online_count', function(online_stat){
+        console.log(online_stat);
+    });
+    //ajax 获取 巡检数据 局部更新数据
+    function patrol_reload() {
+        console.dir('reload');
+        $.post('http://192.168.10.18/patrol/patrol_reload',/* { 'patrols_limit': 1,'patrol_logs_limit':1},*/ function(data) {
+            //layer.msg(data.msg);
+            data = JSON.parse(data);
+            if (data.code == 200) {
+                // console.dir(data.data.patrols);
+
+
+                let patrol_logs = data.data.patrol_logs;
+                let patroling = data.data.patroling;
+                let patrols = data.data.patrols;
+
+                let patrols_arr = "<table class='robotToble' id='patrols'>";
+                let patroling_arr = "<table class='robotToble' id='patroling'>";
+                let patrol_logs_arr = "<table class='robotToble' id='patrol_logs'>";
+                if(patrols.length !== 0){
+                    // console.dir(objs);
+                    for (var i in patrols) {
+                        patrols_arr +=  "<tr><th>" +patrols[i].create_date.substr(5,11)+ "</th><th>" +patrols[i].name+ "</th><th>" +patrols[i].check_user+  "</th></tr>";
+                        // console.dir(alarms[i]);
+                    }
+                }else{
+                    patrols_arr += "<tr><th>暂无数据</th></tr>";
+                }
+                if(patroling.length !== 0){
+                    // console.dir(objs);
+                    for (var i in patroling) {
+                        patroling_arr +=  "<tr><th>" +patrol_logs[i].check_start_time.substr(5,11)+ "</th><th>" +patroling[i].name+  "</th><th>" +patroling[i].check_user+  "</th></tr>";
+                        // console.dir(alarms[i]);
+                    }
+                }else{
+                    patroling_arr += "<tr><th>暂无数据</th></tr>";
+                }
+                if(patrol_logs.length !== 0){
+                    // console.dir(objs);
+                    for (var i in patrol_logs) {
+                        patrol_logs_arr +=  "<tr><th>" +patrol_logs[i].check_start_time.substr(5,11)+ "</th><th>" +patrol_logs[i].name+  "</th><th>" +patrol_logs[i].check_user+  "</th></tr>";
+                    }
+                }else{
+                    patrol_logs_arr += "<tr><th>暂无数据</th></tr>";
+                }
+
+                patrols_arr += "</table>";
+                patroling_arr += "</table>";
+                patrol_logs_arr += "</table>";
+                $("#patrols").replaceWith(patrols_arr);//重写如页面
+                $("#patroling").replaceWith(patroling_arr);//重写如页面
+                $("#patrol_logs").replaceWith(patrol_logs_arr);//重写如页面
+
+                // console.dir(patrols_arr);
+                // console.dir(patroling_arr);
+                // console.dir(patrol_logs_arr);
+                // console.dir(objs);
+
+
+
+
+
+
+                // if (data.url) {
+                //     layer.msg(data.msg + ' 页面即将自动跳转~');
+                // } else {
+                //     layer.msg(data.msg);
+                // }
+                // setTimeout(function() {
+                //     if (data.url) {
+                //         location.href = data.url;
+                //     } else {
+                //         location.reload();
+                //     }
+                // }, 1500);
+            } else {
+                console.dir(data.msg);
+                // layer.msg(data.msg + ' 页面即将自动刷新~');
+                // setTimeout(function() {
+                //     location.reload();
+                // }, 1000);
+            }
+
+        });
+    }
+
+
     if (H5siOS() === true
         || H5sSafariBrowser() === true)
     {
@@ -510,7 +580,7 @@
         protocol: window.location.protocol, //'http:' or 'https:'
         host: '192.168.10.18:8080', //'localhost:8080'
         rootpath:'/', // '/' or window.location.pathname
-        token:'9d51',
+        token:'2a1a',
         streamprofile: 'sub',
         hlsver:'v1', //v1 is for ts, v2 is for fmp4
         session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
