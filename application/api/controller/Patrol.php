@@ -50,9 +50,10 @@ class Patrol extends Common
         //$myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
 //        unset($data['/patrol/data']);
         $txt =  json_encode($data,JSON_UNESCAPED_UNICODE);
-        $str =  str_replace('"',"'",$txt);
 
-        $this->send_msg($str);
+        $reload['reload'] = true;
+        $this->send_msg($data,'222');
+        $this->send_msg($reload,'2333');
         /*$url = 'http://192.168.0.243:9001';
         $type['type'] = '1';
         $type = json_encode($type);
@@ -80,7 +81,6 @@ class Patrol extends Common
 
 
 
-        $to_uid = "";
 
         // 推送的url地址，使用自己的服务器地址
 
@@ -175,12 +175,14 @@ class Patrol extends Common
     }
 
     //发送消息
-    protected function send_msg($txt,$to_uid=''){
+    protected function send_msg($content,$to_uid='2333'){
+        $content = json_encode($content,JSON_UNESCAPED_UNICODE);
+        $content =  str_replace('"',"'",$content);
         $push_api_url = "http://192.168.10.18:2121/";
         $post_data = array(
             "type" => "publish",
-            "content" => $txt,
-            "to" => '222',
+            "content" => $content,
+            "to" => $to_uid,
         );
         $ch = curl_init ();
         curl_setopt ( $ch, CURLOPT_URL, $push_api_url );
@@ -212,17 +214,20 @@ class Patrol extends Common
         return $return;
     }
 
+    //巡查巡检记录
     public function patrol_logs()
     {
         $limit = $this->request->param('limit/d', 10);
         $page = $this->request->param('page/d', 1);
         $datas = Db::connect('sqlsrv_config')
             ->table('check_record_ending')
+            ->order('check_start_time','desc')
             ->page($page, $limit)
             ->select();
         echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
     }
 
+    //待巡查巡检任务
     public function patrols()
     {
         $limit = $this->request->param('limit/d', 10);
@@ -234,15 +239,49 @@ class Patrol extends Common
         echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
     }
 
+    //正在巡检的任务
     public function patroling()
     {
         $limit = $this->request->param('limit/d', 10);
         $page = $this->request->param('page/d', 1);
         $datas = Db::connect('sqlsrv_config')
             ->table('check_record_starting')
+            ->order('check_start_time','desc')
             ->page($page, $limit)
             ->select();
         echo json_encode($datas,JSON_UNESCAPED_UNICODE);die;
     }
 
+    public function patrol_reload()
+    {
+        $patrol_logs_limit = $this->request->param('patrol_logs_limit/d', 10);
+        $patrol_logs_page = $this->request->param('patrol_logs_page/d', 1);
+        $patrol_logs = Db::connect('sqlsrv_config')
+            ->table('check_record_ending')
+            ->order('check_start_time','desc')
+            ->page($patrol_logs_page, $patrol_logs_limit)
+            ->select();
+        $patrols_limit = $this->request->param('patrols_limit/d', 10);
+        $patrols_page = $this->request->param('patrols_page/d', 1);
+        $patrols = Db::connect('sqlsrv_config')
+            ->table('check_record_not_Start')
+            ->page($patrols_page, $patrols_limit)
+            ->select();
+        $patroling_limit = $this->request->param('patroling_limit/d', 10);
+        $patroling_page = $this->request->param('patroling_page/d', 1);
+        $patroling = Db::connect('sqlsrv_config')
+            ->table('check_record_starting')
+            ->order('check_start_time','desc')
+            ->page($patroling_page, $patroling_limit)
+            ->select();
+
+        if($patrol_logs || $patrols || $patroling){
+            $data['patrol_logs'] = $patrol_logs;
+            $data['patrols'] = $patrols;
+            $data['patroling'] = $patroling;
+            $this->return_msg(200, '查询成功！',$data);
+        }
+        $this->return_msg(400, '查询失败！',$data);
+
+    }
 }
