@@ -48,6 +48,8 @@ class Common extends Controller
             ),
             'patroling' => array(
             ),
+            'patrol_reload' => array(
+            ),
         ),
         'Real'    => array(
             'real_time' => array(
