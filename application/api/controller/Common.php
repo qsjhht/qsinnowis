@@ -77,6 +77,8 @@ class Common extends Controller
             ),
             'get_sites' => array(
             ),
+            'get_sites_hk' => array(
+            ),
             'enter_datas' => array(
             ),
             'enter_details' => array(
@@ -91,7 +93,7 @@ class Common extends Controller
                 'alarm_code' => 'require|number', //报警编码  对应报警内容
                 'alarm_manage' => 'require|number',  //处置方法  对应各自系统
                 'eqpt_site' => 'require',  //报警位置  文字说明
-                'zone' => 'require',  //报警位置  编号
+//                'zone' => 'require',  //报警位置  编号
                 'app_key' => 'require',  //报警位置  文字说明
                 'format' => 'require',  //报警位置  文字说明
                 'sign' => 'require',
