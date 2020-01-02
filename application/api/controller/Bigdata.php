@@ -178,6 +178,16 @@ class Bigdata extends Common
         $this->return_msg(200, '获取成功!',$sites_data);
     }
 
+    //获取防火分区数据
+    public function get_sites_hk()
+    {
+        $sites_data = $this->Patrol->getSites_hk();
+        if(!$sites_data){
+            $this->return_msg(400, '获取失败!','');
+        }
+        $this->return_msg(200, '获取成功!',$sites_data);
+    }
+
     //获取企业信息
     public function enter_datas()
     {
@@ -248,7 +258,10 @@ class Bigdata extends Common
         }else{
             $this->params['is_manage'] = '1';
         }
-        $this->params['alarm_time'] = strtotime($this->params['alarm_time']);
+        if(is_string($this->params['alarm_time'])){
+            $this->params['alarm_time'] = strtotime($this->params['alarm_time']);
+        }
+
         $lvl = db('categorys')->field('alarm_lvl')->where('id',$this->params['cate_code'])->find();
         $this->params['alarmlevel'] = $lvl['alarm_lvl'];
         $res = Db('alarmrecs')->strict(false)->insert($this->params);
