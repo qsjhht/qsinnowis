@@ -39,6 +39,7 @@ Route::get('real/get_last_real', 'api/real/get_last_real')->allowCrossDomain();
 Route::get('bigdata/date', 'api/bigdata/date')->allowCrossDomain();
 Route::get('bigdata/get_data', 'api/bigdata/get_data')->allowCrossDomain();
 Route::get('bigdata/get_sites', 'api/bigdata/get_sites')->allowCrossDomain();
+Route::get('bigdata/get_sites_hk', 'api/bigdata/get_sites_hk')->allowCrossDomain();
 Route::get('bigdata/enter_datas', 'api/bigdata/enter_datas')->allowCrossDomain();
 Route::get('bigdata/enter_details', 'api/bigdata/enter_details')->allowCrossDomain();
 Route::post('bigdata/send_ws', 'api/bigdata/send_ws')->allowCrossDomain();
