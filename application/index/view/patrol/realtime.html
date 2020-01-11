@@ -45,6 +45,27 @@
     ::-webkit-scrollbar{
          display: none;
     }
+    .parent {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-column-gap: 2px;
+        grid-row-gap: 2px;
+        width: 48.2%;
+        height: 100%;
+    }
+
+    .div1 { grid-area: 1 / 1 / 2 / 2; }
+    .div2 { grid-area: 1 / 2 / 2 / 3; }
+    .div3 { grid-area: 2 / 1 / 3 / 2; }
+    .div4 { grid-area: 2 / 2 / 3 / 3; }
+    .div5 { grid-area: 3 / 1 / 4 / 2; }
+    .div6 { grid-area: 3 / 2 / 4 / 3; }
+    .flexs{
+        display: flex;
+        justify-content: center;
+        align-items:center;
+    }
 </style>
 <body class="backg" style="overflow: auto">
 
@@ -154,38 +175,63 @@
                     <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
                 </div>
             </div>
-            <div class="main2Con">
-                <div class="divWidth flex">
-                    <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
-                    <div class="divWidthInput">
-                        灯组一</br>
-                        <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
-                    </div>
+            <div class="parent">
+                <div class="div1 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_01" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            普通照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="01" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
                 </div>
-                <div class="divWidth flex" style="border-top:1px dashed #ffffff">
-                    <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
-                    <div class="divWidthInput">
-                        灯组三</br>
-                        <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
-                    </div>
+                <div class="div2 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_02" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            应急照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="02" class="switch_lamp" lay-filter="switch_lamp">
+
+                        </div>
+                </div>
+                <div class="div3 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_03" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            安全照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="03" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
+                </div>
+                <div class="div4 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_04" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            全部照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="04" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
+                </div>
+                <div class="div5 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_05" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            过渡普通照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="05" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
+                </div>
+                <div class="div6 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_06" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            过渡应急照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="06" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
                 </div>
             </div>
-            <div class="main2Con" style="border-left:1px dashed #ffffff">
-                <div class="divWidth flex">
-                    <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2 "/>
-                    <div class="divWidthInput">
-                        灯组二</br>
-                        <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
-                    </div>
-                </div>
-                <div class="divWidth flex" style="border-top:1px dashed #ffffff">
-                    <img src="__STATIC__/new/image/c15.png" alt="当前没有图片" class="evirImg2"/>
-                    <div class="divWidthInput">
-                        灯组四</br>
-                        <input type="checkbox"  lay-skin="switch" lay-text="ON|OFF">
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
     <div class="evirMain evirMain1" style="flex-wrap:wrap">
@@ -222,15 +268,19 @@
 
 <script>
     var zone1 = '';
+    var form,zoneone,lampname;
     let evirImg = document.getElementsByClassName('evirImg');
     layui.config({
         base: '__STATIC__/interact/js/',
     })
-    layui.use(['table','laydate','form','interact'], function(){
+    layui.use(['table','laydate','form','interact','layer'], function(){
         var table = layui.table,
             interact = layui.interact,
             $ = layui.jquery,
-            form = layui.form;
+
+            layer = layui.layer;
+        form = layui.form;
+
         var site_data = JSON.parse($('#sitesdata').val());
         var site_hk = JSON.parse($('#sitehk').val());
         // console.dir(site_data);
@@ -248,6 +298,95 @@
                 evirImg[1].classList.remove('evirImgKey')
             }
         })
+        form.on('switch(switch_lamp)', function(obj){
+            //layer.tips(this.name + '：'+ obj.elem.checked, obj.othis);
+            // console.dir(this.name);
+            // console.dir(this.id);
+            var id = this.id;
+            var status;
+            var status = obj.elem.checked ? status="1" : status="0";
+            // var status = eval(obj.elem.checked);
+
+            if(zone1){
+
+                //获取分区信息 转换小写 去掉/
+                // let zoneone = zone1.replace('/','')/*.toLowerCase()*/;
+                // console.dir(zoneone);
+                // console.log(id);
+                lampname = zoneone+'_'+ id+'_C';
+
+                console.dir(lampname);
+                console.log(status);
+                let lamp = '{"'+lampname+'":"'+status+'"}';
+                $.get('http://10.3.100.7:1234/write',{ 'tags': lamp}, function(res) {
+                    res = JSON.parse(res);
+                    if(res.code == '200'){
+                        layer.msg('成功！');
+                        if(id == '04'){
+                            var btns = $('.switch_lamp');
+                            var lampimgs = $('.evirImg2');
+                            // btns.each(function(i, btn) {
+                            btns.attr('checked',obj.elem.checked);
+                            console.dir(obj.elem.checked);
+                            if(obj.elem.checked){
+                                lampimgs.attr("src", '__STATIC__/new/image/lamp-on.png');
+                            }else{
+                                lampimgs.attr("src", '__STATIC__/new/image/lamp-off.png');
+                            }
+                            form.render('checkbox');
+                            // });
+                        }else{
+                            if(obj.elem.checked){
+                                $("#lamp_" + id + "").attr("src", '__STATIC__/new/image/lamp-on.png');
+                            }else{
+                                $("#lamp_" + id + "").attr("src", '__STATIC__/new/image/lamp-off.png');
+                            }
+                        }
+
+                    }else{
+                        obj.elem.checked = obj.elem.checked ? false : true;
+
+                        layer.msg('失败！');
+                        form.render('checkbox');
+                    }
+
+                });
+
+            }else{
+                layer.msg('请先选择防火分区后再进行操作！');
+
+            }
+
+
+
+
+            // var loding = layer.load(0);
+            // $.post('{:url("eqpt_management/changestatus")}', { 'id': id,'status':status}, function(data) {
+            //     console.log(data);
+            //     if (data.code == 1) {
+            //         if (data.url) {
+            //             layer.close(loding);
+            //             layer.msg(data.msg + ' 页面即将自动刷新~');
+            //         } else {
+            //             layer.close(loding);
+            //             layer.msg(data.msg);
+            //         }
+            //         setTimeout(function() {
+            //             if (data.url) {
+            //                 location.href = data.url;
+            //             } else {
+            //                 location.reload();
+            //             }
+            //         }, 1500);
+            //     } else {
+            //         layer.close(loding);
+            //         layer.msg(data.msg);
+            //         setTimeout(function() {
+            //             location.reload();
+            //         }, 1500);
+            //     }
+            // });
+        });
         interact.render({
             elem : '.test',
             // url : '{:url("index/patrol/sitesdata")}',
@@ -262,7 +401,10 @@
             $(".evirEchart").hide();
             $(".evirSelect").hide();
         //监听选择select选择事件 使用lay-filter
+        var checkbox =$('input:checkbox');
+        checkbox.attr("disabled","disabled");
         interact.on('interact(test)',function(data){
+            // checkbox.attr("disabled",false);
             //判断text是否含有中文
             var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
             if(!reg.test(data.text)){
@@ -273,7 +415,7 @@
 
 
 
-
+                    // console.dir('undefined');
                     arrDate = [];
                     arrData = [];
                     zone = data.text;
@@ -294,6 +436,11 @@
                     }
 
                     zone1 = zone;
+
+                    //获取分区信息 转换小写 去掉/
+                    zoneone = zone1.replace('/','')/*.toLowerCase()*/;
+                    // console.dir(zoneone);
+                    get_lamp();
                     real_time(zone);
                     realtimes(zone);
                     lastdata(zone);
@@ -364,6 +511,7 @@
                     },60000)
 
                 }else{
+                    // console.dir(zone);
                     arrDate = [];
                     arrData = [];
                     // 删除旧定时器
@@ -388,7 +536,10 @@
                         zone_socket(did);
                     }
 
-
+                    //获取分区信息 转换小写 去掉/
+                    zoneone = zone.replace('/','')/*.toLowerCase()*/;
+                    // console.dir(zoneone);
+                    get_lamp();
                     real_time(zone);
                     realtimes(zone);
                     lastdata(zone);
@@ -494,6 +645,139 @@
         }
 
     });
+    function get_lamp() {
+        var btns = $('.switch_lamp');
+        let items='';
+        btns.each(function(i, btn) {
+            // console.dir(btn.id);
+            if(!isNaN(btn.id)){
+                items += zoneone+'_'+btn.id+'_S,';
+            }
+        });
+        let reg=/,$/gi;
+        items=items.replace(reg,"");
+        // console.dir(items);
+        $.get('http://10.3.100.7:1234/get',{ 'tags': items}, function(data) {
+            data = JSON.parse(data);
+            // console.dir(data);
+            if(data.code == '200'){
+                let datas = data.data;
+                console.dir('数组数组');
+                console.dir(datas.length);
+                if(datas.length !== 0){
+                    let hidenum = 0;
+                    jQuery.each(datas, function(i, val) {
+                        console.dir(val);
+                        for(var key in val){
+                            console.dir(key);
+                            matchResult = key.match(/_(\d+)_/)[1];
+
+                            console.dir(val[key]);
+
+                            if(val[key] !== "null"){
+                                vals = val[key] == 1 ? true : false;
+                                $("#" + matchResult + "").attr('checked',vals);
+                                console.dir('matchResult:'+matchResult);
+                                if(vals){
+                                    $("#lamp_" + matchResult + "").attr("src", '__STATIC__/new/image/lamp-on.png');
+                                }
+                                $("#" + matchResult + "").attr("disabled",false);
+                                $("#" + matchResult + "").parent().parent().show();
+                                console.dir(val[key]);
+                            }else{
+                                ++hidenum;
+
+                                $("#" + matchResult + "").parent().parent().hide();
+                                $("#" + matchResult + "").attr("disabled",'disabled');
+                            }
+
+                        }
+                    });
+                    // console.dir('asdfadsf');
+                    // console.dir(hidenum);
+                    if(hidenum == 5){
+                        $("#all_lamp").parent().parent().hide();
+                        $("#all_lamp").attr("disabled",'disabled');
+                    }else{
+                        $("#all_lamp").parent().parent().show();
+                        $("#all_lamp").attr("disabled",false);
+                    }
+                    form.render('checkbox');
+                    console.dir('render');
+                }else{
+                    console.dir('shuzu 0000000');
+                    $('.flexs').hide();
+                }
+
+                // hidenum = 0;
+            }
+
+            // console.dir(data);
+            // if(data.code == '200'){
+            //     datas = data.data;
+            //     // console.dir(datas);
+            //     $('#units').html(datas.date_num.substr(0,1));
+            //     $('#tens').html(datas.date_num.substr(1,1));
+            //     $('#hundreds').html(datas.date_num.substr(2,1));
+            //     $('#thousands').html(datas.date_num.substr(3,1));
+            //     if(datas.nickname !== ''){
+            //         $('#nickname').html(datas.nickname);
+            //     }
+            //     if(datas.person_num !== ''){
+            //         $('#person_num').html(datas.person_num);
+            //
+            //     }
+            //     $('#stime').html(datas.stime);
+            //     $('#etime').html(datas.etime);
+            //     element.progress('demo', datas.per);
+            // }else{
+            //     $('#stime').html('--');
+            //     $('#etime').html('--');
+            // }
+
+        });
+        // $("#01").attr('checked',true);
+        // $("#03").attr('checked',true);
+
+        // $("#01").prop("checked", "checked");
+        // $("#02").prop("checked", "checked");
+        // $("#03").prop("checked", "checked");
+        // $("#04").prop("checked","checked");
+        // console.dir($('#01'));
+        // console.dir($('#01').is(":checked"));
+
+        //     // url:realtime_IP+"/real/real_time?zone="+zones,
+        //     // url:"http://192.168.10.18/real/real_time?zone="+zones,
+        //     async:false,
+        //     success:function(result){
+        //         result = JSON.parse(result);
+        //         // console.dir(result);
+        //         var res={};
+        //         $.each(result,function(key,value){    //objTmp对象数据
+        //             value = parseFloat(value);
+        //             res[key] = value.toFixed(2);
+        //         });
+        //         // console.dir(res);
+        //         let list = document.querySelectorAll('.contentDiv');
+        //         var m = 0;
+        //         for(var i = 0; i < list.length; i++){
+        //             var key = list[i].dataset.name+'_'+zones;
+        //             var ids = list[i].dataset.name;
+        //
+        //
+        //             //console.dir(key);
+        //             if(typeof(res[key]) !== 'undefined'){
+        //                 document.getElementById(ids).innerText = res[key];
+        //             }else{
+        //                 m++;
+        //                 document.getElementById(ids).innerText = '----';
+        //             }
+        //         }
+        //         // console.dir(m);
+        //         //console.dir(result.PV_CH4_SL1SX01);
+        //     }
+        // });
+    }
     function real_time(zone){
         var zones = zone.replace('/','');
         var realtime_IP = $('#realtime_IP').val();
@@ -590,9 +874,9 @@
     function lastdata(zone,name) {
         zone=zone||'XC13/S';
         name=name||'T';
-        console.dir('lastdata sssssssssss');
-        console.dir(zone);
-        console.dir(name);
+        // console.dir('lastdata sssssssssss');
+        // console.dir(zone);
+        // console.dir(name);
         var zone = zone.replace('/','');
         var realtime_IP = $('#realtime_IP').val();
         // console.dir(zone);
@@ -608,8 +892,8 @@
                 // console.dir(result);
                 // console.dir(name);
                 let jsonObj = $.parseJSON(result);
-                console.dir(jsonObj);
-                console.dir('lastdata eeeeeeeeeeeeeee');
+                // console.dir(jsonObj);
+                // console.dir('lastdata eeeeeeeeeeeeeee');
                 objToArray(jsonObj,true);
                 // console.dir(arrDate);
             }
@@ -748,31 +1032,38 @@
         stayguyData = new Array(); // 拉线
         angle_X = new Array(); //角度-X
         angle_Y = new Array(); //角度-Y
-        zonenum = zonenum.replace(/\b(0+)/gi,"");
+        // zonenum = zonenum.replace(/\b(0+)/gi,"");
         // ajxa 使用
         const XML = new XMLHttpRequest();
         let url = `http://10.3.100.8:88/OpenPlatform/openApi?u=${username}&p=${userpass}&did=${did}&date=${getDate}`;
         XML.open('POST',url,false);
+
         XML.onreadystatechange = function(){
             if (XML.readyState == 4 && XML.status == 200) { //回传成功
+                // console.dir(url);
                 let evirData = JSON.parse(XML.responseText).result.data;
                 let device = JSON.parse(XML.responseText).result.device;
+                // console.dir(evirData);
+                // console.dir(device);
+                // console.dir(zonenum);
 
 
                 for(let i in device){
-                    if(device[i].name.search('#沉降'+zonenum) != -1){
+                    if(device[i].name.search(zonenum+'防火分区沉降') != -1){
                         code = device[i].code;
                         Datanum = getArrayIndex(evirData[0].data,code );
+                        // console.dir(code);
+                        // console.dir(Datanum);
                     }
-                    if(device[i].name.search('#拉线'+zonenum) != -1){
+                    if(device[i].name.search(zonenum+'防火分区拉线') != -1){
                         code = device[i].code;
                         stayguynum = getArrayIndex(evirData[0].data,code );
                     }
-                    if(device[i].name.search('#倾角'+zonenum+'-X') != -1){
+                    if(device[i].name.search(zonenum+'防火分区倾角X') != -1){
                         code = device[i].code;
                         Xnum = getArrayIndex(evirData[0].data,code );
                     }
-                    if(device[i].name.search('#倾角'+zonenum+'-Y') != -1){
+                    if(device[i].name.search(zonenum+'防火分区倾角Y') != -1){
                         code = device[i].code;
                         Ynum = getArrayIndex(evirData[0].data,code );
                     }
@@ -858,8 +1149,10 @@
             socketData = JSON.parse(e.data);  //报错
 
             if(socketData.deviceId == did){
+                // console.dir('tuisong ');
                 console.dir(did);
                 oo = socketData.date.substring(11,20);
+                // console.dir(oo);
                 // console.dir(socketData);
                 // console.dir(Datanum);
                 // console.dir(stayguynum);
@@ -871,7 +1164,7 @@
                     numData.push([oo,socketData.data[Datanum].data]);
                     numData.shift();
                     evirEchart('settling1','沉降数据（mm）', numData);
-                    console.dir(socketData.data[Datanum].data);
+                    // console.dir(socketData.data[Datanum].data);
                 }
 
 
@@ -880,20 +1173,20 @@
                     stayguyData.push([oo,socketData.data[stayguynum].data]);
                     stayguyData.shift();
                     evirEchart('settling2','拉线数据（mm）',stayguyData);
-                    console.dir(socketData.data[stayguynum].data);
+                    // console.dir(socketData.data[stayguynum].data);
                 }
 
                 if(Xnum >= 0){
                     angle_X.push([oo,socketData.data[Xnum].data])
                     angle_X.shift();
                     evirEchart('settling3','倾角-X（度）',angle_X);
-                    console.dir(socketData.data[Xnum].data);
+                    // console.dir(socketData.data[Xnum].data);
                 }
                 if(Ynum >= 0) {
                     angle_Y.push([oo, socketData.data[Ynum].data])
                     angle_Y.shift();
                     evirEchart('settling4', '倾角-Y（度）', angle_Y)
-                    console.dir(socketData.data[Ynum].data);
+                    // console.dir(socketData.data[Ynum].data);
                 }
 
             }

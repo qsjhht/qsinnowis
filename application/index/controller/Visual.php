@@ -39,7 +39,7 @@ class Visual extends Adminbase
             ->alias('a')
             ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
             ->join('categorys c','a.cate_code = c.id','LEFT')
-            ->field('a.id,a.alarm_time,c.cate_name,a.zone,l.lvlcontent')
+            ->field('a.id,a.alarm_time,c.cate_name,a.zone,l.lvlcontent,a.eqpt_site')
             ->limit(10)
             ->order('alarm_time desc,id desc')
             ->select();

@@ -238,7 +238,9 @@ class Bigdata extends Common
 //        $this->params['alarm_code'] = $this->request->param('alarm_code');
 //        $this->params['alarm_manage'] = $this->request->param('alarm_manage');
 //        $this->params['alarm_site'] = $this->request->param('alarm_site');
+
         $signs = $this->params['sign']; //提前转储 sign
+        dump($this->params);
         unset($this->params['sign']);   //生成sign前剔除 sign参数
         unset($this->params['bigdata']);   //生成sign前剔除 sign参数
         $callback = $this->asc_sort($this->params); //生成sign
@@ -246,8 +248,12 @@ class Bigdata extends Common
 
         $sign = strtoupper(md5($callback)); //sign对比
 //        $this->params['sign'];
-//        dump($callback);
-//        dump($sign);
+        dump('----------------------');
+        dump($callback);
+        dump('----------------------');
+        dump($sign);
+        dump('----------------------');
+        dump($signs);
 //        dump($this->params);
         if ($sign !== $signs){
             $this->return_msg(400, '参数错误!','');

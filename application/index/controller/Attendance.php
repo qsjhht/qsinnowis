@@ -159,8 +159,8 @@ class Attendance extends Adminbase
     public function check()
     {
         //$this->_userinfo['username'];$this->_userinfo['userid']
-        $d = strtotime(date('Y-m-d',time()));
-        $d2 = date('Y-m-d',strtotime('+1 day'));
+//        $d = strtotime(date('Y-m-d',time()));
+//        $d2 = date('Y-m-d',strtotime('+1 day'));
 
         $this->assign('Uid',$this->_userinfo['userid']);
         $this->assign('Uname',$this->_userinfo['nickname']);
@@ -265,6 +265,7 @@ class Attendance extends Adminbase
 //        }
 //        $this->assign('Info',$check);
         $work_plan = Db('work_plan')->field('user_ids,time_range')->select();
+
         $rang = '';
         foreach ($work_plan as $wp) {
            $wps =  explode(',',rtrim($wp['user_ids'],','));
@@ -275,15 +276,16 @@ class Attendance extends Adminbase
            }
         }
 
+        if($rang){
+
+
 
         $rangs = explode(' - ',$rang);
+
         $mtimer = explode(':',$rangs[0]);
         $ntimer = explode(':',$rangs[1]);
         $mtimer = mktime($mtimer[0],$mtimer[1],$mtimer[2]);
         $ntimer = mktime($ntimer[0],$ntimer[1],$ntimer[2]);
-        $this->assign('Time_range', $rang);
-        $this->assign('S_range', date("H:i:s",$mtimer - 3600) .'---'. date("H:i:s",$mtimer + 3600));
-        $this->assign('E_range', date("H:i:s",$ntimer - 3600) .'---'. date("H:i:s",$ntimer + 3600));
 
         // 查询
         $map1 = [
@@ -337,10 +339,26 @@ class Attendance extends Adminbase
                 $check['n_c'] = false;
             }
         }
-
-
-
         $this->assign('Info',$check);
+
+            $this->assign('Time_range', $rang);
+            $this->assign('S_range', date("H:i:s",$mtimer - 3600) .'---'. date("H:i:s",$mtimer + 3600));
+            $this->assign('E_range', date("H:i:s",$ntimer - 3600) .'---'. date("H:i:s",$ntimer + 3600));
+
+        }else{
+            $check['m_time'] = '无';
+            $check['n_time'] = '无';
+            $check['m_c'] = false;
+            $check['n_c'] = false;
+            $this->assign('Info',$check);
+            $rang = '无排班计划';
+            $this->assign('Time_range', $rang);
+            $this->assign('S_range', '无排班计划');
+            $this->assign('E_range', '无排班计划');
+
+        }
+
+
         return $this->fetch();
     }
 

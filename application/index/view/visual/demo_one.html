@@ -181,7 +181,7 @@
             console.dir('patrol_reload');
         }else{
             let arrs = "<tbody id='appends'>";
-            // console.dir(objs);
+            console.dir(objs);
             let alarms = objs.alarms;
             let alarmnum= objs.alarmnum;
             for (var i in alarms) {
@@ -189,7 +189,7 @@
                 o[i]=array[i];
                 arrDate.push(o);*/
                 var dates = DateToTime(alarms[i].alarm_time);
-                arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +alarms[i].lvlcontent+ "</th><th>" +alarms[i].cate_name+ "</th><th>" +alarms[i].zone+ "</th></tr>";
+                arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +alarms[i].lvlcontent+ "</th><th>" +alarms[i].cate_name+ "</th><th>" +alarms[i].eqpt_site+ "</th></tr>";
                 // console.dir(alarms[i]);
             }
             arrs += "</tbody>";

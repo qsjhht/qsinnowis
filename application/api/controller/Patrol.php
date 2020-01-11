@@ -111,7 +111,6 @@ class Patrol extends Common
        $this->return_msg(200, '无巡检数据！');
 
     }
-
     //webgl 获取单个巡检信息
     public function get_patrol_json()
     {

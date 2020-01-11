@@ -338,7 +338,7 @@
                                         <th class='callTime'>{$vo.alarm_time}</th>
                                         <th class='callGrade'>{$vo.lvlcontent}</th>
                                         <th>{$vo.cate_name}</th>
-                                        <th>{$vo.zone}</th>
+                                        <th>{$vo.eqpt_site|substr=0,11}</th>
                                    </tr>
                                    {/volist}
                                    </tbody>
@@ -512,6 +512,7 @@
          // 后端推送来消息时
          socket.on('new_msg', function(msg){
              let objs =  eval('('+msg+')');
+             // console.dir(msg);
              if(objs.reload){
                  patrol_reload();
              }else{
@@ -524,8 +525,10 @@
                      o[i]=array[i];
                      arrDate.push(o);*/
                      var dates = DateToTime(alarms[i].alarm_time);
-                     arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +alarms[i].lvlcontent+ "</th><th>" +alarms[i].cate_name+ "</th><th>" +alarms[i].zone+ "</th></tr>";
-                     // console.dir(alarms[i]);
+                     if(alarms[i].zone == '无' && alarms[i].eqpt_site !== ''){
+                         alarms[i].zone = alarms[i].eqpt_site.substr(0,5);
+                     }
+                     arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +alarms[i].lvlcontent+ "</th><th>" +alarms[i].cate_name+ "</th><th>" +alarms[i].zone+ "</th></tr>";                     // console.dir(alarms[i]);
                  }
                  arrs += "</tbody>";
 
