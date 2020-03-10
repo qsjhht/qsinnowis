@@ -157,14 +157,14 @@
                     <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg "/>
                     <div class="divWidthInput">
                         水舱排风</br>
-                        <input type="checkbox"  lay-skin="switch"  lay-filter="switchTest" lay-text="ON|OFF"/>
+                        <input type="checkbox"  lay-skin="switch"  lay-filter="fan_switch1" lay-text="ON|OFF"/>
                     </div>
                 </div>
                 <div class="divWidth flex" style="border-top:1px dashed #ffffff">
                     <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg"/>
                     <div class="divWidthInput">
                         电舱排风</br>
-                        <input type="checkbox" lay-skin="switch"  lay-filter="switch" lay-text="ON|OFF">
+                        <input type="checkbox" lay-skin="switch"  lay-filter="fan_switch2" lay-text="ON|OFF">
                     </div>
                 </div>
             </div>
@@ -172,7 +172,7 @@
                 <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
                 <div class="divWidthInput">
                     水泵</br>
-                    <input type="checkbox" lay-skin="switch" lay-text="ON|OFF">
+                    <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
                 </div>
             </div>
             <div class="parent">
@@ -284,18 +284,43 @@
         var site_data = JSON.parse($('#sitesdata').val());
         var site_hk = JSON.parse($('#sitehk').val());
         // console.dir(site_data);
-        form.on('switch(switchTest)',function(){
+        form.on('switch(fan_switch1)',function(){
             if(this.checked ? true : false == true){
-                evirImg[0].classList.add('evirImgKey')
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    evirImg[0].classList.add('evirImgKey')
+                }, 1000);
             }else if(this.checked ? trun : false == false){
-                evirImg[0].classList.remove('evirImgKey')
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    evirImg[0].classList.remove('evirImgKey')
+                }, 1000);
             }
         })
-        form.on('switch(switch)',function(){
+        form.on('switch(fan_switch2)',function(){
             if(this.checked ? true : false == true){
-                evirImg[1].classList.add('evirImgKey')
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    evirImg[1].classList.add('evirImgKey');
+                }, 1000);
             }else if(this.checked ? trun : false == false){
-                evirImg[1].classList.remove('evirImgKey')
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    evirImg[1].classList.remove('evirImgKey');
+                }, 1000);
+            }
+        })
+        form.on('switch(switchTest)',function(){
+            if(this.checked ? true : false == true){
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    // evirImg[1].classList.add('evirImgKey');
+                }, 1000);
+            }else if(this.checked ? trun : false == false){
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    // evirImg[1].classList.remove('evirImgKey');
+                }, 1000);
             }
         })
         form.on('switch(switch_lamp)', function(obj){
@@ -330,16 +355,20 @@
                             console.dir(obj.elem.checked);
                             if(obj.elem.checked){
                                 lampimgs.attr("src", '__STATIC__/new/image/lamp-on.png');
+                                form.render('checkbox');
                             }else{
                                 lampimgs.attr("src", '__STATIC__/new/image/lamp-off.png');
+                                form.render('checkbox');
                             }
-                            form.render('checkbox');
+
                             // });
                         }else{
                             if(obj.elem.checked){
                                 $("#lamp_" + id + "").attr("src", '__STATIC__/new/image/lamp-on.png');
+                                form.render('checkbox');
                             }else{
                                 $("#lamp_" + id + "").attr("src", '__STATIC__/new/image/lamp-off.png');
+                                form.render('checkbox');
                             }
                         }
 
@@ -401,8 +430,8 @@
             $(".evirEchart").hide();
             $(".evirSelect").hide();
         //监听选择select选择事件 使用lay-filter
-        var checkbox =$('input:checkbox');
-        checkbox.attr("disabled","disabled");
+        var switch_lamp = $('.switch_lamp');
+        switch_lamp.attr("disabled","disabled");
         interact.on('interact(test)',function(data){
             // checkbox.attr("disabled",false);
             //判断text是否含有中文
@@ -690,6 +719,7 @@
                                 $("#" + matchResult + "").parent().parent().hide();
                                 $("#" + matchResult + "").attr("disabled",'disabled');
                             }
+                            form.render('checkbox');
 
                         }
                     });
