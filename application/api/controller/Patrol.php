@@ -93,6 +93,26 @@ class Patrol extends Common
 
     }
 
+    //配置 dotnet 地址端口配置 中冶BIM用
+    public function get_dotnet()
+    {
+        //$patrol = Db('is_patrol')->select();
+//        $patrol = Db('is_patrol')->limit(1)->order('id','desc')->field('checkCode,json')->find();
+//
+//        $patrol = str_replace('"',"'",$patrol['json']);
+        /* if ($patrol){
+             $patrol['flag'] = '1';
+             return json_encode($patrol,JSON_UNESCAPED_UNICODE);
+         }
+         $patrol['flag'] = '0';*/
+        $dotnet= '192.168.5.100:9090';
+//        if($patrol){
+            return json_encode($dotnet,JSON_UNESCAPED_UNICODE);
+//        }
+//        $this->return_msg(200, '无巡检数据！');
+
+    }
+
     //获取已经开始的巡检任务信息
     public function get_patrol()
     {

@@ -38,6 +38,8 @@ class Common extends Controller
             ),
             'get_patrol' => array(
             ),
+            'get_dotnet' => array(
+            ),
             'get_patrol_json' => array(
             ),
             'get_user_position' => array(

@@ -20,6 +20,7 @@ Route::get('patrol/eqpt_data', 'api/patrol/eqpt_data')->allowCrossDomain();
 Route::get('patrol/get_type', 'api/patrol/get_type')->allowCrossDomain();
 
 Route::get('patrol/get_patrol', 'api/patrol/get_patrol')->allowCrossDomain();
+Route::get('patrol/get_dotnet', 'api/patrol/get_dotnet')->allowCrossDomain();
 
 Route::get('patrol/get_patrol_json', 'api/patrol/get_patrol_json')->allowCrossDomain();
 
