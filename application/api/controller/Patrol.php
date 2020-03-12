@@ -105,7 +105,7 @@ class Patrol extends Common
              return json_encode($patrol,JSON_UNESCAPED_UNICODE);
          }
          $patrol['flag'] = '0';*/
-        $dotnet= '192.168.5.100:9090';
+        $dotnet['ip']= '192.168.5.100:9005';
 //        if($patrol){
             return json_encode($dotnet,JSON_UNESCAPED_UNICODE);
 //        }
