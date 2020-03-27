@@ -343,7 +343,7 @@
                 console.dir(lampname);
                 console.log(status);
                 let lamp = '{"'+lampname+'":"'+status+'"}';
-                $.get('http://10.3.100.7:1234/write',{ 'tags': lamp}, function(res) {
+                $.get('http://192.168.5.100:1234/write',{ 'tags': lamp}, function(res) {
                     res = JSON.parse(res);
                     if(res.code == '200'){
                         layer.msg('成功！');
@@ -686,22 +686,22 @@
         let reg=/,$/gi;
         items=items.replace(reg,"");
         // console.dir(items);
-        $.get('http://10.3.100.7:1234/get',{ 'tags': items}, function(data) {
+        $.get('http://192.168.5.100:1234/get',{ 'tags': items}, function(data) {
             data = JSON.parse(data);
             // console.dir(data);
             if(data.code == '200'){
                 let datas = data.data;
-                console.dir('数组数组');
-                console.dir(datas.length);
+                // console.dir('数组数组');
+                // console.dir(datas.length);
                 if(datas.length !== 0){
                     let hidenum = 0;
                     jQuery.each(datas, function(i, val) {
-                        console.dir(val);
+                        // console.dir(val);
                         for(var key in val){
-                            console.dir(key);
+                            // console.dir(key);
                             matchResult = key.match(/_(\d+)_/)[1];
 
-                            console.dir(val[key]);
+                            // console.dir(val[key]);
 
                             if(val[key] !== "null"){
                                 vals = val[key] == 1 ? true : false;
@@ -733,9 +733,9 @@
                         $("#all_lamp").attr("disabled",false);
                     }
                     form.render('checkbox');
-                    console.dir('render');
+                    // console.dir('render');
                 }else{
-                    console.dir('shuzu 0000000');
+                    // console.dir('shuzu 0000000');
                     $('.flexs').hide();
                 }
 
@@ -811,10 +811,9 @@
     function real_time(zone){
         var zones = zone.replace('/','');
         var realtime_IP = $('#realtime_IP').val();
-        // console.dir(zones);
         $.ajax({
             // url:realtime_IP+"/real/real_time?zone="+zones,
-            url:"http://192.168.10.18/real/real_time?zone="+zones,
+            url:"http://192.168.5.100:1000/real/real_time?zone="+zones,
             async:false,
             success:function(result){
                 result = JSON.parse(result);
@@ -892,7 +891,7 @@
         // console.dir(name);
         $.ajax({
             // url:realtime_IP+"/real/real_times?name=QS_O2_XC13S",
-            url:"http://192.168.10.18/real/real_times?zone="+zone+"&name="+name,
+            url:"http://192.168.5.100:1000/real/real_times?zone="+zone+"&name="+name,
             async:false,
             success:function(result){
                 let jsonObj = $.parseJSON(result);
@@ -915,7 +914,7 @@
         $.ajax({
             // url:realtime_IP+"/real/get_last_real?name=QS_O2_XC13S",
             // url:"http://192.168.10.18/real/get_last_real?name=QS_O2_XC13S",
-            url:"http://192.168.10.18/real/get_last_real?zone="+zone+"&name="+name,
+            url:"http://192.168.5.100:1000/real/get_last_real?zone="+zone+"&name="+name,
             async:false,
             success:function(result){
 
@@ -1024,8 +1023,8 @@
 
 
     //设置参数
-    let username = 'admin'; //账户名
-    let userpass = 'admin'; // 密码
+    let username = 'lshengh626'; //账户名
+    let userpass = '312650221'; // 密码
 
 
 
@@ -1065,7 +1064,7 @@
         // zonenum = zonenum.replace(/\b(0+)/gi,"");
         // ajxa 使用
         const XML = new XMLHttpRequest();
-        let url = `http://10.3.100.8:88/OpenPlatform/openApi?u=${username}&p=${userpass}&did=${did}&date=${getDate}`;
+        let url = `https://www.civildata.cn/api/OpenPlatform/openApi?u=${username}&p=${userpass}&did=${did}&date=${getDate}`;
         XML.open('POST',url,false);
 
         XML.onreadystatechange = function(){
@@ -1168,7 +1167,7 @@
         evirEchart('settling4','倾角-Y（度）',angle_Y);
     }
     // webSocket  使用
-    wsUrl = 'ws://10.3.100.8:88/OpenPlatform/webSocket?projectId=211';
+    wsUrl = 'ws://192.168.5.100:88/OpenPlatform/webSocket?projectId=211';
     ws = new WebSocket(wsUrl);
     ws.onopen = function(){
         console.log("client:打开链接");
