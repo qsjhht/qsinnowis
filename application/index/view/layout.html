@@ -15,7 +15,6 @@
     <script src="/static/js/jquery-1.7.1.min.js"></script>
 </head>
 <style>
-
     button{
         width:30px;
         height:25px;
@@ -29,6 +28,9 @@
     .shadow{
     outline:1px solid #247998;
     box-shadow: 0 0 6px #247998 inset;
+    }
+    .color_l{
+        background-color", "rgba(00,255,255,.6)
     }
     .layui-layer-content{
         color: black;
@@ -122,11 +124,11 @@
                 </li>
             </ul>-->
 
-            <li style="position:absolute;right:3px;top:40px;width:7%">
-                <a href="{:url('index/visual/demoone')}" target="_blank" style="display:inline-block "><button type="button" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" >左</button></a>
-                <a href="{:url('index/visual/demotwo')}" target="_blank" style="display:inline-block "><button type="button">中</button></a>
-                <a href="{:url('index/visual/demothree')}" target="_blank" style="display:inline-block "><button type="button" style="border-top-right-radius: 5px;border-bottom-right-radius: 5px" >右</button></a>
-            </li>
+            <div style="position:absolute;right:3px;top:40px;width:7%">
+                <a href="{:url('index/visual/demoone')}" target="_blank" style="display:inline-block "><button class="btns" type="button" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" >左</button></a>
+                <a href="{:url('index/visual/demotwo')}" target="_blank" style="display:inline-block "><button class="btns" type="button">中</button></a>
+                <a href="{:url('index/visual/demothree')}" target="_blank" style="display:inline-block "><button class="btns" type="button" style="border-top-right-radius: 5px;border-bottom-right-radius: 5px" >右</button></a>
+            </div>
 
             <!--<li>-->
                 <!--<a href="{:url('index/visual/demoone')}" target="_blank" >左屏</a>-->
@@ -173,6 +175,19 @@
             $(this).next("span").css("color","#00ffff");
         });
 */
+        // $(".btns").mousemove(function(){
+        //     $(this).css("background-color", "rgba(00,255,255,.6)")
+        // });
+        // $(".btns").mouseout(function(){
+        //     $(this).css("background-color", "rgba(00,255,255,.4)")
+        // });
+        $(".btns").mousemove(function(){
+            $(".btns").css("background-color", "rgba(00,255,255,.4)");
+            $(this).css("background-color", "rgba(00,255,255,.6)");
+        });
+        $(".btns").mouseout(function(){
+            $(".btns").css("background-color", "rgba(00,255,255,.4)");
+        });
 
         $(".headerNav li").mousemove(function(){
             $("span").css("color","#00ffff");
