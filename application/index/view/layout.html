@@ -217,7 +217,7 @@
         });
         $("#logout").click(function(){
             layer.confirm('确定要退出吗？', { icon: 3, title: false }, function(index) {
-                $.post('{:url("index/logout")}', function(data) {
+                $.get('{:url("index/logout")}', function(data) {
                     layer.msg(data.msg);
                     location.reload();
                     /*if (data.code == 1) {
