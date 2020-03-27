@@ -273,17 +273,20 @@ class Bigdata extends Common
 
         $lvl = db('categorys')->field('alarm_lvl')->where('id',$this->params['cate_code'])->find();
         $this->params['alarmlevel'] = $lvl['alarm_lvl'];
-        $res_id = Db('alarmrecs')->strict(false)->insert($this->params);
 
+        $res_id = Db('alarmrecs')->strict(false)->insertGetId($this->params);
         if($res_id){
 
             $real_alarm = db('alarmrecs')
                 ->alias('a')
                 ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
                 ->join('categorys c','a.cate_code = c.id','LEFT')
+                ->join('alarmtype t','a.alarm_type = t.type','LEFT')
+                ->field('a.id,a.alarm_time,t.typecontent,c.cate_name,a.eqpt_site,a.is_manage,l.lvlcontent,a.rec_details,a.remark,a.zone')
                 ->where('a.id',$res_id)
                 ->find();
-
+//dump($real_alarm);
+//dump($res_id);
 
             $alarms = db('alarmrecs')
                 ->alias('a')
@@ -324,7 +327,7 @@ class Bigdata extends Common
             $alarmdata['real_alarm'] = $real_alarm;
 //            $alarms = db('alarmrecs')->field('id,alarm_time,cate_code,alarmlevel')->limit(10)->order('alarm_time desc,id desc')->select();
             $this->send_ws($alarmdata);
-            $this->return_msg(200, '实时报警上传成功!', $alarms);
+            $this->return_msg(200, '实时报警上传成功!', $alarmdata);
         }
         $this->return_msg(400, '实时报警上传失败!', '');
         }
