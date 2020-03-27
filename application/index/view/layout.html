@@ -16,6 +16,16 @@
 </head>
 <style>
 
+    button{
+        width:30px;
+        height:25px;
+        background-color:rgba(00,255,255,.4);
+        margin:0;
+        padding:0;
+        border:0;
+        color:#000;
+        cursor:pointer;
+    }
     .shadow{
     outline:1px solid #247998;
     box-shadow: 0 0 6px #247998 inset;
@@ -40,23 +50,27 @@
     <!--一级标签-->
     <div class="header">
         <!--报警设置-->
+        <!--报警设置-->
         <ul class="headerUl">
-            <li>
-                <a href="{:url('index/visual/demoone')}" target="_blank" >左屏</a>
-            </li>
-            <span>|</span>
-            <li>
-                <a href="{:url('index/visual/demotwo')}" target="_blank"><!--<img src="__STATIC__/image/a1.png" alt="">-->中屏</a>
-            </li>
-            <span>|</span>
-            <li>
-                <a href="{:url('index/visual/demothree')}" target="_blank"><!--<img src="__STATIC__/image/a1.png" alt="">-->右屏</a>
-            </li>
+            <li  id="user_name" style="float: right">
+                {if $userInfo.username != ''}
+                <a href="{:url('index/Attendance/check')}" target="contentFrame">{$userInfo.nickname}</a>
+                <dl id="hover-togg">
+                    <dd class="bck"><a href="javascript:void(0);"  id="logout">安全退出</a></dd>
+                    <!--<dd class="bck"><a href="" class="re_qrcode" id="re_qrcode">更新二维码</a></dd>-->
+                </dl>
+                {else/}
+                <a href="javascript:void(0);" id="login">请登录</a>
+                {/if}
 
-            <!--<li>
-                <img src="__STATIC__/image/a2.png" alt="">
-                报警
-            </li>-->
+            </li>
+            <span style="display:inline;">|</span>
+            <li>
+                <a>
+                    <img src="__STATIC__/image/a2.png" alt="/">
+                    报警
+                </a>
+            </li>
         </ul>
         <!--一级菜单-->
         <ul class="headerNav">
@@ -107,18 +121,11 @@
                     </dl>
                 </li>
             </ul>-->
-            <li  id="user_name" style="float: right">
-                {if $userInfo.username != ''}
-                <a href="{:url('index/Attendance/check')}" target="contentFrame">{$userInfo.nickname}</a>
-                    <dl id="hover-togg">
-                        <dd class="bck"><a href="javascript:void(0);"  id="logout">安全退出</a></dd>
-                        <!--<dd class="bck"><a href="" class="re_qrcode" id="re_qrcode">更新二维码</a></dd>-->
-                    </dl>
-                {else/}
-                    <a href="javascript:void(0);" id="login">请登录</a>
-                {/if}
-
-            </li>
+            <!--<li style="float: right">-->
+                <!--<button type="button" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" >左</button>-->
+                <!--<button type="button" >中</button>-->
+                <!--<button type="button" style="border-top-right-radius: 5px;border-bottom-right-radius: 5px">右</button>-->
+            <!--</li>-->
 
         </ul>
         <!--动画-->
