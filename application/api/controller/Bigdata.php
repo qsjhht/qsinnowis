@@ -281,7 +281,7 @@ class Bigdata extends Common
                 ->alias('a')
                 ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
                 ->join('categorys c','a.cate_code = c.id','LEFT')
-                ->where('id',$res_id)
+                ->where('a.id',$res_id)
                 ->find();
 
 
