@@ -62,6 +62,14 @@ class Common extends Controller
             ),
             'get_last_real' => array(
             ),
+            'status_refresh' => array(
+            ),
+            'call_ericsson' => array(
+            ),
+            'get_video_set' => array(
+            ),
+            'video_set' => array(
+            ),
 
         ),
         'Master'    => array(
