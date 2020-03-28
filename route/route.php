@@ -36,6 +36,10 @@ Route::get('real/real_time', 'api/real/real_time')->allowCrossDomain();
 Route::get('real/real_times', 'api/real/real_times')->allowCrossDomain();
 Route::get('real/real_timest', 'api/real/real_timest')->allowCrossDomain();
 Route::get('real/get_last_real', 'api/real/get_last_real')->allowCrossDomain();
+Route::get('real/status_refresh', 'api/real/status_refresh')->allowCrossDomain();
+Route::get('real/call_ericsson', 'api/real/call_ericsson')->allowCrossDomain();
+Route::get('real/get_video_set', 'api/real/get_video_set')->allowCrossDomain();
+Route::get('real/video_set', 'api/real/video_set')->allowCrossDomain();
 
 Route::get('bigdata/date', 'api/bigdata/date')->allowCrossDomain();
 Route::get('bigdata/get_data', 'api/bigdata/get_data')->allowCrossDomain();
