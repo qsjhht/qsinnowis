@@ -70,6 +70,8 @@ class Common extends Controller
             ),
             'video_set' => array(
             ),
+            'get_phone' => array(
+            ),
 
         ),
         'Master'    => array(
