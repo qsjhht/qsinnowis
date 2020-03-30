@@ -74,6 +74,20 @@ return [
         // 端口
         'hostport'        => '1433',
     ],
+    'phone_config' => [
+        // 数据库类型
+        'type'            => 'sqlsrv',
+        // 服务器地址
+        'hostname'        => '192.168.20.50',
+        // 数据库名
+        'database'        => 'RMDDISP',
+        // 用户名
+        'username'        => 'sa', //qs_user
+        // 密码
+        'password'        => 'Qiushi123', //'qs@123',
+        // 端口
+        'hostport'        => '1433',
+    ],
     'mysql_config' => [
         // 数据库类型
         'type'            => 'mysql',
