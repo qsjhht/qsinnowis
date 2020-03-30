@@ -364,7 +364,20 @@ class Real extends Common
 //
     }
 
+    public function get_phone()
+    {
+        $phone_data = Db::connect('phone_config')
+            ->table('组分机')
+//            ->order('check_start_time','desc')
+            ->select();
 
+        if($phone_data){
+            $this->return_msg('200','获取成功！',$phone_data);
+        }else{
+            $this->return_msg('400','获取失败！');
+        }
+
+    }
 
 
 }
