@@ -694,8 +694,8 @@ class Eqpt extends Adminbase
                 ->strict(false)
                 ->insert($data);
             if ($res){
-                $this->success('新增异常记录成功！');
-            }$this->error('新增异常记录失败！');
+                $this->success('新增成功！');
+            }$this->error('新增失败！');
         }else{
             $cate = Db('categorys')
                 ->where('parentid','0')
@@ -713,8 +713,8 @@ class Eqpt extends Adminbase
             $this->error('ID错误');
         }
         if(Db('categorys')->delete($id)){
-            $this->success('删除系统/设备成功！');
-        }$this->error('删除系统/设备失败！');
+            $this->success('删除成功！');
+        }$this->error('删除失败！');
     }
 
     public function cate_details()
@@ -741,8 +741,8 @@ class Eqpt extends Adminbase
                 ->strict(false)
                 ->update($data);
             if ($res){
-                $this->success('修改信息成功！');
-            }$this->error('修改信息失败！');
+                $this->success('修改成功！');
+            }$this->error('修改失败！');
         }else{
             $id = $this->request->param('id');
             $cate = Db('categorys')
