@@ -16,7 +16,7 @@ class Patrol extends Common
     protected function initialize()
     {
         parent::initialize();
-        $this->host = 'http://192.168.10.21:8088';
+        $this->host = 'http://192.168.5.112:8088';
         $this->url = $this->host .= "/RMD_PipeGallery/rmdBaseEquipmentController.do?getPositionByUserId";
         $this->scket_ip = '192.168.5.111';
         $this->scket_port = '22333';
@@ -211,7 +211,7 @@ class Patrol extends Common
     protected function send_msg($content,$to_uid='2333'){
         $content = json_encode($content,JSON_UNESCAPED_UNICODE);
         $content =  str_replace('"',"'",$content);
-        $push_api_url = "http://192.168.10.18:2121/";
+        $push_api_url = "http://192.168.5.100:2121/";
         $post_data = array(
             "type" => "publish",
             "content" => $content,
