@@ -28,6 +28,7 @@ Route::get('patrol/get_user_position', 'api/patrol/get_user_position')->allowCro
 
 Route::get('patrol/patrol_logs', 'api/patrol/patrol_logs')->allowCrossDomain();
 Route::get('patrol/patrols', 'api/patrol/patrols')->allowCrossDomain();
+Route::get('patrol/demo', 'api/patrol/demo')->allowCrossDomain();
 Route::get('patrol/patroling', 'api/patrol/patroling')->allowCrossDomain();
 
 Route::post('patrol/patrol_reload', 'api/patrol/patrol_reload')->allowCrossDomain();
