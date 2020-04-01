@@ -42,13 +42,13 @@ class Real extends Common
         foreach ($real as $value){
             $realdata[$value['NAME']] = $value['VALUE'];
         }*/
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $conn=odbc_connect('kinghistorion','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT * FROM realtime where TagName like 'WIN%".$zone."%'";
+        $sql="SELECT * FROM realtime where TagName like 'QS_%".$zone."%'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -62,7 +62,7 @@ class Real extends Common
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
 //            if($name == $zone){
-                $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
+                $yk_arr[substr(odbc_result($rs,"TagName"),3)] =odbc_result($rs,"DataValue");
 //            }
 //            $yk_arr[$name]['TagName'] = $name;
 //            $yk_arr[$name]['DataTime'] = odbc_result($rs,"DataTime");
@@ -118,8 +118,8 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'T_'.$name.'_'.$zone;  //区分 T LT
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $pars = 'QS_'.$name.'_'.$zone;  //区分 T LT
+        $conn=odbc_connect('kinghistorion','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -199,8 +199,8 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'T_'.$name.'_'.$zone;  //区分 T LT
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $pars = 'QS_'.$name.'_'.$zone;  //区分 T LT
+        $conn=odbc_connect('kinghistorion','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -249,8 +249,8 @@ class Real extends Common
     {
         $zone = $this->request->param('zone');
         $name = $this->request->param('name');
-        $pars = 'T_'.$name.'_'.$zone; //区分 T LT
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $pars = 'QS_'.$name.'_'.$zone; //区分 T LT
+        $conn=odbc_connect('kinghistorion','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
