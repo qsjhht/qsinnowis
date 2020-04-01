@@ -45,6 +45,14 @@ class Visual extends Adminbase
             ->select();
         $this->assign('Alarms', $alarms);
 
+        $videos = db('video_set')
+            ->select();
+        foreach ($videos as $video) {
+            $sets[$video['html_id']] = $video['token'];
+        }
+        $videos = json_encode($sets,JSON_UNESCAPED_UNICODE);
+        $this->assign('Videos', $videos);
+
         $nums = db('alarmrecs')
             ->alias('a')
             ->join('alarmlvl l','a.alarmlevel = l.level')
@@ -192,7 +200,13 @@ class Visual extends Adminbase
 //            ->order('check_start_time','desc')
 //            ->select();
 //        $this->assign('Patroling', $patroling);
-
+        $videos = db('video_set')
+            ->select();
+        foreach ($videos as $video) {
+            $sets[$video['html_id']] = $video['token'];
+        }
+        $videos = json_encode($sets,JSON_UNESCAPED_UNICODE);
+        $this->assign('Videos', $videos);
 
 //        dump($patrol_logs);
 //        dump($patrols);

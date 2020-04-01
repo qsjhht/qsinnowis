@@ -44,7 +44,7 @@ class Eqpt extends Adminbase
         //实例化工具树类
         $tree = new \util\Tree();
         //获取分类菜单
-        $resultcate = Db('category')->order(array( 'id' => 'ESC'))->select();
+        $resultcate = Db('categorys')->order(array( 'id' => 'ESC'))->where('isShow','1')->select();
         $arraycate = array();
         foreach ($resultcate as $r) {
             $r['selected'] = $r['id'] == 0 ? 'selected' : '';
@@ -153,7 +153,7 @@ class Eqpt extends Adminbase
             //实例化工具树类
             $tree = new \util\Tree();
             //获取分类菜单
-            $resultcate = Db('category')->order(array( 'id' => 'ESC'))->select();
+            $resultcate = Db('categorys')->order(array( 'id' => 'ESC'))->where('isShow','1')->select();
             $arraycate = array();
             foreach ($resultcate as $r) {
                 $r['selected'] = $r['id'] == 0 ? 'selected' : '';
@@ -242,7 +242,7 @@ class Eqpt extends Adminbase
         //实例化工具树类
         $tree = new \util\Tree();
         //获取分类菜单
-        $resultcate = Db('category')->order(array( 'id' => 'ESC'))->select();
+        $resultcate = Db('categorys')->order(array( 'id' => 'ESC'))->where('isShow','1')->select();
         $arraycate = array();
         foreach ($resultcate as $r) {
             $r['selected'] = $r['id'] == 0 ? 'selected' : '';
@@ -351,7 +351,7 @@ class Eqpt extends Adminbase
             //实例化工具树类
             $tree = new \util\Tree();
             //获取分类菜单
-            $resultcate = Db('category')->order(array('id' => 'ESC'))->select();
+            $resultcate = Db('categorys')->order(array('id' => 'ESC'))->where('isShow','1')->select();
             $arraycate = array();
             foreach ($resultcate as $r) {
                 $r['selected'] = $r['id'] == 0 ? 'selected' : '';
@@ -472,7 +472,7 @@ class Eqpt extends Adminbase
             //实例化工具树类
             $tree = new \util\Tree();
             //获取分类菜单
-            $resultcate = Db('category')->order(array( 'id' => 'ESC'))->select();
+            $resultcate = Db('categorys')->order(array( 'id' => 'ESC'))->where('isShow','1')->select();
             $arraycate = array();
             foreach ($resultcate as $r) {
                 $r['selected'] = $r['id'] == 0 ? 'selected' : '';
@@ -517,7 +517,7 @@ class Eqpt extends Adminbase
         $eqpts = Db::table('eqpts')
             ->alias('e')
             ->field('e.eqpt_id,e.eqpt_type,e.eqpt_num,e.eqpt_brand,s.site_name,e.eqpt_status,e.eqpt_model,e.eqpt_ins_time,c.cate_name,d.eqpt_rated,d.eqpt_durable,d.eqpt_supplier,d.eqpt_buyer,d.eqpt_service_MP,d.eqpt_quality,d.eqpt_upkeep_info,d.eqpt_remarks')
-            ->join('category c','e.eqpt_cate_id = c.id')
+            ->join('categorys c','e.eqpt_cate_id = c.id')
             ->join('site s','e.eqpt_site_id = s.id')
             ->join('eqpt_details d','e.eqpt_id = d.eqpt_id')
             ->where('e.eqpt_id',$data['eqpt_id'])
@@ -536,7 +536,7 @@ class Eqpt extends Adminbase
             $eqpts = Db::table('eqpts')
                 ->alias('e')
                 ->field('e.eqpt_id,e.eqpt_cate_id,e.eqpt_site_id,e.eqpt_type,e.eqpt_brand,e.eqpt_model,e.eqpt_status,e.eqpt_ins_time,d.eqpt_rated,d.eqpt_durable,d.eqpt_supplier,d.eqpt_buyer,d.eqpt_service_MP,d.eqpt_quality,d.eqpt_upkeep_info,d.eqpt_remarks')
-                ->join('category c', 'e.eqpt_cate_id = c.id')
+                ->join('categorys c', 'e.eqpt_cate_id = c.id')
                 ->join('site s', 'e.eqpt_site_id = s.id')
                 ->join('eqpt_details d', 'e.eqpt_id = d.eqpt_id')
                 ->where('e.eqpt_id', $eqpt_id['eqpt_id'])
@@ -583,7 +583,7 @@ class Eqpt extends Adminbase
             $eqpts = Db::table('eqpts')
                 ->alias('e')
                 ->field('e.eqpt_id,e.eqpt_type,e.eqpt_cate_id,e.eqpt_site_id,e.eqpt_num,e.eqpt_brand,e.eqpt_site_id,s.site_name,e.eqpt_status,e.eqpt_model,e.eqpt_ins_time,c.cate_name,d.eqpt_rated,d.eqpt_durable,d.eqpt_supplier,d.eqpt_buyer,d.eqpt_service_MP,d.eqpt_quality,d.eqpt_upkeep_info,d.eqpt_remarks')
-                ->join('category c', 'e.eqpt_cate_id = c.id')
+                ->join('categorys c', 'e.eqpt_cate_id = c.id')
                 ->join('site s', 'e.eqpt_site_id = s.id')
                 ->join('eqpt_details d', 'e.eqpt_id = d.eqpt_id')
                 ->where('e.eqpt_id', $eqpt_id['eqpt_id'])
@@ -594,7 +594,7 @@ class Eqpt extends Adminbase
             //实例化工具树类
             $tree = new \util\Tree();
             //获取分类菜单
-            $resultcate = Db('category')->order(array('id' => 'ESC'))->select();
+            $resultcate = Db('categorys')->order(array('id' => 'ESC'))->select();
             $arraycate = array();
             foreach ($resultcate as $r) {
                 $r['selected'] = $r['id'] == $eqpts['eqpt_cate_id'] ? 'selected' : '';
@@ -652,6 +652,108 @@ class Eqpt extends Adminbase
         }
     }
 
+    public function cate_list()
+    {
+        if ($this->request->isAjax()) {
+            $tree = new \util\Tree();
+            $tree->icon = array('&nbsp;&nbsp;&nbsp;│ ', '&nbsp;&nbsp;&nbsp;├─ ', '&nbsp;&nbsp;&nbsp;└─ ');
+            $tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+            $result = Db('categorys')
+                ->field('id,parentid,cate_name,cate_remark,isShow,is_alarm')
+//                ->alias('a')
+//                ->join('alarmlvl l','a.alarm_lvl = l.level')
+//                ->where('is_alarm = 1')
+                ->select();
+
+//        $result = Db::name('categorys')->order(array('listorder', 'id' => 'DESC'))->select();
+        $result1 = $result;
+        foreach ($result as &$res) {
+            $res['has_sub'] = 0;
+            foreach ($result1 as $item) {
+                    if($res['id'] == $item['parentid']){
+                        $res['has_sub'] += 1;
+                    }
+                }
+            }
+            $tree->init($result);
+
+            $_list = $tree->getTreeList($tree->getTreeArray(0), 'cate_name');
+
+            $total = count($_list);
+            $result = array("code" => 0, "count" => $total, "data" => $_list);
+            return json($result);
+        }
+        return $this->fetch();
+    }
+
+    public function cate_add()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $res = Db('categorys')
+                ->strict(false)
+                ->insert($data);
+            if ($res){
+                $this->success('新增成功！');
+            }$this->error('新增失败！');
+        }else{
+            $cate = Db('categorys')
+                ->where('parentid','0')
+                ->select();
+            $this->assign('Cate',$cate);
+            return $this->fetch();
+        }
+    }
+
+
+    public function cate_del()
+    {
+        $id = $this->request->param('id');
+        if (empty($id)) {
+            $this->error('ID错误');
+        }
+        if(Db('categorys')->delete($id)){
+            $this->success('删除成功！');
+        }$this->error('删除失败！');
+    }
+
+    public function cate_details()
+    {
+        $id = $this->request->param('id');
+        $res   = db('categorys')->where('id',$id)->find();
+        $parents   = db('categorys')->field('cate_name')->where('id',$res['parentid'])->find();
+        $res['parent_name'] = '无';
+        if($parents['cate_name'] !== null){
+            $res['parent_name'] = $parents['cate_name'];
+        }else{
+            $res['parent_name'] = '无';
+        }
+        $this->assign('Info',$res);
+        return $this->fetch();
+    }
+
+    public function cate_edit()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $res = Db('categorys')
+                ->where('id',$data['id'])
+                ->strict(false)
+                ->update($data);
+            if ($res){
+                $this->success('修改成功！');
+            }$this->error('修改失败！');
+        }else{
+            $id = $this->request->param('id');
+            $cate = Db('categorys')
+                ->where('parentid','0')
+                ->select();
+            $this->assign('Cate',$cate);
+            $res   = db('categorys')->where('id',$id)->find();
+            $this->assign('Info',$res);
+            return $this->fetch();
+        }
+    }
 
 
     public function temp(){

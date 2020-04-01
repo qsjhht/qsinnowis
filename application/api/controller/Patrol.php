@@ -16,20 +16,34 @@ class Patrol extends Common
     protected function initialize()
     {
         parent::initialize();
-        $this->host = 'http://192.168.10.21:8088';
+        $this->host = 'http://192.168.5.112:8088';
         $this->url = $this->host .= "/RMD_PipeGallery/rmdBaseEquipmentController.do?getPositionByUserId";
+        $this->scket_ip = '192.168.5.111';
+        $this->scket_port = '22333';
     }
     //推送web socket
     public function demo()
     {
+        $aa = $this->request->param('aa');
+//        $this->Socket = new Socketmodel($this->scket_ip,$this->scket_port);
+        $aa = $this->doEncoding($aa);
 
-        $list =  "{'flag':'0','routeList':[[114.61465703896,38.122961340611],[114.61520860247,38.123817756155],[114.61568633017,38.12446819936],[114.61656090764,38.125681293144],[114.61700370428,38.126299713278],[114.61764550076,38.127086436083],[114.61823535865,38.127803112471],[114.61903252434,38.128773641566],[114.61979984919,38.129715052192],[114.62022925348,38.130382011419],[114.62039191148,38.130636573698],[114.6207409421,38.131473818194]]}";
+        $fp = stream_socket_client("udp://192.168.5.111:22333", $errno, $errstr);
+        if (!$fp) {
+            echo "ERROR: $errno - $errstr<br />\n";
+        } else {
+            fwrite($fp, $aa);
+            echo fread($fp, 1024);
+            fclose($fp);
+        }
+
+//        $list =  "{'flag':'0','routeList':[[114.61465703896,38.122961340611],[114.61520860247,38.123817756155],[114.61568633017,38.12446819936],[114.61656090764,38.125681293144],[114.61700370428,38.126299713278],[114.61764550076,38.127086436083],[114.61823535865,38.127803112471],[114.61903252434,38.128773641566],[114.61979984919,38.129715052192],[114.62022925348,38.130382011419],[114.62039191148,38.130636573698],[114.6207409421,38.131473818194]]}";
 
         //$return_data['code'] = 200;
         //$datas = json_encode();
         //$to_uid = "";
         // 推送的url地址，使用自己的服务器地址
-        $this->send_msg($list);
+//        $this->send_msg($list);
 
     }
 
@@ -197,7 +211,7 @@ class Patrol extends Common
     protected function send_msg($content,$to_uid='2333'){
         $content = json_encode($content,JSON_UNESCAPED_UNICODE);
         $content =  str_replace('"',"'",$content);
-        $push_api_url = "http://192.168.10.18:2121/";
+        $push_api_url = "http://192.168.5.100:2121/";
         $post_data = array(
             "type" => "publish",
             "content" => $content,

@@ -28,6 +28,7 @@ Route::get('patrol/get_user_position', 'api/patrol/get_user_position')->allowCro
 
 Route::get('patrol/patrol_logs', 'api/patrol/patrol_logs')->allowCrossDomain();
 Route::get('patrol/patrols', 'api/patrol/patrols')->allowCrossDomain();
+Route::get('patrol/demo', 'api/patrol/demo')->allowCrossDomain();
 Route::get('patrol/patroling', 'api/patrol/patroling')->allowCrossDomain();
 
 Route::post('patrol/patrol_reload', 'api/patrol/patrol_reload')->allowCrossDomain();
@@ -40,6 +41,7 @@ Route::get('real/status_refresh', 'api/real/status_refresh')->allowCrossDomain()
 Route::get('real/call_ericsson', 'api/real/call_ericsson')->allowCrossDomain();
 Route::get('real/get_video_set', 'api/real/get_video_set')->allowCrossDomain();
 Route::get('real/video_set', 'api/real/video_set')->allowCrossDomain();
+Route::get('real/get_phone', 'api/real/get_phone')->allowCrossDomain();
 
 Route::get('bigdata/date', 'api/bigdata/date')->allowCrossDomain();
 Route::get('bigdata/get_data', 'api/bigdata/get_data')->allowCrossDomain();

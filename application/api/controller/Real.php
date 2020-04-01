@@ -8,7 +8,7 @@
 
 namespace app\api\controller;
 use app\index\model\Realsql as RealsqlModel;
-use app\index\model\Realsql;
+use app\index\model\Phone as PhoneModel;
 use think\Controller;
 use think\Db;
 use think\Request;
@@ -42,13 +42,13 @@ class Real extends Common
         foreach ($real as $value){
             $realdata[$value['NAME']] = $value['VALUE'];
         }*/
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $conn=odbc_connect('kinghistorion','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT * FROM realtime where TagName like 'WIN%".$zone."%'";
+        $sql="SELECT * FROM realtime where TagName like 'QS_%".$zone."%'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -62,7 +62,7 @@ class Real extends Common
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
 //            if($name == $zone){
-                $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
+                $yk_arr[substr(odbc_result($rs,"TagName"),3)] =odbc_result($rs,"DataValue");
 //            }
 //            $yk_arr[$name]['TagName'] = $name;
 //            $yk_arr[$name]['DataTime'] = odbc_result($rs,"DataTime");
@@ -118,8 +118,8 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'T_'.$name.'_'.$zone;  //区分 T LT
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $pars = 'QS_'.$name.'_'.$zone;  //区分 T LT
+        $conn=odbc_connect('kinghistorion','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -199,8 +199,8 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'T_'.$name.'_'.$zone;  //区分 T LT
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $pars = 'QS_'.$name.'_'.$zone;  //区分 T LT
+        $conn=odbc_connect('kinghistorion','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -249,8 +249,8 @@ class Real extends Common
     {
         $zone = $this->request->param('zone');
         $name = $this->request->param('name');
-        $pars = 'T_'.$name.'_'.$zone; //区分 T LT
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $pars = 'QS_'.$name.'_'.$zone; //区分 T LT
+        $conn=odbc_connect('kinghistorion','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -364,7 +364,50 @@ class Real extends Common
 //
     }
 
+    public function get_phone()
+    {
+        $serverName  =  "192.168.20.50" ;
+        $connectionInfo  = array(  "Database" => "RMDDISP" ,  "UID" => "sa" ,  "PWD" => "Qiushi123"  );
+        $conn  =  sqlsrv_connect (  $serverName ,  $connectionInfo );
+        if(  $conn  ===  false  ) {
+            die(  print_r (  sqlsrv_errors (),  true ));
+        }
 
+        $sql  =  "select * FROM 组分机" ;
+
+        // print "SQL: $sql\n";
+
+        // $str=iconv ( "utf-8", "gb2312//IGNORE", $str ); //第一次转换，不可省略，省略立即报错
+        $cmd='SELECT *  FROM 组分机;';//拼接
+        $long= iconv ( "utf-8", "gb2312//IGNORE", $cmd );//第二次转换，不可省略
+        $result = sqlsrv_query($conn , $long);//正常运行未报错
+
+
+        // $result = sqlsrv_query($conn, $sql);
+        if($result === false) {
+            $this->return_msg(400, '获取失败！');
+            die(print_r(sqlsrv_errors(), true));
+        }
+        #Fetching Data by array
+        while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+            // $row = iconv('gbk', 'utf-8', $row);
+            foreach ($row as $key => $value) {
+                $keys = $this->doEncoding($key);
+                $arr[$keys] = $this->doEncoding($value);
+            }
+            $data[] = $arr;
+        }
+        $this->return_msg(200, '获取成功！',$data);
+//        $phone_data = Db::connect('phone_config');
+//
+//
+//        if($phone_data){
+//            $this->return_msg('200','获取成功！',$phone_data);
+//        }else{
+//            $this->return_msg('400','获取失败！');
+//        }
+
+    }
 
 
 }
