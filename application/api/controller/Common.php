@@ -35,6 +35,10 @@ class Common extends Controller
             'get_type' => array(
             ),
             'demo' => array(
+                'type' => 'require',  //通话类别
+                'from_num' => 'require|number', //调度台号码
+//                'from_name' => 'require', //调度台名
+                'call' => 'require',  //呼叫号码
             ),
             'get_patrol' => array(
             ),
@@ -71,6 +75,12 @@ class Common extends Controller
             'video_set' => array(
             ),
             'get_phone' => array(
+            ),
+            'call_phone' => array(
+                'type' => 'require',  //通话类别
+                'from_num' => 'require|number', //调度台号码
+//                'from_name' => 'require', //调度台名
+                'call' => 'require',  //呼叫号码
             ),
 
         ),
