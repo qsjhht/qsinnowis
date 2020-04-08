@@ -1,7 +1,7 @@
 {extend name="demo_layout"/}
 {block name="maincss"}
 <title>Left</title>
-<script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
+
 <script src="__STATIC__/new/echarts.js"></script>
 <link rel="stylesheet" href="__STATIC__/new/demoOne.css">
 <link rel="stylesheet" href="__STATIC__/new/gis/dist/ol.css">
@@ -10,8 +10,7 @@
 <script src="__STATIC__/new/gis/dist/iclient9-openlayers.js"></script>
 <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
 <script src="__STATIC__/new/gis/SecRealData.js"></script>
-<script src="/static/layui/layui.js"></script>
-<script src="/static/js/jquery-1.7.1.min.js"></script>
+
 <style>
     .galRoad{text-align: center;font-size: 20px;padding-top: 30px}
     .section{text-align: center;font-size: 15px;height: 30px;border-bottom: 1px dashed #ffffff}
@@ -181,11 +180,10 @@
 
 {/block}
 {block name="script"}
-<script src="__STATIC__/new/gis/socket.io.js"></script>
 <script>
     $('.callTime').each(function(){
 
-        console.dir($(this).text());
+        // console.dir($(this).text());
 
         $(this).text(DateToTime($(this).text()));
     });
@@ -197,10 +195,88 @@
     // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
     var uid = '2333';
     console.dir(uid);
+    var audio = document.getElementById("myAudio");
     // socket连接后以uid登录
     socket.on('connect', function(){
         socket.emit('login', uid);
     });
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                visible: false ,
+                dialogVisible:false,
+                alarm_tips:'',
+                audio:''
+            }
+        },
+        created(){
+            let ccc = this.$options.methods.alarm_tips.bind(this);
+            socket.on('new_msg',(data) => {
+                ccc(data);
+                console.dir('cccccccccccccccc');
+                console.dir(data);
+            })
+        },
+        methods:{
+            alarm_tips:function(a){
+                let _this = this;
+                let evala = eval('('+ a +')').real_alarm;
+                _this.alarm_tips = evala;
+                if(evala.lvlcontent == '普通'){
+                    // return;
+                }else if(evala.lvlcontent == '设备'){
+                    return ;
+                }else if(evala.lvlcontent == '紧急'){
+                    audio.play();
+                    audio.loop = true;
+                    _this.$notify({
+                        title:`${evala.lvlcontent}报警`,
+                        message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                        duration:0,
+                        dangerouslyUseHTMLString:true,
+                        iconClass:'el-icon-bell',
+                        customClass:'bulletion_yellow',
+                        onClick:function(){
+                            audio.pause();
+                            // dialogVisible = true;
+                        },
+                        onClose(){
+                            audio.pause();
+                        }
+                    })
+                }else if(evala.lvlcontent == '严重'){
+                    audio.play();
+                    audio.loop = true;
+                    _this.$notify({
+                        title:`${evala.lvlcontent}报警`,
+                        message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                        duration:0,
+                        dangerouslyUseHTMLString:true,
+                        iconClass:'el-icon-bell',
+                        customClass:'bulletin_red',
+                        onClick:function(){
+                            audio.pause();
+                            // _this.dialogVisible = true;
+                        },
+                        onClose(){
+                            audio.pause();
+                        }
+                    })
+                }
+                _this.alarm_tips.alarm_time = new Date(_this.alarm_tips.alarm_time*1000).toLocaleString();
+                if(_this.alarm_tips.is_manage == 0){
+                    _this.alarm_tips.is_manage = '否'
+                }else if(_this.alarm_tips.is_manage == 1){
+                    _this.alarm_tips.is_manage = '是'
+                }
+
+            }
+        }
+    })
 
     // 后端推送来消息时
     socket.on('new_msg', function(msg){
