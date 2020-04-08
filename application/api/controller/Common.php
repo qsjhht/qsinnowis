@@ -32,6 +32,8 @@ class Common extends Controller
             ),
             'eqpt_data' => array(
             ),
+            'gis_data' => array(
+            ),
             'get_type' => array(
             ),
             'demo' => array(

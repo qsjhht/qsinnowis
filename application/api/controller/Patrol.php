@@ -24,16 +24,27 @@ class Patrol extends Common
     //推送web socket
     public function demo()
     {
-        $aa = $this->request->param('aa');
+        $type = $this->request->param('type');
+        $from_num = $this->request->param('from_num');
+        $from_name = $this->request->param('from_name');
+        $call = $this->request->param('call');
 //        $this->Socket = new Socketmodel($this->scket_ip,$this->scket_port);
-        $aa = $this->doEncoding($aa);
+//        $aa = $this->doEncoding($aa);
 
-        $fp = stream_socket_client("udp://192.168.5.111:22333", $errno, $errstr);
+        if ($type == '调度群呼'){
+            $num_or_g = '分组';
+        }else if($type == '调度单呼'){
+            $num_or_g = '号码';
+        }
+        $msg =  $type.' 调度号码='.$from_num.' 调度名称='.$from_name.' '.$num_or_g.'='.$call.'chr(13)';
+        dump($msg);
+        die;
+        $fp = stream_socket_client("udp://192.168.5.111:2008", $errno, $errstr);
         if (!$fp) {
             echo "ERROR: $errno - $errstr<br />\n";
         } else {
             fwrite($fp, $aa);
-            echo fread($fp, 1024);
+//            echo fread($fp, 1024);
             fclose($fp);
         }
 
@@ -167,8 +178,8 @@ class Patrol extends Common
         $code = $this->request->param('eqpt_id');
         $datas =Db::connect('sqlsrv_config')->table('rmd_base_equipment')->field('equipment_code,equipment_name,catalogue_value,equipment_xh,equipment_jszt,brand,prevent_fire_area,prevent_fire_area_id')->where('equipment_code',$code)->find();
 
-        $site_id =Db::connect('mysql_config')->table('qs_site')->field('parentid')->where('id',$datas['prevent_fire_area_id'])->find();
-        $site_name =Db::connect('mysql_config')->table('qs_site')->field('site_name')->where('id',$site_id['parentid'])->find();
+        $site_id =Db::connect('mysql_config')->table('qs_sites')->field('parentid')->where('id',$datas['prevent_fire_area_id'])->find();
+        $site_name =Db::connect('mysql_config')->table('qs_sites')->field('site_name')->where('id',$site_id['parentid'])->find();
         $datas['location'] = $site_name['site_name'] .'-' .$datas['prevent_fire_area'];
         //$datas['catalogue_type'] = $datas['catalogue_value'];
         foreach ($datas as $key=>$value) {
@@ -183,6 +194,33 @@ class Patrol extends Common
         $return_data['msg']  = '查询成功！';
         $return_data['data'] = $datas;
         echo json_encode($return_data,JSON_UNESCAPED_UNICODE);die;
+    }
+
+    //获取设备信息 for GIS
+    public function gis_data()
+    {
+        $code = $this->request->param('cate_code');
+        $zone = $this->request->param('zone');
+
+        $datas =Db::connect('sqlsrv_config')
+            ->table('rmd_base_equipment')
+            ->field('equipment_code,equipment_name,catalogue_value,equipment_xh,equipment_jszt,catalogue_value,brand,prevent_fire_area,prevent_fire_area_id')
+            ->where('catalogue',$code)
+            ->where('prevent_fire_area',$zone)
+            ->find();
+        $site_id =Db::connect('mysql_config')->table('qs_sites')->field('parentid')->where('id',$datas['prevent_fire_area_id'])->find();
+        $site_name =Db::connect('mysql_config')->table('qs_sites')->field('site_name')->where('id',$site_id['parentid'])->find();
+        $datas['location'] = $site_name['site_name'] .'-' .$datas['prevent_fire_area'];
+        //$datas['catalogue_type'] = $datas['catalogue_value'];
+//        foreach ($datas as $key=>$value) {
+//            if ($key == 'catalogue_value'){
+//                $datas['catalogue_type'] = $datas[$key];
+//            }
+//        }
+        unset($datas['prevent_fire_area_id']);
+//        unset($datas['catalogue_value']);
+        unset($datas['prevent_fire_area']);
+        $this->return_msg(200,'查询成功！',$datas);
     }
 
     public function get_user_position()

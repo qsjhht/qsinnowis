@@ -15,7 +15,10 @@ Route::post('user/login', 'api/user/login')->allowCrossDomain();
 
 Route::post('patrol/data', 'api/patrol/data')->allowCrossDomain();
 
+//中冶 bim 通过bim设备code 获取信息
 Route::get('patrol/eqpt_data', 'api/patrol/eqpt_data')->allowCrossDomain();
+//GIS 通过位置 zone 设备类型 cate 获取设备信息
+Route::get('patrol/gis_data', 'api/patrol/gis_data')->allowCrossDomain();
 
 Route::get('patrol/get_type', 'api/patrol/get_type')->allowCrossDomain();
 
