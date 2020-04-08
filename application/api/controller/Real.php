@@ -471,9 +471,9 @@ class Real extends Common
         }
         odbc_close($conn);
 
-        $water['maxs'] = max($water_arr);
-        $water['mins'] = min($water_arr);
-        $water['avg'] = array_sum($water_arr)/count($water_arr);
+        $water['w_max'] = max($water_arr);
+        $water['w_ins'] = min($water_arr);
+        $water['w_avg'] = array_sum($water_arr)/count($water_arr);
         $this->return_msg(200,'查询成功！',$water);
     }
 
@@ -501,9 +501,9 @@ class Real extends Common
         }
         odbc_close($conn);
 
-        $sensor_arr['maxs'] = max($water_arr);
-        $sensor_arr['mins'] = min($water_arr);
-        $sensor_arr['avg'] = array_sum($water_arr)/count($water_arr);
+        $sensor_arr['s_max'] = max($water_arr);
+        $sensor_arr['s_min'] = min($water_arr);
+        $sensor_arr['s_avg'] = array_sum($water_arr)/count($water_arr);
         $this->return_msg(200,'查询成功！',$sensor_arr);
     }
 
