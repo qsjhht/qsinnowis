@@ -86,6 +86,8 @@ class Common extends Controller
             ),
             'get_water' => array(
             ),
+            'get_sensor' => array(
+            ),
 
         ),
         'Master'    => array(
