@@ -282,7 +282,7 @@ class Bigdata extends Common
                 ->join('alarmlvl l','a.alarmlevel = l.level','LEFT')
                 ->join('categorys c','a.cate_code = c.id','LEFT')
                 ->join('alarmtype t','a.alarm_type = t.type','LEFT')
-                ->field('a.id,a.alarm_time,t.typecontent,c.cate_name,a.eqpt_site,a.is_manage,l.lvlcontent,a.rec_details,a.remark,a.zone')
+                ->field('a.id,a.alarm_time,t.typecontent,a.cate_code,c.cate_name,a.eqpt_site,a.is_manage,l.lvlcontent,a.rec_details,a.remark,a.zone')
                 ->where('a.id',$res_id)
                 ->find();
 //dump($real_alarm);
