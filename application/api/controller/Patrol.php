@@ -178,13 +178,16 @@ class Patrol extends Common
         $code = $this->request->param('eqpt_id');
         $datas =Db::connect('sqlsrv_config')->table('rmd_base_equipment')->field('equipment_code,equipment_name,catalogue_value,equipment_xh,equipment_jszt,brand,prevent_fire_area,prevent_fire_area_id')->where('equipment_code',$code)->find();
 
-        $site_id =Db::connect('mysql_config')->table('qs_sites')->field('parentid')->where('id',$datas['prevent_fire_area_id'])->find();
-        $site_name =Db::connect('mysql_config')->table('qs_sites')->field('site_name')->where('id',$site_id['parentid'])->find();
-        $datas['location'] = $site_name['site_name'] .'-' .$datas['prevent_fire_area'];
-        //$datas['catalogue_type'] = $datas['catalogue_value'];
-        foreach ($datas as $key=>$value) {
-            if ($key == 'catalogue_value'){
-                $datas['catalogue_type'] = $datas[$key];
+        $site_id =Db::connect('mysql_config')->table('qs_site')->field('parentid')->where('id',$datas['prevent_fire_area_id'])->find();
+        $site_name =Db::connect('mysql_config')->table('qs_site')->field('site_name')->where('id',$site_id['parentid'])->find();
+
+        if($datas){
+            $datas['location'] = $site_name['site_name'] .'-' .$datas['prevent_fire_area'];
+            //$datas['catalogue_type'] = $datas['catalogue_value'];
+            foreach ($datas as $key=>$value) {
+                if ($key == 'catalogue_value'){
+                    $datas['catalogue_type'] = $datas[$key];
+                }
             }
         }
         unset($datas['prevent_fire_area_id']);
@@ -196,21 +199,25 @@ class Patrol extends Common
         echo json_encode($return_data,JSON_UNESCAPED_UNICODE);die;
     }
 
-    //获取设备信息 for GIS
+    //获取设备信息 for GIS 获取水电舱位置
     public function gis_data()
     {
         $code = $this->request->param('cate_code');
         $zone = $this->request->param('zone');
+        $zone_name = explode('/',$zone);
 
         $datas =Db::connect('sqlsrv_config')
             ->table('rmd_base_equipment')
             ->field('equipment_code,equipment_name,catalogue_value,equipment_xh,equipment_jszt,catalogue_value,brand,prevent_fire_area,prevent_fire_area_id')
             ->where('catalogue',$code)
-            ->where('prevent_fire_area',$zone)
+            ->where('prevent_fire_area',$zone_name[0])
             ->find();
-        $site_id =Db::connect('mysql_config')->table('qs_sites')->field('parentid')->where('id',$datas['prevent_fire_area_id'])->find();
+        $site_id =Db::connect('mysql_config')->table('qs_sites')->field('parentid')->where('site_name',$zone)->find();
+
         $site_name =Db::connect('mysql_config')->table('qs_sites')->field('site_name')->where('id',$site_id['parentid'])->find();
-        $datas['location'] = $site_name['site_name'] .'-' .$datas['prevent_fire_area'];
+        if($datas){
+            $datas['location'] = $site_name['site_name'] .'-' .$datas['prevent_fire_area'];
+        }
         //$datas['catalogue_type'] = $datas['catalogue_value'];
 //        foreach ($datas as $key=>$value) {
 //            if ($key == 'catalogue_value'){
