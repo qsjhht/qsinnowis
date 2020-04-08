@@ -57,7 +57,7 @@ Route::get('real/get_phone', 'api/real/get_phone')->allowCrossDomain();
 //爱立信调度服务 拨号
 Route::get('real/call_phone', 'api/real/call_phone')->allowCrossDomain();
 //获取全部水位实时数据 最大最小平均值
-Route::get('real/get_water', 'api/real/get_water')->allowCrossDomain();
+Route::get('real/get_s_logs', 'api/real/get_s_logs')->allowCrossDomain();
 //获取指定传感器实时数据 最大最小平均值
 Route::get('real/get_sensor', 'api/real/get_sensor')->allowCrossDomain();
 

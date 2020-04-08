@@ -84,10 +84,11 @@ class Common extends Controller
 //                'from_name' => 'require', //调度台名
                 'call' => 'require',  //呼叫号码
             ),
-            'get_water' => array(
+            'get_s_logs' => array(
+                'sensor' => 'require',  //传感器类别
             ),
             'get_sensor' => array(
-                'sensor' => 'require',  //通话类别
+                'sensor' => 'require',  //传感器类别
             ),
 
         ),

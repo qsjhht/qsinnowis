@@ -448,7 +448,7 @@ class Real extends Common
     }
 
     //获取亚控工业实时库 水位 最大 最小 平均值
-    public function get_water()
+    public function get_s_logs()
     {
         $conn=odbc_connect('KingHistorian','sa','sa');
         if (!$conn)
@@ -456,7 +456,7 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT * FROM realtime where TagName like 'QS_LT%'";
+        $sql="SELECT top 8400 * FROM history where TagName like 'QS_LT%' and DataTime > '2019-10-10' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -466,15 +466,14 @@ class Real extends Common
         $water_arr = array();
         while (odbc_fetch_row($rs))
         {
-            $water_arr[] =odbc_result($rs,"DataValue");
-
+//            dump(odbc_result($rs,"DataValue"));
+            $water_arr[odbc_result($rs,"DataTime")][] =odbc_result($rs,"DataValue");
+            $logs[odbc_result($rs,"DataTime")]['l_max'] = max($water_arr[odbc_result($rs,"DataTime")]);
+            $logs[odbc_result($rs,"DataTime")]['l_min'] = min($water_arr[odbc_result($rs,"DataTime")]);
+            $logs[odbc_result($rs,"DataTime")]['l_avg'] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
         }
         odbc_close($conn);
-
-        $water['w_max'] = max($water_arr);
-        $water['w_ins'] = min($water_arr);
-        $water['w_avg'] = array_sum($water_arr)/count($water_arr);
-        $this->return_msg(200,'查询成功！',$water);
+        $this->return_msg(200,'查询成功！',$logs);
     }
 
     //获取亚控工业实时库 指定传感器 最大 最小 平均值
