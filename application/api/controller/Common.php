@@ -84,6 +84,8 @@ class Common extends Controller
 //                'from_name' => 'require', //调度台名
                 'call' => 'require',  //呼叫号码
             ),
+            'get_water' => array(
+            ),
 
         ),
         'Master'    => array(

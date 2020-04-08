@@ -36,16 +36,30 @@ Route::get('patrol/patroling', 'api/patrol/patroling')->allowCrossDomain();
 
 Route::post('patrol/patrol_reload', 'api/patrol/patrol_reload')->allowCrossDomain();
 
+// 获取防火分区 传感器实时数据
 Route::get('real/real_time', 'api/real/real_time')->allowCrossDomain();
+//获取防火分区 指定传感器数据  最近200条
 Route::get('real/real_times', 'api/real/real_times')->allowCrossDomain();
+//帮前端处理数据格式  获取防火分区 指定传感器数据  最近200条
 Route::get('real/real_timest', 'api/real/real_timest')->allowCrossDomain();
+//获取指定传感器 指定防火分区最新数据
 Route::get('real/get_last_real', 'api/real/get_last_real')->allowCrossDomain();
+
 Route::get('real/status_refresh', 'api/real/status_refresh')->allowCrossDomain();
+// 预计拨打爱立信调度
 Route::get('real/call_ericsson', 'api/real/call_ericsson')->allowCrossDomain();
+//获取 主页右上角四个摄像头 token
 Route::get('real/get_video_set', 'api/real/get_video_set')->allowCrossDomain();
+//设置 主页右上角四个摄像头 token
 Route::get('real/video_set', 'api/real/video_set')->allowCrossDomain();
+//获取爱立信调度服务 所有调度电话信息
 Route::get('real/get_phone', 'api/real/get_phone')->allowCrossDomain();
+//爱立信调度服务 拨号
 Route::get('real/call_phone', 'api/real/call_phone')->allowCrossDomain();
+//获取全部水位实时数据平均值
+Route::get('real/get_water', 'api/real/get_water')->allowCrossDomain();
+
+
 
 Route::get('bigdata/date', 'api/bigdata/date')->allowCrossDomain();
 Route::get('bigdata/get_data', 'api/bigdata/get_data')->allowCrossDomain();

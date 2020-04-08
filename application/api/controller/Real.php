@@ -447,5 +447,47 @@ class Real extends Common
         }
     }
 
+    public function get_water()
+    {
+        $conn=odbc_connect('KingHistorian','sa','sa');
+        if (!$conn)
+        {
+            exit("连接失败: " . $conn);
+        }
+
+        $sql="SELECT * FROM realtime where TagName like 'QS_LT%";
+        $rs=odbc_exec($conn,$sql);
+dump($rs);die;
+        if (!$rs)
+        {
+            exit("SQL 语句错误");
+        }
+        $yk_arr = array();
+        while (odbc_fetch_row($rs))
+        {
+//            $name = substr(odbc_result($rs,"TagName"),-5);
+            /* $compname=odbc_result($rs,"TagName");*/
+            //$conname=odbc_result($rs,"DataTime");
+//            if($name == $zone){
+            $yk_arr[substr(odbc_result($rs,"TagName"),3)] =odbc_result($rs,"DataValue");
+//            }
+//            $yk_arr[$name]['TagName'] = $name;
+//            $yk_arr[$name]['DataTime'] = odbc_result($rs,"DataTime");
+//            $yk_arr[$name]['DataValue'] = odbc_result($rs,"DataValue");
+//            echo "<tr><td>$compname</td>";
+            //echo "<td>$conname</td></tr>";
+//            $yk_arr[substr(odbc_result($rs,"TagName"),16)] = odbc_result($rs,"DataTime");
+//            $yk_arr[odbc_result($rs,"DataTime")] =odbc_result($rs,"DataValue");
+
+        }
+        odbc_close($conn);
+        /*dump($yk_arr);
+        die;*/
+        //dump($realdata);
+        /*$return_data['code'] = 200;
+        $return_data['msg']  = '查询成功！';
+        $return_data['data'] = $real;*/
+        echo json_encode($yk_arr,JSON_UNESCAPED_UNICODE);die;
+    }
 
 }
