@@ -87,6 +87,7 @@ class Common extends Controller
             'get_water' => array(
             ),
             'get_sensor' => array(
+                'sensor' => 'require',  //通话类别
             ),
 
         ),
