@@ -191,6 +191,7 @@
 
     var map;
     var url;
+    var gis_arr = [];
     $(function () {
         // alert('11');
 
@@ -422,7 +423,8 @@
                         },
                         onClose(){
                             audio.pause();
-                            map.removeLayer(resultLayer);
+                            let name = "layer_"+evala.id;
+                            map.removeLayer(gis_arr[name]);
                         }
                     })
                 }else if(evala.lvlcontent == '严重'){
@@ -442,7 +444,8 @@
                         },
                         onClose(){
                             audio.pause();
-                            map.removeLayer(resultLayer);
+                            let name = "layer_"+evala.id;
+                            map.removeLayer(gis_arr[name]);
                         }
                     })
                 }
@@ -580,7 +583,6 @@
         var alarmData = alarmData;
 
         var section = alarmData.zone.split('/')[0];
-
         var queryName = codeChangeLay(alarmData.cate_code);
         var param = new SuperMap.QueryBySQLParameters({
             queryParams: {
@@ -605,10 +607,11 @@
                 features: features,
                 wrapX: false
             });
-            resultLayer = new ol.layer.Vector({
+            let name = "layer_"+alarmData.id;
+            gis_arr[name] = new ol.layer.Vector({
                 source: vectorSource
             });
-            map.addLayer(resultLayer);
+            map.addLayer(gis_arr[name]);
         });
     }
 
