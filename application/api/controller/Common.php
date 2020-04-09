@@ -75,6 +75,10 @@ class Common extends Controller
             'get_video_set' => array(
             ),
             'video_set' => array(
+                'id1' => 'chsDash',
+                'id2' => 'chsDash',
+                'id3' => 'chsDash',
+                'id4' => 'chsDash',
             ),
             'get_phone' => array(
             ),
