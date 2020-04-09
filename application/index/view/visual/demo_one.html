@@ -422,6 +422,7 @@
                         },
                         onClose(){
                             audio.pause();
+                            map.removeLayer(resultLayer);
                         }
                     })
                 }else if(evala.lvlcontent == '严重'){
@@ -441,6 +442,7 @@
                         },
                         onClose(){
                             audio.pause();
+                            map.removeLayer(resultLayer);
                         }
                     })
                 }
@@ -454,10 +456,10 @@
             }
         }
     });
-    $("#deletBtn").click(function () {
-        map.removeLayer(resultLayer);
-        $("#deletBtn").hide();
-    });
+    // $("#deletBtn").click(function () {
+    //     map.removeLayer(resultLayer);
+    //     // $("#deletBtn").hide();
+    // });
 
     function codeChangeLay(data) {
         var namelayer;
@@ -621,7 +623,7 @@
         let objs =  eval('('+msg+')');
         var gis_alarm = objs.real_alarm;
         query_alarm(gis_alarm);
-        $("#deletBtn").show();
+        // $("#deletBtn").show();
 
         if(objs.reload){
             console.dir('patrol_reload');
