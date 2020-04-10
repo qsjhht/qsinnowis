@@ -469,9 +469,12 @@ class Real extends Common
         {
 //            dump(odbc_result($rs,"DataValue"));
             $water_arr[odbc_result($rs,"DataTime")][] =odbc_result($rs,"DataValue");
-            $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
-            $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
-            $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
+            $logs['l_max'][odbc_result($rs,"DataTime")][] = odbc_result($rs,"DataTime");
+            $logs['l_max'][odbc_result($rs,"DataTime")][] =  max($water_arr[odbc_result($rs,"DataTime")]);
+            $logs['l_min'][odbc_result($rs,"DataTime")][] = odbc_result($rs,"DataTime");
+            $logs['l_min'][odbc_result($rs,"DataTime")][] = min($water_arr[odbc_result($rs,"DataTime")]);
+            $logs['l_avg'][odbc_result($rs,"DataTime")][] = odbc_result($rs,"DataTime");
+            $logs['l_avg'][odbc_result($rs,"DataTime")][] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
         }
         odbc_close($conn);
         $this->return_msg(200,'查询成功！',$logs);
