@@ -469,15 +469,21 @@ class Real extends Common
         {
 //            dump(odbc_result($rs,"DataValue"));
             $water_arr[odbc_result($rs,"DataTime")][] =odbc_result($rs,"DataValue");
-            $logs['l_max'][odbc_result($rs,"DataTime")][] = odbc_result($rs,"DataTime");
-            $logs['l_max'][odbc_result($rs,"DataTime")][] =  max($water_arr[odbc_result($rs,"DataTime")]);
-            $logs['l_min'][odbc_result($rs,"DataTime")][] = odbc_result($rs,"DataTime");
-            $logs['l_min'][odbc_result($rs,"DataTime")][] = min($water_arr[odbc_result($rs,"DataTime")]);
-            $logs['l_avg'][odbc_result($rs,"DataTime")][] = odbc_result($rs,"DataTime");
-            $logs['l_avg'][odbc_result($rs,"DataTime")][] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
+            $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
+            $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
+            $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
         }
         odbc_close($conn);
-        $this->return_msg(200,'查询成功！',$logs);
+        foreach ($logs['l_max'] as $time => $l_max) {
+            $l_arr['max'][] = array($time,$l_max);
+        }
+        foreach ($logs['l_min'] as $time => $l_max) {
+            $l_arr['min'][] = array($time,$l_max);
+        }
+        foreach ($logs['l_avg'] as $time => $l_max) {
+            $l_arr['avg'][] = array($time,$l_max);
+        }
+        $this->return_msg(200,'查询成功！',$l_arr);
     }
 
     //获取亚控工业实时库 指定传感器 最大 最小 平均值
