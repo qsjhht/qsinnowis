@@ -510,9 +510,9 @@ class Real extends Common
         }
         odbc_close($conn);
 
-        $sensor_arr['s_max'] = array([$date_time],max($water_arr));
-        $sensor_arr['s_min'] = array([$date_time],min($water_arr));
-        $sensor_arr['s_avg'] = array([$date_time],array_sum($water_arr)/count($water_arr));
+        $sensor_arr['s_max'] = array($date_time,max($water_arr));
+        $sensor_arr['s_min'] = array($date_time,min($water_arr));
+        $sensor_arr['s_avg'] = array($date_time,array_sum($water_arr)/count($water_arr));
         $this->return_msg(200,'查询成功！',$sensor_arr);
     }
 
