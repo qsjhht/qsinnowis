@@ -426,11 +426,13 @@ class Real extends Common
             $from_name = '调度台2';
         }
 
-        if ($type == '调度群呼'){
+        if ($type == '调度组呼'){
             $num_or_g = '分组';
         }else if($type == '调度单呼'){
             $num_or_g = '号码';
         }
+        dump($num_or_g);
+        die;
         $msg =  $type.' 调度号码='.$from_num.' 调度名称='.$from_name.' '.$num_or_g.'='.$call.chr(13);
         $msgo =  $type.' 调度号码='.$from_num.' 调度名称='.$from_name.' '.$num_or_g.'='.$call;
 //        dump($msg);
