@@ -1,5 +1,7 @@
 ﻿
     // 数据
+
+
 let date = new Date();
 var preDate = new Date(date.getTime() - 24*60*60*1000);
 var nextDate = new Date(date.getTime() + 24*60*60*1000);
@@ -24,7 +26,7 @@ var nextDate = new Date(date.getTime() + 24*60*60*1000);
 
 let data = {
     getYear:date.getFullYear(),//年份
-    getMonth:date.getMonth()+1,//月份
+    getMonth:date.getMonth()-1,//月份
     getDate:date.getDate(),//日
     getTime:date.getHours(),//当前时间
     weeHours:date.getMinutes(),//当前分钟
@@ -85,8 +87,25 @@ let data = {
     }
 };
 data.water(6,60);//水位
-
+    // console.dir(data.arr.slice(0,data.number()));
+    // console.dir(data.arr.slice(0,data.number()));
 // 水位监测
+//获取历史数据
+    let waters = [];
+    $.ajax({
+        url:"http://192.168.5.100:1000/real/get_s_logs?sensor=LT",
+        async:false,
+        success:function(json){
+            let data = JSON.parse(json);
+            waters = data.data.avg;
+        },
+        error: function(){
+            console.error('ajax请求错误 ');
+        }
+    });
+    console.dir(waters);
+    console.dir(waters);
+    console.dir(waters);
 let contentFirm = echarts.init(document.getElementById('contentFirm'));
 let firmOption = {
     title:{
@@ -154,7 +173,7 @@ let firmOption = {
                 color: '#0e628e'
             }])
         },
-        data:data.arr.slice(0,data.number()),
+        data:waters,
         markLine:{
             silent:true,
             lineStyle:{
@@ -171,90 +190,79 @@ let firmOption = {
 };
 contentFirm.setOption(firmOption);
 
+    // 实时更新
+    setInterval(function(){
+        $.ajax({
+            url:"http://192.168.5.100:1000/real/get_sensor?sensor=LT",
+            async:false,
+            success:function(result){
+                let water_obj = JSON.parse(result).data.s_avg;
+                waters.unshift(water_obj);
+                waters.pop();
+            }
+        });
+        // 水仓
+        contentFirm.setOption({
+            series: [{
+                data: waters
+            }]
+        });
+        console.dir(waters);
+    },60000);
+
 // 环境监测
 let borCont = echarts.init(document.getElementById('borCont'));
 // 温度
-let optionTem = {
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        textStyle:{
-            color:'#00ffff'
-        },
-        data:['最高温度','平均温度','最低温度']
-    },
-    xAxis: {
-        name:'时间',
-        type: 'time',
-        axisLine:{
-            lineStyle:{
-                color:'#FFFFFF'
+//     console.dir(data.environ(1,21));
+//     console.dir(data.environ(1,19));
+//     console.dir(data.environ(1,17));
+    res = {};
+    function get_sensor(sensor) {
+        $.ajax({
+            url:"http://192.168.5.100:1000/real/get_s_logs?sensor="+sensor,
+            async:false,
+            success:function(json){
+                let data = JSON.parse(json);
+                res = data.data;
+            },
+            error: function(){
+                console.error('ajax请求错误 ');
             }
-        },
-        splitLine: {
-            show: false
+        });
+    }
+
+    function objToArray(obj,shift) {
+
+        // console.dir('ooooooooooooooooooooooooooooooooooooooooooooooo');
+        // console.dir(res.avg);
+
+        res.avg.unshift(obj.s_avg);
+        res.max.unshift(obj.s_max);
+        res.min.unshift(obj.s_min);
+        // console.dir('nnnnnnnnnnnnnnnnnnnn');
+        // console.dir(res.avg);
+        if (shift) {
+            res.avg.pop();
+            res.max.pop();
+            res.min.pop();
+            // console.dir('sssssssssssssssssssssssssssssssss');
+            // console.dir(res.avg);
+            // console.dir('aaaaaaaaaaaaaaaaaavvvvvvvvvvvvvvvvvvvvvvggggggggggggggggg');
         }
-    },
-    yAxis: {
-        name:'温度（°C）',
-        type: 'value',
-        axisLine:{
-            lineStyle:{
-                color:'#FFFFFF'
-            }
-        },
-        min:0,
-        splitLine: {
-            show: false
-        }
-    },
-    series: [
-        {
-            name:'最高温度',
-            type:'line',
-            smooth:true,
-            data:data.environ(1,21)
-        },
-        {
-            name:'平均温度',
-            type:'line',
-            smooth:true,
-            data:data.environ(1,19)
-        },
-        {
-            name:'最低温度',
-            type:'line',
-            smooth:true,
-            data:data.environ(1,17)
-        }
-    ]
-};
-//湿度
-let optionHum = {
-        tooltip: {
-            trigger: 'axis'
-        },
+    }
+
+function set_option(e_y_name,e_unit) {
+    e_option = {
+
         legend: {
             textStyle:{
                 color:'#00ffff'
             },
-            data:['最高湿度','平均湿度','最低湿度']
+            data:['最高'+e_y_name,'平均'+e_y_name,'最低'+e_y_name]
         },
-        xAxis: {
-            name:'时间',
-            type: 'time',
-            axisLine:{
-                lineStyle:{
-                    color:'#FFFFFF'
-                }
-            },
-            splitLine: {
-                show: false
-            }
-        },
+
         yAxis: {
-            name:'湿度（%）',
+            name:e_unit,
             type: 'value',
             axisLine:{
                 lineStyle:{
@@ -268,212 +276,158 @@ let optionHum = {
         },
         series: [
             {
-                name:'最高湿度',
+                name:'最高'+e_y_name,
                 type:'line',
                 smooth:true,
-                data:data.environ(3,73)
-            },{
-                name:'平均湿度',
-                type:'line',
-                smooth:true,
-                data:data.environ(3,67)
-            },{
-                name:'最低湿度',
-                type:'line',
-                smooth:true,
-                data:data.environ(3,62)
-            }
-        ]
-};
-// 氧气
-let optionOxygen = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            textStyle:{
-                color:'#00ffff'
+                data:res.max
             },
-            data:['最高氧气浓度','平均氧气浓度','最低氧气浓度']
-        },
-        xAxis: {
-            name:'时间',
-            type: 'time',
-            axisLine:{
-                lineStyle:{
-                    color:'#FFFFFF'
-                }
-            },
-            splitLine: {
-                show: false
-            }
-        },
-        yAxis: {
-            name:'氧气（%VOL）',
-            type: 'value',
-            axisLine:{
-                lineStyle:{
-                    color:'#FFFFFF'
-                }
-            },
-            min:0,
-            splitLine: {
-                show: false
-            }
-        },
-        series: [
             {
-                name:'最高氧气浓度',
+                name:'平均'+e_y_name,
                 type:'line',
                 smooth:true,
-                data:data.environ(1,23)
-            },{
-                name:'平均氧气浓度',
+                data:res.avg
+            },
+            {
+                name:'最低'+e_y_name,
                 type:'line',
                 smooth:true,
-                data:data.environ(1,21)
-            },{
-                name:'最低氧气浓度',
-                type:'line',
-                smooth:true,
-                data:data.environ(1,19)
+                data:res.min
             }
         ]
     };
-// 硫化氢
-let optionHyd = {
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        textStyle:{
-            color:'#00ffff'
+}
+//初始化  获取一天内温度 赋值res
+    get_sensor("T");
+    e_y_name = "温度";
+    e_unit = "温度(℃)";
+    //option 赋值
+    e_i_option = {
+        tooltip: {
+            trigger: 'axis'
         },
-        data:['最高硫化氢浓度','平均硫化氢浓度','最低硫化氢浓度']
-    },
-    xAxis: {
-        name:'时间',
-        type: 'time',
-        axisLine:{
-            lineStyle:{
-                color:'#FFFFFF'
+        legend: {
+            textStyle:{
+                color:'#00ffff'
+            },
+            data:['最高'+e_y_name,'平均'+e_y_name,'最低'+e_y_name]
+        },
+        xAxis: {
+            name:'时间',
+            type: 'time',
+            axisLine:{
+                lineStyle:{
+                    color:'#FFFFFF'
+                }
+            },
+            splitLine: {
+                show: false
             }
         },
-        splitLine: {
-            show: false
-        }
-    },
-    yAxis: {
-        name:'硫化氢（ppm）',
-        type: 'value',
-        axisLine:{
-            lineStyle:{
-                color:'#FFFFFF'
+        yAxis: {
+            name:e_unit,
+            type: 'value',
+            axisLine:{
+                lineStyle:{
+                    color:'#FFFFFF'
+                }
+            },
+            min:0,
+            splitLine: {
+                show: false
             }
         },
-        min:0,
-        splitLine: {
-            show: false
-        }
-    },
-    series: [
-        {
-            name:'最高硫化氢浓度',
-            type:'line',
-            smooth:true,
-            data:data.environ(0,0)
+        dataZoom:[{
+            start:98,
+            end:100,
+            backgroundColor:'rgb(ff,ff,ff)',
+            height:'15',
+            bottom:'3%'
         },{
-            name:'平均硫化氢浓度',
-            type:'line',
-            smooth:true,
-            data:data.environ(0,0)
-        },{
-            name:'最低硫化氢浓度',
-            type:'line',
-            smooth:true,
-            data:data.environ(0,0)
-        }
-    ]
-};
-// 甲烷
-let optionMethane = {
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        textStyle:{
-            color:'#00ffff'
-        },
-        data:['最高甲烷浓度','平均甲烷浓度','最低甲烷浓度']
-    },
-    xAxis: {
-        name:'时间',
-        type: 'time',
-        axisLine:{
-            lineStyle:{
-                color:'#FFFFFF'
+            type:'slider',
+            //borderColor:'rgb(30,255,05)',
+            height:'15',
+            bottom:'3%'
+        }],
+        series: [
+            {
+                name:'最高'+e_y_name,
+                type:'line',
+                smooth:true,
+                data:res.max
+            },
+            {
+                name:'平均'+e_y_name,
+                type:'line',
+                smooth:true,
+                data:res.avg
+            },
+            {
+                name:'最低'+e_y_name,
+                type:'line',
+                smooth:true,
+                data:res.min
             }
-        },
-        splitLine: {
-            show: false
-        }
-    },
-    yAxis: {
-        name:'甲烷（%LEL）',
-        type: 'value',
-        axisLine:{
-            lineStyle:{
-                color:'#FFFFFF'
+        ]
+    };
+    //初始化 echart
+    borCont.setOption(e_i_option);
+    //定时更新 echart 数据
+    Reallog = setInterval(function(){
+        $.ajax({
+            url:"http://192.168.5.100:1000/real/get_sensor?sensor=T",
+            async:false,
+            success:function(result){
+                let jsonObj = JSON.parse(result).data;
+                //更新 res 数组
+                objToArray(jsonObj,true);
             }
-        },
-        min:0,
-        splitLine: {
-            show: false
-        }
-    },
-    series: [
-        {
-            name:'最高甲烷浓度',
-            type:'line',
-            data:data.environ(1,4)
-        },{
-            name:'平均甲烷浓度',
-            type:'line',
-            data:data.environ(1,2)
-        },{
-            name:'最低甲烷浓度',
-            type:'line',
-            data:data.environ(0,0)
-        }
-    ]
-};
-borCont.setOption(optionTem);
+        });
+        set_option(e_y_name,e_unit);
+        borCont.setOption(e_option);
+    },60000);
 
-// 实时更新
-setInterval(function(){
-    data.arr.shift();
-    // 水仓
-    contentFirm.setOption({
-        series: [{
-            data: data.arr.slice(0, data.number())
-        }]
-    });
-},15000);
+
 // 下拉框判断
-let valueNum = 1;
 function select(e){
-    valueNum = e;
-    if(e == 1){
-        borCont.setOption(optionTem);
-    }else if(e == 2){
-        borCont.setOption(optionHum);
-    }else if(e == 3){
-        borCont.setOption(optionOxygen);
-    }else if(e == 4){
-        borCont.setOption(optionHyd);
-    }else if(e == 5){
-        borCont.setOption(optionMethane);
+    if(e == 'T'){
+
+        e_y_name = "温度";
+        e_unit = "温度(℃)";
+
+    }else if(e == "M"){
+        e_y_name = "湿度";
+        e_unit = "湿度(%)";
+
+    }else if(e == "O2"){
+        e_y_name = "氧气浓度";
+        e_unit = "氧气(%VOL)";
+
+    }else if(e == "CH4"){
+        e_y_name = "甲烷浓度";
+        e_unit = "甲烷(%LEL)";
+
+    }else if(e == "H2S"){
+        e_y_name = "硫化氢浓度";
+        e_unit = "硫化氢(ppm)";
     }
+    get_sensor(e);
+    set_option(e_y_name,e_unit);
+    borCont.setOption(e_option);
+    window.clearInterval(Reallog);
+    //定时更新 echart 数据
+    Reallog = setInterval(function(){
+        $.ajax({
+            url:"http://192.168.5.100:1000/real/get_sensor?sensor="+e,
+            async:false,
+            success:function(result){
+                let jsonObj = JSON.parse(result).data;
+                objToArray(jsonObj,true);
+            }
+        });
+        set_option(e_y_name,e_unit);
+        borCont.setOption(e_option);
+        // console.dir(res);
+    },60000);
 }
 
 // -----------------------------------------------------------
