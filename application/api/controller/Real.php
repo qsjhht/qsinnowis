@@ -457,7 +457,7 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT top 8400 * FROM history where TagName like 'QS_".$sensor."%' and DataTime > '2019-10-10' order by DataTime desc";
+        $sql="SELECT top 7200 * FROM history where TagName like 'QS_".$sensor."%' and DataTime > '2019-10-10' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -506,13 +506,13 @@ class Real extends Common
         while (odbc_fetch_row($rs))
         {
             $water_arr[] =odbc_result($rs,"DataValue");
-
+            $date_time = odbc_result($rs,"DataTime");
         }
         odbc_close($conn);
 
-        $sensor_arr['s_max'] = max($water_arr);
-        $sensor_arr['s_min'] = min($water_arr);
-        $sensor_arr['s_avg'] = array_sum($water_arr)/count($water_arr);
+        $sensor_arr['s_max'][$date_time] = max($water_arr);
+        $sensor_arr['s_min'][$date_time] = min($water_arr);
+        $sensor_arr['s_avg'][$date_time] = array_sum($water_arr)/count($water_arr);
         $this->return_msg(200,'查询成功！',$sensor_arr);
     }
 
