@@ -24,7 +24,7 @@ class Index extends Adminbase
     }
     public function index()
     {
-
+dump($this->url);die;
 //        $user_phone = db('user')->field('user_phone')->select();
         //dump($user_phone);die;
 //        $this->assign('accounts',$user_phone);
@@ -85,6 +85,14 @@ class Index extends Adminbase
     }
 
 //二维码相关
+    public function download()
+    {
+        //$download =  new \think\response\Download($this->apk);
+        //return $download->name('kid-ward.apk');
+        // 或者使用助手函数完成相同的功能
+        // download是系统封装的一个助手函数
+        return download($this->apk, 'kid-ward.apk');
+    }
     public function re_qrcode()
     {
         if(@fopen( $this->filename, 'r' )){
