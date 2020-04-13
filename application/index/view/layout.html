@@ -234,6 +234,18 @@
         </el-dialog>
         <!--  -->
     </div>
+    <div id="layer-photos-demo" class="layer-photos-demo" style="display: none">
+        本软件版权为求实科技集团有限公司所有。<br> 受《中华人民共和国著作权法》和著作权国际公约的保护。<br> 未经求实科技集团有限公司书面许可，不得以任何方式或理由对该软件或资料的任何部分进行使用、破解、复制、修改、抄录、传播或与其它产品捆绑使用、销售，侵权必究。<br>
+        软件名称：InnoWis智慧管廊综合管理平台<br>
+        授权使用：河北承宏管廊工程有限公司<br>
+        使用范围：正定新区存量综合管廊工程 <br>
+        授权期限：永久授权<br>
+        授权单位：求实科技集团有限公司<br>
+        <div  style="text-align: center">
+            <img style="" layer-pid="1" layer-src="url('/qrcode/Reimg.jpeg')" src="/qrcode/qrcodes.png" alt="图片名">
+        </div>
+        扫描下载安卓版app
+    </div>
     <audio id="myAudio" style="display: none;">
         <source src="__STATIC__/new/alarm.wav" type="audio/wav">
         您的浏览器不支持 audio 与元素。
@@ -440,13 +452,13 @@
         $("#copyright").click(function(){
             layer.open({
                 title: '版权声明！'
-                ,content: '本软件版权为求实科技集团有限公司所有。<br> 受《中华人民共和国著作权法》和著作权国际公约的保护。<br> 未经求实科技集团有限公司书面许可，不得以任何方式或理由对该软件或资料的任何部分进行使用、破解、复制、修改、抄录、传播或与其它产品捆绑使用、销售，侵权必究。<br> ' +
-                '软件名称：InnoWis智慧管廊综合管理平台<br> ' +
-                '授权使用：河北承宏管廊工程有限公司<br> ' +
-                '使用范围：正定新区存量综合管廊工程 <br> ' +
-                '授权期限：永久授权<br> ' +
-                '授权单位：求实科技集团有限公司<br> '
+                ,content: $('#layer-photos-demo').html()
             });
+            // alert('adsfasf');
+            // layer.photos({
+            //     photos: '#layer-photos-demo'
+            //     ,anim: 1 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            // });
         });
 
         $("#login").click(function(){
