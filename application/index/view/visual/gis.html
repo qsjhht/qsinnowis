@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>gis</title>
+    <meta http-equiv="X-UA-Compatible" content="chrome=50"/>
+    <script src="__STATIC__/layui-2.5.6/layui.js"></script>
+    <link rel="stylesheet" href="__STATIC__/new/gis/dist/iclient9-openlayers.css">
+    <link rel="stylesheet" href="__STATIC__/new/gis/dist/ol.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
+    <script src="__STATIC__/new/gis/dist/ol.js"></script>
+    <!--<script src="openlayers/include-openlayers.js"></script>-->
+    <script src="__STATIC__/new/gis/dist/iclient9-openlayers-es6.min.js"></script>
+    <script src="__STATIC__/h5splayer/platform.js"></script>
+    <script src="__STATIC__/h5splayer/h5splayer.js"></script>
+    <script src="__STATIC__/h5splayer/h5splayerhelper.js"></script>
+    <!--<script src="../h5stream/js/adapter.js"></script>-->
+
+
+</head>
+<style>
+    .search input{
+        opacity: 0.2;
+    }
+    .ol-popup {
+        position: absolute;
+        background-color: rgba(07,09,18,0.7);
+        -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+        filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #113c58;
+        bottom: 12px;
+        left: -50px;
+        min-width: 240px;
+        color: #cccccc;
+    }
+
+     .ol-popup:before {
+        top: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    .ol-popup:after {
+        border-top-color: white;
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+    }
+
+    .ol-popup:before {
+        border-top-color: #113c58;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+    }
+    .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+        color:#113c58 ;
+    }
+    .ol-popup-closer:after {
+        content: "✖";
+    }
+    .ol-popup-closer:hover{
+        color:white ;
+    }
+    .demo-tree{
+        background-color: rgba(07,09,18,0.7);
+        border: 1px solid #113c58;
+        border-radius: 5px;
+    }
+    /*.layui-tree div div div:hover{*/
+        /*background-color: red;*/
+    /*}*/
+
+</style>
+<body>
+<div id="map" style="width: 100%; height: 96%;background-color: #CCCCCC"></div>
+<div id="popup" class="ol-popup">
+    <a href="" id="popup-closer" class="ol-popup-closer"></a>
+    <div id="popup-content" class="row h5videowrapper h5container"></div>
+</div>
+<div id="deletBtn" style="display:none;position: absolute;top: 16px;right: 16px;background-color: #470313;border: 1px solid #df3d38;color: #df3d38;width: 30px;height: 30px;padding: 10px;border-radius: 8px">X</div>
+<div class="search" style="position: absolute;top: 10px;left: 70px">
+    <div id="test" class="demo-tree"></div>
+    <input id="code" type="text" placeholder="编号" value="9">
+    <input type="text" placeholder="防火分区" id="section" value="XC01">
+    <button id="showQue">显示</button><button id="hideQue">隐藏</button>
+</div>
+<script>
+    //获取popup的节点
+    var container = document.getElementById('popup');
+    var content = document.getElementById('popup-content');
+    var closer = document.getElementById('popup-closer');
+
+    // 创建一个overlay, 绑定html元素container
+    var overlay = new ol.Overlay(({
+        element: container,
+        autoPan: true,
+        autoPanAnimation: {
+            duration: 250
+        }
+    }));
+    var map, resultLayer,
+        url = 'http://192.168.5.100:8090/iserver/services/map-zhengDing/rest/maps/zhengDing',
+        map = new ol.Map({
+            target: 'map',
+            view: new ol.View({
+                center: [114.62 , 38.14],
+                zoom: 14,
+                maxZoom:20,
+                minZoom:14,
+                projection: 'EPSG:4326'
+            }),
+            overlays:[overlay]
+        });
+    var layer = new ol.layer.Tile({
+        source: new ol.source.TileSuperMapRest({
+            url: url
+        }),
+        projection: 'EPSG:4326'
+    });
+    map.addLayer(layer);
+    var queryParam = {};
+    var queryName;
+    $('#showQue').click(function () {
+      var gisCode = $("#code").val();
+      queryName =  codeChangeLay(gisCode);
+      console.log(queryName);
+      var attFil = "Section='"+$('#section').val()+"'";
+      queryParam.queryName = queryName;
+      queryParam.attFil = attFil;
+      console.log(queryParam);
+      query(queryParam);
+    })
+    $('#hideQue').click(function () {
+        map.removeLayer(resultLayer);
+    })
+
+//    子图层条件查找
+    function query(querData) {
+        var querData = querData;
+        var param = new SuperMap.QueryBySQLParameters({
+            queryParams: {
+                name: querData.queryName,
+                attributeFilter: querData.attFil,
+//                attributeFilter: "Section='"+section+"'"
+            }
+        });
+        new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
+            var qeuryName1 = queryName.split('_')[0];
+            var src = '../../../static/images/gis-img/'+qeuryName1+'.png';
+
+            console.log(src);
+            arr = [];
+            var features = (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features);
+            console.log(features);
+            arr.push(features);
+            var iconStyle = new ol.style.Style({
+                image: new ol.style.Icon(({
+                    imgSize:[200,200],
+                    anchor: [0.5, 0.5],
+                    src: src,
+                    scale:0.15
+                }))
+            });
+            for (var i = 0; i < features.length; i++) {
+                features[i].setStyle(iconStyle);
+            }
+            var vectorSource = new ol.source.Vector({
+                features: features,
+                wrapX: false
+            });
+            resultLayer = new ol.layer.Vector({
+                source: vectorSource
+            });
+            arr = [];
+            arr.push(resultLayer);
+            map.addLayer(resultLayer);
+//            pointermove
+
+            console.log(resultLayer);
+            console.log(map.getLayers())
+        });
+    }
+
+//    设置事件
+
+
+
+    var selectSingleClick = new ol.interaction.Select({
+    });
+    map.addInteraction(selectSingleClick);
+    // 监听选中事件，然后在事件处理函数中改变被选中的`feature`的样式
+    selectSingleClick.on('select', function(event){
+
+      console.log(event);
+      console.log(event);
+
+        if (event.selected.length !==0){
+            if (event.selected[0].N.SmUserID == '4'||event.selected[0].N.SmUserID == '2'){
+                var innerHTML;
+
+                innerHTML = '<video class=';
+                innerHTML += '"h5video1" id="h5sVideo1" style="width:240px" webkit-playsinline playsinline poster="./img/123.jpg">';
+                innerHTML +='</video>';
+                content.innerHTML = innerHTML;
+                videoStart();
+                overlay.setPosition(event.mapBrowserEvent.coordinate);
+            }
+            else {
+                var cang;
+                if (event.selected[0].N.Cang == '电仓'){
+                    cang = "D";
+                }else if(event.selected[0].N.Cang == '水仓'){
+                    cang = "S"
+                }
+                var code = event.selected[0].N.SmUserID;
+                var section = event.selected[0].N.Section+"/"+cang;
+                var url = "http://192.168.5.100:1000/patrol/gis_data?zone="+section+"&cate_code="+code;
+                console.log(url);
+
+
+//            请求设备属性数据
+                $.ajax({
+                    url:url,
+                    async:true,
+                    success:function (data) {
+                        var eqpInfo = eval('('+data+')').data;
+//                    console.log(eqpInfo);
+                        var innerHTML;
+                        innerHTML = "设备名称："+eqpInfo.equipment_name+"<br>";
+                        innerHTML +="设备编号："+ eqpInfo.equipment_code+"<br>";
+                        innerHTML +="设备系统："+ eqpInfo.catalogue_value+"<br>";
+                        innerHTML +="设备状态："+ eqpInfo.equipment_jszt+"<br>";
+                        innerHTML +="设备位置："+ eqpInfo.location+"<br>";
+                        content.innerHTML = innerHTML;
+                        overlay.setPosition(event.mapBrowserEvent.coordinate);
+                    }
+                })
+            }
+
+
+
+//            event.selected[0].setStyle(new ol.style.Style({
+//                image: new ol.style.Circle({
+//                    radius: 10,
+//                    fill: new ol.style.Fill({
+//                        color: 'blue'
+//                    })
+//                })
+//            }));
+        }
+        //取消选中的事件
+        else if (event.deselected.length !==0){
+            selectSingleClick.getFeatures().clear();
+            console.log('000000')
+        }
+
+    })
+
+//    map.on('click',function (e) {
+//        map.forEachFeatureAtPixel(e.pixel, function (feature) {
+//            console.log('点击了元素');
+//            console.log(e);
+//            console.log(this);
+//
+//            vectorTileStyles.dispatchEvent({
+//                type: 'featureSelected',
+//                selectedId: feature.getProperties().id,
+//                layerName: feature.getProperties().layerName
+//            });
+//            return true;
+//        }, {hitTolerance: 5});
+//        resultLayer.changed();
+
+//    })
+//    });
+
+//    视频播放方法
+    var v1;
+
+    var conf1 = {
+        videoid:'h5sVideo1',
+        protocol: 'http:', //'http:' or 'https:'
+        host: '192.168.5.100:8080', //'localhost:8080'
+        rootpath:'/', // '/'
+        token:'a55b',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    function videoStart() {
+        if(conf1.token == ''){
+            alert('请选择设备');
+            return false;
+        }else{
+            if(v1 != null)
+            {
+                v1.disconnect();
+                delete v1;
+                v1 = null;
+            }
+            if (H5siOS() === true)
+            {
+                console.log('H5siOS() === true');
+                v1 = new H5sPlayerRTC(conf1);
+            }else
+            {
+                console.log('H5siOS() === true else');
+                v1 = new H5sPlayerWS(conf1);
+            }
+            v1.connect();
+        }
+    }
+    function codeChangeLay(data) {
+        var namelayer;
+        switch (data){
+            case '4'||'2':
+                namelayer = 'Camera_P';
+                break;
+            case '10':
+                namelayer = 'RQBJ_P';
+                break;
+            case '29':
+                namelayer = 'H2S_P';
+                break;
+            case '9':
+                namelayer = 'TX_P';
+                break;
+            case '8':
+                namelayer = 'IR_P';
+                break;
+            case '13':
+                namelayer = 'MQ_P';
+                break;
+            case '14':
+                namelayer = 'DK_P';
+                break;
+            case '16':
+                namelayer = 'MS_P';
+                break;
+            case '86':
+                namelayer = 'S_P';
+                break;
+            case '87':
+                namelayer = 'SGBJ_P';
+                break;
+            case '89':
+                namelayer = 'SYDL_P';
+                break;
+            case '90':
+                namelayer = 'CW_P';
+                break;
+            case '17':
+                namelayer = 'MCKG_P';
+                break;
+            case '96':
+                namelayer = 'GFMH_P';
+                break;
+            case '94':
+                namelayer = 'JZDY_P';
+                break;
+            case '93':
+                namelayer = 'FPD_P';
+                break;
+            case '27':
+                namelayer = 'WSD_P';
+                break;
+            case '30':
+                namelayer = 'O2_P';
+                break;
+            case '28':
+                namelayer = 'CH4_P';
+                break;
+            case '31':
+                namelayer = 'SWJ_P';
+                break;
+            case '49':
+                namelayer = 'FHFS_P';
+                break;
+            case '50':
+                namelayer = 'FHFP_P';
+                break;
+            case '44'||'51'||'52':
+                namelayer = 'FJ_P';
+                break;
+            case '110':
+                namelayer = 'PUMP_P';
+                break;
+            case '57'||'58':
+                namelayer = 'AP_P';
+                break;
+            case '61':
+                namelayer = 'AL_P';
+                break;
+            case '63':
+                namelayer = 'AP_P';
+                break;
+            case '64':
+                namelayer = 'UPS_P';
+                break;
+            case '22':
+                namelayer = 'JQR_P';
+                break;
+            case '83':
+                namelayer = 'JLSZ_P';
+                break;
+            case '82':
+                namelayer = 'QJ_P';
+                break;
+            case '80':
+                namelayer = 'LXWY_P';
+                break;
+            case '81':
+                namelayer = 'SJCJ_P';
+                break;
+            case '68':
+                namelayer = 'WXAP_P';
+                break;
+            case '42':
+                namelayer = 'IPDH_P';
+                break;
+            default:
+
+        }
+        var queryName = namelayer+"@zdSheBei#1";
+        return queryName;
+    }
+</script>
+<script>
+    layui.use('tree',function () {
+        console.log('111');
+        var tree = layui.tree,
+            data = [{title:'安防系统',id:1,field:'name1',
+                children:[{title:'视频监控',id:3,field:'name11',
+                    children:[{title:'摄像机',id:23,field:''}]},
+                    {title:'人员入侵',id:4,
+                    children:[{title:'入侵报警主机'},
+                        {title:'红外探测器'},
+                        {title:'三鉴探测器'},
+                        {title:'单路地址模块'}]},
+                    {title:'门禁',
+                    children:[{title:'门禁控制器'},
+                        {title:'消防联动模块'},
+                        {title:'读卡器'},
+                        {title:'出门按钮'},
+                        {title:'电锁'},]}]},
+                {title:'消防系统',id:7}]
+        tree.render({
+            elem:'#test',
+            data:data,
+            showCheckbox:false,
+            id:'demoId1',
+            showLine:false,
+            onlyIconControl:false,
+            oncheck:function () {
+                console.log(obj.data); //得到当前点击的节点数据
+                console.log(obj.checked); //得到当前节点的展开状态：open、close、normal
+                console.log(obj.elem); //得到当前节点元素
+                console.log(obj); //得到当前节点元素
+            }
+        })
+    })
+</script>
+</body>
+</html>

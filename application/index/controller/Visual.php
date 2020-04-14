@@ -111,6 +111,10 @@ class Visual extends Adminbase
     {
         return $this->fetch();
     }
+    public function gis()
+    {
+        return $this->fetch();
+    }
     public function demo()
     {
         return $this->fetch();
