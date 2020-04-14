@@ -12,6 +12,8 @@ class Index extends Adminbase
     protected $QRcode;
     protected $url;
     protected $Reimg;
+    protected $errorCorrectionLevel = 'L';
+    protected $matrixPointSize = 3;
     protected function initialize()
     {
         parent::initialize();
@@ -20,11 +22,11 @@ class Index extends Adminbase
         $this->logo = ROOT_PATH.'qrcode\logo4.jpg'; //准备好的logo背景图片
         $this->Reimg = ROOT_PATH.'qrcode\Reimg.jpeg'; //组合好的二维码图片
         $this->apk = ROOT_PATH.'qrcode\kid-ward.apk';
-        $this->url = 'http://'.$_SERVER['SERVER_NAME'].'/index/index/download';
+        $this->url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/index/index/download';
     }
     public function index()
     {
-dump($this->url);die;
+//dump($this->url);die;
 //        $user_phone = db('user')->field('user_phone')->select();
         //dump($user_phone);die;
 //        $this->assign('accounts',$user_phone);
@@ -32,7 +34,13 @@ dump($this->url);die;
         $navi = Db('auth')->where('auth_pid',0)->order('auth_id', 'esc')->select();
         //dump( $navi);die;
         $this->assign('Navi',$navi);
-        $this->qrcode_logo();
+        if(!@fopen( $this->filename, 'r' )){
+            $this->QRcode->png($this->url,$this->filename,$this->errorCorrectionLevel, $this->matrixPointSize);
+//            if(@fopen( $this->Reimg, 'r' )){
+//                unlink($this->Reimg);
+//            }
+        }
+//        $this->qrcode_logo();
         $this->assign('imgurl',$this->Reimg);
         return $this->fetch();
     }
