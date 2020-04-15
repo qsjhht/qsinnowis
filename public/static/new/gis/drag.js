@@ -7,7 +7,7 @@
  */
 
 //  添加底图
-var url = "http://172.30.12.100:8090/iserver/services/map-zhengDing/rest/maps/zhengDing";
+var url = "http://192.168.5.100:8090/iserver/services/map-zhengDing/rest/maps/zhengDing";
 var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
 var overlay = new ol.Overlay(({
