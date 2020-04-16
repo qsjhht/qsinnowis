@@ -8,6 +8,7 @@
     <script src="__STATIC__/layui-2.5.6/layui.js"></script>
     <link rel="stylesheet" href="__STATIC__/new/gis/dist/iclient9-openlayers.css">
     <link rel="stylesheet" href="__STATIC__/new/gis/dist/ol.css">
+    <link rel="stylesheet" href="__STATIC__/new/gis/visualgis.css">
     <link rel="stylesheet" href="__STATIC__/layui-2.5.6/css/layui.css">
     <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
     <script src="__STATIC__/new/gis/dist/ol.js"></script>
@@ -18,89 +19,57 @@
     <script src="__STATIC__/h5splayer/h5splayerhelper.js"></script>
     <!--<script src="../h5stream/js/adapter.js"></script>-->
 
-
 </head>
-<style>
-    body,html{
-        overflow-y: hidden;
-    }
-    .search input{
-        opacity: 0.2;
-    }
-    .ol-popup {
-        position: absolute;
-        background-color: rgba(07,09,18,0.7);
-        -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-        filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #113c58;
-        bottom: 12px;
-        left: -50px;
-        min-width: 240px;
-        color: #cccccc;
-    }
-
-     .ol-popup:before {
-        top: 100%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-    }
-
-    .ol-popup:after {
-        border-top-color: white;
-        border-width: 10px;
-        left: 48px;
-        margin-left: -10px;
-    }
-
-    .ol-popup:before {
-        border-top-color: #113c58;
-        border-width: 11px;
-        left: 48px;
-        margin-left: -11px;
-    }
-    .ol-popup-closer {
-        text-decoration: none;
-        position: absolute;
-        top: 2px;
-        right: 8px;
-        color:#113c58 ;
-    }
-    .ol-popup-closer:after {
-        content: "✖";
-    }
-    .ol-popup-closer:hover{
-        color:white ;
-    }
-    .demo-tree{
-        background-color: rgba(07,09,18,0.7);
-        border: 1px solid #113c58;
-        border-radius: 5px;
-    }
-    /*.layui-tree div div div:hover{*/
-        /*background-color: red;*/
-    /*}*/
-
-</style>
 <body>
-<div id="map" style="width: 100%; height: 900px;background-color: #CCCCCC"></div>
+
+<!--地图容器-->
+<div id="map"></div>
+
+<!--popup弹窗-->
 <div id="popup" class="ol-popup">
-    <a href="" id="popup-closer" class="ol-popup-closer"></a>
+    <a href="javascript:quxiao()" id="popup-closer" class="ol-popup-closer"></a>
     <div id="popup-content" class="row h5videowrapper h5container"></div>
 </div>
-<div id="deletBtn" style="display:none;position: absolute;top: 16px;right: 16px;background-color: #470313;border: 1px solid #df3d38;color: #df3d38;width: 30px;height: 30px;padding: 10px;border-radius: 8px">X</div>
-<div class="search" style="position: absolute;top: 10px;left: 70px">
-    <div id="test" class="demo-tree"></div>
-    <input id="code" type="text" placeholder="编号" value="9">
-    <input type="text" placeholder="防火分区" id="section" value="XC01">
-    <button id="showQue">显示</button><button id="hideQue">隐藏</button>
+
+<!--搜索框-->
+<div class="search">
+    <input id="system" type="text" placeholder="请选择系统" value="" onfocus="treeSiShow()">
+    <input  id="section" type="text" placeholder="请选择防火分区" value="" onfocus="treeSecShow()">
+    <div class="btnGrop">
+        <button id="showQue" class="shoHidBtn">显示</button><button class="shoHidBtn" id="hideQue">取消</button>
+    </div>
+
+    <div>
+        <div id="test" class="demo-tree" style="display: none"></div>
+        <div id="test2" class="demo-tree2" style="display: none"></div>
+    </div>
 </div>
+
+
 <script>
+
+    //    条件选择焦点聚焦事件
+    function treeSiShow() {
+        $('#test2').slideUp();
+        $('#test').slideToggle();
+    }
+    function treeSecShow() {
+        $('#test').slideUp();
+        $('#test2').slideToggle();
+    }
+
+    //    点击目标区域以外获取消失树
+    $(document).mouseup(function (e) {
+        var con = $("#system,#section,#test,#test2");   // 设置目标区域
+        if (!con.is(e.target) && con.has(e.target).length === 0) {
+            con.blur();
+            $('#test,#test2').slideUp()
+        }
+    });
+    function quxiao() {
+        map.removeOverlay(overlay);
+    }
+
     //获取popup的节点
     var container = document.getElementById('popup');
     var content = document.getElementById('popup-content');
@@ -114,8 +83,8 @@
             duration: 250
         }
     }));
-    var map, resultLayer,
-        url = 'http://192.168.5.100:8090/iserver/services/map-zhengDing/rest/maps/zhengDing',
+    //
+    var map, resultLayer, url = 'http://192.168.5.100:8090/iserver/services/map-zhengDing/rest/maps/zhengDing',
         map = new ol.Map({
             target: 'map',
             view: new ol.View({
@@ -134,23 +103,36 @@
         projection: 'EPSG:4326'
     });
     map.addLayer(layer);
-    var queryParam = {};
-    var queryName;
+
+    var queryParam = {}; //查询条件对象
+    var queryName;  //查询的图层名称
+    var queryName1; //查询的系统名字
+    /*******************************************************************************************调用显隐事件************************************************************************************/
+//    显示事件
     $('#showQue').click(function () {
-      var gisCode = $("#code").val();
-      queryName =  codeChangeLay(gisCode);
-      console.log(queryName);
-      var attFil = "Section='"+$('#section').val()+"'";
-      queryParam.queryName = queryName;
-      queryParam.attFil = attFil;
-      console.log(queryParam);
-      query(queryParam);
-    })
+        $('#test,#test2').slideUp();  //数目录消失
+
+        queryName = queryName1+'_P@zdSheBei';  //拼接图层名称
+        var attFil = "Section='"+$('#section').val()+"'";  //查询过滤的条件
+
+        queryParam.queryName = queryName;
+        queryParam.attFil = attFil;
+        console.log('打印查询的的图层和过滤的条件'+queryParam);
+
+        query(queryParam);   //调用查询方法
+
+        $('#system,#section').val(''); //清空搜索的条件
+    });
+
+    //    取消事件
     $('#hideQue').click(function () {
         map.removeLayer(resultLayer);
-    })
+        map.removeOverlay(overlay);
+    });
 
-//    子图层条件查找
+    /*******************************************************************************************地图查询************************************************************************************/
+
+//    子图层条件查找事项
     function query(querData) {
         var querData = querData;
         var param = new SuperMap.QueryBySQLParameters({
@@ -161,14 +143,13 @@
             }
         });
         new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
-            var qeuryName1 = queryName.split('_')[0];
-            var src = '../../../static/images/gis-img/'+qeuryName1+'.png';
-
-            console.log(src);
-            arr = [];
+            // var src = '../img/'+queryName1+'.png';
+            var src = '../../../static/images/gis-img/'+queryName1+'.png';
             var features = (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features);
             console.log(features);
-            arr.push(features);
+            console.log('图标路径src：'+src);
+
+            //设置样式
             var iconStyle = new ol.style.Style({
                 image: new ol.style.Icon(({
                     imgSize:[200,200],
@@ -177,6 +158,7 @@
                     scale:0.15
                 }))
             });
+
             for (var i = 0; i < features.length; i++) {
                 features[i].setStyle(iconStyle);
             }
@@ -187,39 +169,40 @@
             resultLayer = new ol.layer.Vector({
                 source: vectorSource
             });
-            arr = [];
-            arr.push(resultLayer);
             map.addLayer(resultLayer);
-//            pointermove
-
-            console.log(resultLayer);
-            console.log(map.getLayers())
         });
     }
 
-//    设置事件
 
 
 
+    /************************************************************************************************地图feature选中事件*****************************************************************************/
     var selectSingleClick = new ol.interaction.Select({
     });
     map.addInteraction(selectSingleClick);
     // 监听选中事件，然后在事件处理函数中改变被选中的`feature`的样式
     selectSingleClick.on('select', function(event){
+        var innerHTML;
+        console.log(event);
 
-      console.log(event);
-
+        //如果选中了事件
         if (event.selected.length !==0){
-            if (event.selected[0].N.SmUserID == '4'||event.selected[0].N.SmUserID == '2'){
-                var innerHTML;
+
+            //无设置SmUserID情况
+            if(event.selected[0].N.SmUserID===null){
+                innerHTML = '无数据请求';
+                return;
+            }
+
+            //摄像头情况
+            else if (event.selected[0].N.SmUserID == '4'||event.selected[0].N.SmUserID == '2'){
 
                 innerHTML = '<video class=';
-                innerHTML += '"h5video1" id="h5sVideo1" style="width:240px" webkit-playsinline playsinline poster="./img/123.jpg">';
+                innerHTML += '"h5video1" id="h5sVideo1" style="width:400px" webkit-playsinline playsinline poster="./img/123.jpg">';
                 innerHTML +='</video>';
-                content.innerHTML = innerHTML;
-                videoStart();
-                overlay.setPosition(event.mapBrowserEvent.coordinate);
             }
+
+            //设备情况
             else {
                 var cang;
                 if (event.selected[0].N.Cang == '电仓'){
@@ -230,27 +213,31 @@
                 var code = event.selected[0].N.SmUserID;
                 var section = event.selected[0].N.Section+"/"+cang;
                 var url = "http://192.168.5.100:1000/patrol/gis_data?zone="+section+"&cate_code="+code;
-                console.log(url);
 
 
+                /******************************************************************************地图feature选中事件请求数据**********************************************************/
 //            请求设备属性数据
+                console.log('请求设备属性url：'+url);
                 $.ajax({
                     url:url,
                     async:true,
                     success:function (data) {
                         var eqpInfo = eval('('+data+')').data;
-//                    console.log(eqpInfo);
-                        var innerHTML;
-                        innerHTML = "设备名称："+eqpInfo.equipment_name+"<br>";
-                        innerHTML +="设备编号："+ eqpInfo.equipment_code+"<br>";
-                        innerHTML +="设备系统："+ eqpInfo.catalogue_value+"<br>";
-                        innerHTML +="设备状态："+ eqpInfo.equipment_jszt+"<br>";
-                        innerHTML +="设备位置："+ eqpInfo.location+"<br>";
-                        content.innerHTML = innerHTML;
-                        overlay.setPosition(event.mapBrowserEvent.coordinate);
+                        if($.isEmptyObject(eqpInfo)){
+                            innerHTML = '数据为空';
+                        }else {
+                            innerHTML = "设备名称："+eqpInfo.equipment_name+"<br>";
+                            innerHTML +="设备编号："+ eqpInfo.equipment_code+"<br>";
+                            innerHTML +="设备系统："+ eqpInfo.catalogue_value+"<br>";
+                            innerHTML +="设备状态："+ eqpInfo.equipment_jszt+"<br>";
+                            innerHTML +="设备位置："+ eqpInfo.location+"<br>";
+                        }
                     }
                 })
             }
+            content.innerHTML = innerHTML;
+            videoStart();
+            overlay.setPosition(event.mapBrowserEvent.coordinate);   //设置位置
 
 
 
@@ -265,33 +252,33 @@
         }
         //取消选中的事件
         else if (event.deselected.length !==0){
+            map.removeOverlay(overlay);
             selectSingleClick.getFeatures().clear();
             console.log('000000')
         }
 
     })
 
-//    map.on('click',function (e) {
-//        map.forEachFeatureAtPixel(e.pixel, function (feature) {
-//            console.log('点击了元素');
-//            console.log(e);
-//            console.log(this);
-//
-//            vectorTileStyles.dispatchEvent({
-//                type: 'featureSelected',
-//                selectedId: feature.getProperties().id,
-//                layerName: feature.getProperties().layerName
-//            });
-//            return true;
-//        }, {hitTolerance: 5});
-//        resultLayer.changed();
+    //    map.on('click',function (e) {
+    //        map.forEachFeatureAtPixel(e.pixel, function (feature) {
+    //            console.log('点击了元素');
+    //            console.log(e);
+    //            console.log(this);
+    //
+    //            vectorTileStyles.dispatchEvent({
+    //                type: 'featureSelected',
+    //                selectedId: feature.getProperties().id,
+    //                layerName: feature.getProperties().layerName
+    //            });
+    //            return true;
+    //        }, {hitTolerance: 5});
+    //        resultLayer.changed();
 
-//    })
-//    });
-
+    //    })
+    //    });
+    /***************************************************************************************视频播放方法****************************************************************************/
 //    视频播放方法
     var v1;
-
     var conf1 = {
         videoid:'h5sVideo1',
         protocol: 'http:', //'http:' or 'https:'
@@ -324,140 +311,103 @@
             v1.connect();
         }
     }
-    function codeChangeLay(data) {
-        var namelayer;
-        switch (data){
-            case '4'||'2':
-                namelayer = 'Camera_P';
-                break;
-            case '10':
-                namelayer = 'RQBJ_P';
-                break;
-            case '29':
-                namelayer = 'H2S_P';
-                break;
-            case '9':
-                namelayer = 'TX_P';
-                break;
-            case '8':
-                namelayer = 'IR_P';
-                break;
-            case '13':
-                namelayer = 'MQ_P';
-                break;
-            case '14':
-                namelayer = 'DK_P';
-                break;
-            case '16':
-                namelayer = 'MS_P';
-                break;
-            case '86':
-                namelayer = 'S_P';
-                break;
-            case '87':
-                namelayer = 'SGBJ_P';
-                break;
-            case '89':
-                namelayer = 'SYDL_P';
-                break;
-            case '90':
-                namelayer = 'CW_P';
-                break;
-            case '17':
-                namelayer = 'MCKG_P';
-                break;
-            case '96':
-                namelayer = 'GFMH_P';
-                break;
-            case '94':
-                namelayer = 'JZDY_P';
-                break;
-            case '93':
-                namelayer = 'FPD_P';
-                break;
-            case '27':
-                namelayer = 'WSD_P';
-                break;
-            case '30':
-                namelayer = 'O2_P';
-                break;
-            case '28':
-                namelayer = 'CH4_P';
-                break;
-            case '31':
-                namelayer = 'SWJ_P';
-                break;
-            case '49':
-                namelayer = 'FHFS_P';
-                break;
-            case '50':
-                namelayer = 'FHFP_P';
-                break;
-            case '44'||'51'||'52':
-                namelayer = 'FJ_P';
-                break;
-            case '110':
-                namelayer = 'PUMP_P';
-                break;
-            case '57'||'58':
-                namelayer = 'AP_P';
-                break;
-            case '61':
-                namelayer = 'AL_P';
-                break;
-            case '63':
-                namelayer = 'AP_P';
-                break;
-            case '64':
-                namelayer = 'UPS_P';
-                break;
-            case '22':
-                namelayer = 'JQR_P';
-                break;
-            case '83':
-                namelayer = 'JLSZ_P';
-                break;
-            case '82':
-                namelayer = 'QJ_P';
-                break;
-            case '80':
-                namelayer = 'LXWY_P';
-                break;
-            case '81':
-                namelayer = 'SJCJ_P';
-                break;
-            case '68':
-                namelayer = 'WXAP_P';
-                break;
-            case '42':
-                namelayer = 'IPDH_P';
-                break;
-            default:
-
-        }
-        var queryName = namelayer+"@zdSheBei";
-        return queryName;
-    }
 </script>
+
 <script>
+    /******************************************************************************目录树模块**********************************************************/
+
     layui.use('tree',function () {
-        // console.log('111');
         var tree = layui.tree,
-            data = [{title:'安防系统',id:1,field:'name1',
-                children:[{title:'视频监控',id:3,field:'name11',
-                    children:[{title:'摄像机',id:23,field:''}]},
-                    {title:'人员入侵',id:4,
-                    children:[{title:'入侵报警主机'},
-                        {title:'红外探测器'},
-                        {title:'三鉴探测器'},
-                        {title:'单路地址模块'}]},
-                    {title:'门禁',
-                    children:[{title:'门禁控制器'},
-                        {title:'消防联动模块'},
-                        {title:'读卡器'},
-                        {title:'出门按钮'},
-                        {title:'电锁'},]}]},
-                {title:'消防系统',id:7}];
+            data = [{title:'安防系统',id:'AF',field:'name1', children:[
+                    {title:'视频监控',id:'SPJK',field:'name11', children:[
+                            {title:'摄像机',id:'Camera',field:''}]},
+                    {title:'人员入侵',id:'RYRQ',children:[
+                            {title:'入侵报警主机',id:'RQBJ'},
+                            {title:'红外探测器',id:'TX'},
+                            {title:'三鉴探测器',id:'IR'},
+                            {title:'单路地址模块',id:'EC'}]},
+                    {title:'门禁系统',id:'MJ',children:[
+                            {title:'门禁控制器',id:'MQ'},
+                            {title:'消防联动模块',id:'XFLD'},
+                            {title:'读卡器',id:'DK'},
+                            {title:'出门按钮',id:'CMN'},
+                            {title:'电锁',id:'MS'}]}]},
+                {title:'消防系统',id:'XF',children:[
+                        {title:'火灾报警',id:'HZBJ',children:[
+                                {title:'感温光纤主机',id:'GXZJ'},
+                                {title:'区域报警主机',id:'QYBJ'},
+                                {title:'感温电缆监视模块',id:'MR'},
+                                {title:'烟感探测器',id:'S'},
+                                {tilte:'手动报警按钮',id:'Y'},
+                                {tilte:'声光报警器',id:'SGBJ'}]},
+                        {title:'电气火灾',id:'DQHZ',children:[
+                                {title:'电气火灾监视器',id:'DQJS'},
+                                {title:'剩余电流探测器',id:'SYDL'},
+                                {title:'测温电气火灾探测器',id:'CW'}]},
+                        {title:'防火门监控',id:'FHMJK',children:[
+                                {title:'防火门监控器',id:'MJKQ'},
+                                {title:'防火门监控模块',id:'MJKM'},
+                                {title:'防火门磁开关',id:'MCKG'}]},
+                        {title:'消防灭火',id:'XFMH',children:[
+                                {title:'超细干粉灭火器',id:'GFMH'},
+                                {title:'手提灭火器',id:'STMH'},
+                                {title:'灭火声光器',id:'MHSG'},
+                                {title:'紧急启停按钮',id:'JJQT'}]},
+                        {title:'应急疏散',id:'YJSS',children:[
+                                {title:'应急照明集中电源',id:'JZDY'},
+                                {title:'应急疏散灯具',id:'DJ'},
+                                {title:'应急照明分配电',id:'FPD'},
+                                {title:'应急疏散控制器',id:'KZJ'}]},
+                        {title:'消防广播',id:'XFGB',children:[
+                                {title:'广播模块',id:'GB'},
+                                {title:'扬声器',id:'YSQ'}]}]},
+                {title:'环境控制系统',id:'HK',children:[
+                        {title:'环境监测',id:'HJJC',children:[
+                                {title:'温湿度传感器',id:'WSD'},
+                                {title:'氧气传感器',id:'O2'},
+                                {title:'硫化氢传感器',id:'H2S'},
+                                {title:'甲烷传感器',id:'CH4'},
+                                {title:'水位传感器',id:'SWJ'}]},
+                        {title:'排风系统',id:'PF',children:[
+                                {title:'防火阀',id:'FHF'},
+                                {title:'风机',id:'FJ'}]},
+                        {title:'排水系统',id:'PS',children:[
+                                {title:'水泵',id:'pump'}]},
+                        {title:'自控系统',id:'Zk',children:[
+                                {title:'PLC',id:'PLC'}]}]},
+                {title:'动力配电系统',id:'DLPD',children:[
+                        {title:'配电柜',id:'AP'},
+                        {title:'照明配电箱',id:'Al'},
+                        {title:'风机控制箱',id:'APP'},
+                        {title:'水泵控制箱',id:'APT'},
+                        {title:'检修控制箱',id:'APX'},
+                        {title:'消防控制箱XFP',id:'XFP'}]},
+                {title:'机器人系统',id:'JQR',children:[
+                        {title:'机器人',id:'JQR'}
+                    ]},{title:'照明系统',id:'ZM',children:[
+                        {title:'智能继电器模块',id:'JDQ'},
+                        {title:'照明配电箱',id:'AL'},
+                        {title:'网络模块',id:'WLMK'}]},
+                {title:'沉降系统',id:'CJ',children:[
+                        {title:'静力水准仪',id:'JLSZ'},
+                        {title:'倾角仪',id:'QJ'},
+                        {title:'拉线式位移计',id:'LXWY'},
+                        {title:'数据采集仪',id:'SJCJ'}]},
+                {title:'无线AP系统',id:'WXAP',children:[
+                        {title:'无线AP',id:'WXAP'}]},
+                {title:'指挥调度系统',id:'ZHDD',children:[
+                        {title:'IP电话',id:'IPDH'}]}],
+            data2 =[
+                {title:'园博园大街',id:'YBY',children:[
+                        {title:'YBY01'},{title:'YBY02'},{title:'YBY03'},{title:'YBY04'},{title:'YBY05'},{title:'YBY06'},{title:'YBY07'},{title:'YBY08'},{title:'YBY09'},{title:'YBY10'},{title:'YBY11'},{title:'YBY12'},{title:'YBY13'},{title:'YBY14'},{title:'YBY15'},{title:'YBY16'},{title:'YBY17'},{title:'YBY18'},{title:'YBY19'},{title:'YBY20'},{title:'YBY21'}]},
+                {title:'新城大街',id:'XC',children:[
+                        {title:'XC01'},{title:'XC02'},{title:'XC03'},{title:'XC04'},{title:'XC05'},{title:'XC06'},{title:'XC07'},{title:'XC08'},{title:'XC09'},{title:'XC10'},{title:'XC11'},{title:'XC12'},{title:'XC13'},{title:'XC14'},{title:'XC15'},{title:'XC16'},{title:'XC17'},{title:'XC18'},{title:'XC19'},{title:'XC20'},{title:'XC21'}]},
+                {title:'太行大街',id:'TH',children:[
+                        {title:'TH01'},{title:'TH02'},{title:'TH03'},{title:'TH04'},{title:'TH05'},{title:'TH06'},{title:'TH07'},{title:'TH08'},{title:'TH09'},{title:'TH10'},{title:'TH11'},{title:'TH12'},{title:'TH13'},{title:'TH14'},{title:'TH15'},{title:'TH16'},{title:'TH17'},{title:'TH18'},{title:'TH19'}]},
+                {title:'迎旭路',id:'YX',children:[
+                        {title:'YX01'},{title:'YX02'},{title:'YX03'},{title:'YX04'},{title:'YX05'},{title:'YX06'},{title:'YX07'},{title:'YX08'},{title:'YX09'},{title:'YX10'},{title:'YX11'},{title:'YX12'},{title:'YX13'},{title:'YX14'},{title:'YX15'},{title:'YX16'},{title:'YX17'},{title:'YX18'},{title:'YX19'},{title:'YX20'},{title:'YX21'},{title:'YX22'},{title:'YX23'}]},
+                {title:'隆兴路',id:'LX',children:[
+                        {title:'LX01'},{title:'LX02'},{title:'LX03'},{title:'LX04'},{title:'LX05'},{title:'LX06'},{title:'LX07'},{title:'LX08'},{title:'LX09'},{title:'LX10'},{title:'LX11'},{title:'LX12'},{title:'LX13'}]}] ;
         tree.render({
             elem:'#test',
             data:data,
@@ -465,11 +415,20 @@
             id:'demoId1',
             showLine:false,
             onlyIconControl:false,
-            oncheck:function () {
-                console.log(obj.data); //得到当前点击的节点数据
-                console.log(obj.checked); //得到当前节点的展开状态：open、close、normal
-                console.log(obj.elem); //得到当前节点元素
-                console.log(obj); //得到当前节点元素
+            click:function (obj) {
+                queryName1 = obj.data.id;
+                $('#system').val(obj.data.title);
+            }
+        })
+        tree.render({
+            elem:'#test2',
+            data:data2,
+            showCheckbox:false,
+            id:'demoId2',
+            showLine:false,
+            onlyIconControl:false,
+            click:function (obj) {
+                $('#section').val(obj.data.title);
             }
         })
     })
