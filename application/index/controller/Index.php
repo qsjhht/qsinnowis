@@ -21,7 +21,7 @@ class Index extends Adminbase
         $this->filename = ROOT_PATH.'qrcode/qrcodes.png';
         $this->logo = ROOT_PATH.'qrcode\logo4.jpg'; //准备好的logo背景图片
         $this->Reimg = ROOT_PATH.'qrcode\Reimg.jpeg'; //组合好的二维码图片
-        $this->apk = ROOT_PATH.'qrcode\kid-ward.apk';
+        $this->apk = ROOT_PATH.'qrcode\innowis.apk';
         $this->url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/index/index/download';
     }
     public function index()
