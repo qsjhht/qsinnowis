@@ -8,8 +8,8 @@
     <script src="__STATIC__/layui-2.5.6/layui.js"></script>
     <link rel="stylesheet" href="__STATIC__/new/gis/dist/iclient9-openlayers.css">
     <link rel="stylesheet" href="__STATIC__/new/gis/dist/ol.css">
-    <link rel="stylesheet" href="__STATIC__/new/gis/visualgis.css">
     <link rel="stylesheet" href="__STATIC__/layui-2.5.6/css/layui.css">
+    <link rel="stylesheet" href="__STATIC__/new/gis/visualgis.css">
     <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
     <script src="__STATIC__/new/gis/dist/ol.js"></script>
     <!--<script src="openlayers/include-openlayers.js"></script>-->
@@ -191,6 +191,7 @@
             //无设置SmUserID情况
             if(event.selected[0].N.SmUserID===null){
                 innerHTML = '无数据请求';
+                content.innerHTML = innerHTML;
                 return;
             }
 
@@ -200,6 +201,8 @@
                 innerHTML = '<video class=';
                 innerHTML += '"h5video1" id="h5sVideo1" style="width:400px" webkit-playsinline playsinline poster="./img/123.jpg">';
                 innerHTML +='</video>';
+                content.innerHTML = innerHTML;
+                videoStart();
             }
 
             //设备情况
@@ -232,15 +235,12 @@
                             innerHTML +="设备状态："+ eqpInfo.equipment_jszt+"<br>";
                             innerHTML +="设备位置："+ eqpInfo.location+"<br>";
                         }
+                        content.innerHTML = innerHTML;
                     }
-                })
+                });
+
             }
-            content.innerHTML = innerHTML;
-            videoStart();
             overlay.setPosition(event.mapBrowserEvent.coordinate);   //设置位置
-
-
-
 //            event.selected[0].setStyle(new ol.style.Style({
 //                image: new ol.style.Circle({
 //                    radius: 10,
