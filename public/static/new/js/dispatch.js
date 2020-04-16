@@ -72,14 +72,14 @@ function dispatchRight(){
           }else{
                dispatchCon = `<div class="dispatchShowHide">
                     <fieldset class="layui-elem-field layui-field-title border">
-                         <legend><img src="../../../static/new/dispatch-img/dian.png" width="15" height="20" alt="/"> 水仓</legend>
+                         <legend><img src="../../static/new/dispatch-img/dian.png" width="15" height="20" alt="/"> 水仓</legend>
                     </fieldset>
-                    <div style="height:33.5vh;overflow-y:auto" class="scrollber dispatchContent">
+                    <div style="height:37.5vh;overflow-y:auto" class="scrollber dispatchContent">
                     </div>
                     <fieldset class="layui-elem-field layui-field-title border" >
-                         <legend><img src="../../../static/new/dispatch-img/shui.png" width="15" height="20" alt="/"> 电仓</legend>
+                         <legend><img src="../../static/new/dispatch-img/shui.png" width="15" height="20" alt="/"> 电仓</legend>
                     </fieldset>
-                    <div style="height:33.5vh;overflow-y:auto" class="scrollber dispatchContent">
+                    <div style="height:37.5vh;overflow-y:auto" class="scrollber dispatchContent">
                     </div>
                </div>`
                $('#dispatchBottom_left').append(dispatchCon)
