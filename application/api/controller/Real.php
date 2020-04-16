@@ -456,8 +456,7 @@ class Real extends Common
         $call = $this->request->param('call');
 //        $this->Socket = new Socketmodel($this->scket_ip,$this->scket_port);
 //        $aa = $this->doEncoding($aa);
-        $from_name = '';
-        $num_or_g = '';
+
         if ($from_num == 8001){
             $from_name = '调度台1';
         }else if($from_num == 8002){
