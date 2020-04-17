@@ -104,18 +104,19 @@ class Contingency extends Adminbase
     public function supplies_add()
     {
         if ($this->request->isPost()) {
-            $data = $this->request->post();
-//            dump($data);die;
-            $res = Db('supplies')
-                ->strict(false)
-                ->insertGetId($data);
-            $s_number = 'YJWZ-'.sprintf('%03d', $res);
-            $ress = Db('supplies')
-                ->where('sup_id', $res)
+            Db::transaction(function () {
+                $data = $this->request->post();
+                $res = Db('supplies')
+                    ->strict(false)
+                    ->insertGetId($data);
+                $s_number = 'YJWZ-'.sprintf('%03d', $res);
+                $ress = Db('supplies')
+                    ->where('sup_id', $res)
                     ->update(['s_number' => $s_number]);
-            if ($ress){
                 $this->success('新增成功！');
-            }$this->error('新增失败！');
+            });
+//            dump($data);die;
+            $this->error('新增失败！');
         }else{
             $cates = Db('sup_cate')->select();
             $users = db('admin')->field('userid,nickname')->order('userid', 'desc')->select();
@@ -178,6 +179,7 @@ class Contingency extends Adminbase
 
     }
 
+    //应急物资 删除
     public function sup_del()
     {
         $sup_id = $this->request->param('sup_id');
@@ -193,8 +195,255 @@ class Contingency extends Adminbase
     //应急队伍
     public function team()
     {
+        $t_cate = Db('team_cate')->select();
+        $this->assign('Cates',$t_cate);
+        if ($this->request->isAjax()) {
+            $limit = $this->request->param('limit/d', 10);
+            $page = $this->request->param('page/d', 1);
+            $cate = $this->request->param('cate');
+            if(!empty($cate) && $cate !== ''){
+                $result = Db('teams')
+                    ->page($page, $limit)
+                    ->alias('t')
+                    ->order('team_id','desc')
+                    ->join('team_cate c','t.t_c_id = c.t_c_id')
+                    ->where('t.t_c_id', $cate)
+                    ->select();
+            }else{
+                $result = Db('teams')
+                    ->page($page, $limit)
+                    ->alias('t')
+                    ->order('team_id','desc')
+                    ->join('team_cate c','t.t_c_id = c.t_c_id')
+//                ->where('is_alarm = 1')
+                    ->select();
+            }
+            //数据处理
+            foreach ($result as &$res) {
+//                dump($res['t_c_id']);
+                if($res['t_c_id'] == 1){
+                    $leader = Db('admin')
+                        ->field('nickname,phone')
+                        ->where('userid',$res['leader'])
+                        ->find();
+
+//                    $res['leaders'][] = json_encode([$leader['nickname'] => $leader['phone']],JSON_UNESCAPED_UNICODE);
+                    $res['leaders'][] =  '<button type="button" class="layui-btn" style="margin: 3px">'.'队长：'.$leader['nickname'].'&nbsp;&nbsp;'.'手机：'.$leader['phone'].'</button>' ;
+                    $members = Db('admin')
+                        ->field('nickname,phone')
+                        ->whereIn('userid',$res['member'])
+                        ->select();
+                    $memstr  = '';
+//                    foreach ($members as $member) {
+                    if($members){
+//
+                        foreach ($members as $member) {
+                            $memstr .= '<button type="button" class="layui-btn layui-btn-normal" style="margin: 3px">'.$member['nickname'].': '.$member['phone'].'</button>' ;
+                        }
+                        $res['members'][] = $memstr;
+                    }
+//                    $res['ex_p'] = '组长：'.$leader['nickname'].':'.$leader['phone'] .'  '.$memberstr;
+//                    dump($group);
+                }else{
+                    $memstr  = '';
+                    $members = explode(' ',$res['ex_p']);
+                    foreach ($members as $member) {
+                        $item = explode('-',$member);
+//                        dump($item);
+                        $memstr .= '<button type="button" class="layui-btn layui-btn-normal" style="margin: 3px">'.$item[0].': '.$item[1].'</button>' ;
+                    }
+                    $res['members'][] = $memstr;
+                }
+            }
+            $total = Db('teams')
+                ->alias('t')
+                ->join('team_cate c','t.t_c_id = c.t_c_id')
+                ->count();
+            $result = array("code" => 0,"msg" => '', "count" => $total, "data" => $result);
+            return json($result);
+        }
         return $this->fetch();
     }
+
+    //应急队伍 新增
+    public function team_add()
+    {
+        if ($this->request->isPost()) {
+            Db::transaction(function () {
+                $data = $this->request->post();
+                if(!empty($data['ex_p'])){
+                    $data['ex_p']=preg_replace ( "/\s(?=\s)/","\\1", $data['ex_p']);
+                    $data['ex_p'] = trim($data['ex_p']);
+                }
+                $res = Db('teams')
+                    ->strict(false)
+                    ->insertGetId($data);
+                $t_number = 'YJDW-'.sprintf('%03d', $res);
+                $ress = Db('teams')
+                    ->where('team_id', $res)
+                    ->update(['t_number' => $t_number]);
+                $this->success('新增成功！');
+            });
+            $this->error('新增失败！');
+        }else{
+//            $dept = db('dept')->field('dept_id,dept_pid,dept_name')->order('dept_id', 'desc')->select();
+//            $users = db('admin')->field('deptid,userid,nickname')->order('userid', 'desc')->select();
+//            $arr = [];
+//            foreach ($dept as $de) {
+//                $children = '';
+//                foreach ($users as $item) {
+//                    if($de['dept_id'] == $item['deptid']){
+//                        $children[] =  ['name'=>$item['nickname'],'value'=>$item['userid'],'children'=>''];
+//                    }
+//                }
+//                if($children){
+//                    $arr[] = ['name'=>$de['dept_name'],'value'=>$de['dept_id'],'children'=>$children];
+//                }
+//            }
+
+            $users = db('admin')
+                ->alias('a')
+                ->join('dept d','a.deptid = d.dept_id')
+                ->field('dept_name,userid,nickname')
+                ->order('userid', 'desc')
+                ->select();
+            foreach ($users as $user) {
+                $arr[] = ['name'=>$user['nickname'],'value'=>$user['userid'],'showname'=>$user['dept_name'].'-'.$user['nickname']];
+            }
+            $this->assign('Users',json_encode($arr,JSON_UNESCAPED_UNICODE));
+            $t_cate = Db('team_cate')->select();
+            $this->assign('Cates',$t_cate);
+
+
+
+    //        dump($t_cate);die;
+            return $this->fetch();
+        }
+    }
+
+    //应急队伍 详情
+    public function team_details()
+    {
+        $team_id = $this->request->param('team_id');
+
+        $result = Db('teams')
+            ->alias('t')
+            ->join('team_cate c','t.t_c_id = c.t_c_id')
+            ->where('team_id',$team_id)
+            ->find();
+
+        if($result['t_c_id'] == 1){
+            $leader = Db('admin')
+                ->field('nickname,phone')
+                ->where('userid',$result['leader'])
+                ->find();
+
+//                    $res['leaders'][] = json_encode([$leader['nickname'] => $leader['phone']],JSON_UNESCAPED_UNICODE);
+            $result['leaders'][] =  '<button type="button" class="layui-btn" style="margin: 3px">'.$leader['nickname'].': '.$leader['phone'].'</button>' ;
+
+            $members = Db('admin')
+                ->field('nickname,phone')
+                ->whereIn('userid',$result['member'])
+                ->select();
+            $memstr  = '';
+//                    foreach ($members as $member) {
+            if($members){
+//
+                foreach ($members as $member) {
+                    $memstr .= '<button type="button" class="layui-btn layui-btn-normal member" style="margin: 3px">'.$member['nickname'].': '.$member['phone'].'</button>' ;
+                }
+                $result['members'][] = $memstr;
+            }
+//                    $res['ex_p'] = '组长：'.$leader['nickname'].':'.$leader['phone'] .'  '.$memberstr;
+//                    dump($group);
+        }else{
+            $memstr  = '';
+            $members = explode(' ',$result['ex_p']);
+            foreach ($members as $member) {
+                $item = explode('-',$member);
+//                        dump($item);
+                $memstr .= '<button type="button" class="layui-btn layui-btn-normal member" style="margin: 3px">'.$item[0].': '.$item[1].'</button>' ;
+            }
+            $result['leaders'][] = '';
+            $result['members'][] = $memstr;
+        }
+        //获取设备信息
+        //注入
+        $this->assign("Teams", $result);
+        return $this->fetch();
+    }
+
+    //应急队伍 删除
+    public function team_del()
+    {
+        $team_id = $this->request->param('team_id');
+        if (empty($team_id)) {
+            $this->error('ID错误');
+        }
+        if(Db('teams')->delete($team_id)){
+            $this->success('删除成功！');
+        }$this->error('删除失败！');
+    }
+
+    //应急队伍 详情编辑
+    public function team_edit(){
+        if ($this->request->isPost()) {
+            $team_id = $this->request->param('team_id');
+            $data = $this->request->post();
+//            dump($data);die;
+            if(!empty($data['ex_p'])){
+                $data['ex_p']=preg_replace ( "/\s(?=\s)/","\\1", $data['ex_p']);
+                $data['ex_p'] = trim($data['ex_p']);
+            }
+            $res = Db('teams')
+                ->where('team_id',$team_id)
+                ->strict(false)
+                ->update($data);
+//            $s_number = 'YJWZ-'.sprintf('%03d', $res);
+//            $ress = Db('supplies')
+//                ->where('sup_id', $res)
+//                ->update(['s_number' => $s_number]);
+            if ($res){
+                $this->success('编辑成功！');
+            }$this->error('编辑失败！');
+        }else{
+            $team_id = $this->request->param('team_id');
+
+            $result = Db('teams')
+                ->alias('t')
+                ->join('team_cate c','t.t_c_id = c.t_c_id')
+                ->where('team_id',$team_id)
+                ->find();
+
+            $users = db('admin')
+                ->alias('a')
+                ->join('dept d','a.deptid = d.dept_id')
+                ->field('dept_name,userid,nickname')
+                ->order('userid', 'desc')
+                ->select();
+            $member_arr = explode(',',$result['leader']);
+            foreach ($users as $user) {
+                if(!in_array($user['userid'],$member_arr)){
+                    $member_s[] = ['name'=>$user['nickname'],'value'=>$user['userid'],'showname'=>$user['dept_name'].'-'.$user['nickname']];
+                }
+                $leader_s[] = ['name'=>$user['nickname'],'value'=>$user['userid'],'showname'=>$user['dept_name'].'-'.$user['nickname']];
+            }
+
+            $result['member'] =  json_encode(explode(',',$result['member']),JSON_UNESCAPED_UNICODE);
+            $result['leader'] =  json_encode(explode(',',$result['leader']),JSON_UNESCAPED_UNICODE);
+            $this->assign('Leader_s',json_encode($leader_s,JSON_UNESCAPED_UNICODE));
+            $this->assign('Member_s',json_encode($member_s,JSON_UNESCAPED_UNICODE));
+            $t_cate = Db('team_cate')->select();
+            $this->assign('Cates',$t_cate);
+            //获取设备信息
+            //注入
+            $this->assign("Teams", $result);
+//            dump()
+            return $this->fetch();
+        }
+
+    }
+
 
     //应急演练
     public function drill()
