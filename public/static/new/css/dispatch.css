@@ -73,7 +73,7 @@
     color:#0FF;
     outline:1px solid #247998;
     box-shadow:0 0 6px #247998 inset;
-    background-image:url('../image/hua_blue.png');
+    background-image:url('../dispatch-img/hua_blue.png');
 }
 
  .rightTriangle{
@@ -102,7 +102,7 @@
  }
  /* 空闲 */
 .leisure{
-    background-image:url('../image/phone_blue.png');
+    background-image:url('../dispatch-img/phone_blue.png');
     background-repeat: no-repeat;
     background-position:12%;
     background-size:30px 30px;
@@ -120,7 +120,7 @@
 
  /* 挂机 */
  .outboard{
-    background-image:url('../image/phone_yellow.png');
+    background-image:url('../dispatch-img/phone_yellow.png');
     background-repeat: no-repeat;
     background-position:12%;
     background-size:30px 30px;
@@ -138,7 +138,7 @@
 
 /* 正在呼叫 */
 .callOut{
-    background-image:url('../image/phone_green.png');
+    background-image:url('../dispatch-img/phone_green.png');
     background-repeat: no-repeat;
     background-position:12%;
     background-size:30px 30px;
@@ -156,7 +156,7 @@
 
 /* 呼叫失败 */
 .goUnder{
-    background-image:url('../image/phone_red.png');
+    background-image:url('../dispatch-img/phone_red.png');
     background-repeat: no-repeat;
     background-position:12%;
     background-size:30px 30px;
