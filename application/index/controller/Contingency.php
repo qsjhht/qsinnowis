@@ -228,7 +228,7 @@ class Contingency extends Adminbase
                         ->find();
 
 //                    $res['leaders'][] = json_encode([$leader['nickname'] => $leader['phone']],JSON_UNESCAPED_UNICODE);
-                    $res['leaders'][] =  '<button type="button" class="layui-btn" style="margin: 3px">'.'队长：'.$leader['nickname'].'&nbsp;&nbsp;'.'手机：'.$leader['phone'].'</button>' ;
+                    $res['leaders'][] =  '<button type="button" class="layui-btn leaderbtn" style="margin: 3px">'.'队长：'.$leader['nickname'].'&nbsp;&nbsp;'.'手机：'.$leader['phone'].'</button>' ;
                     $members = Db('admin')
                         ->field('nickname,phone')
                         ->whereIn('userid',$res['member'])
@@ -238,7 +238,7 @@ class Contingency extends Adminbase
                     if($members){
 //
                         foreach ($members as $member) {
-                            $memstr .= '<button type="button" class="layui-btn layui-btn-normal" style="margin: 3px">'.$member['nickname'].': '.$member['phone'].'</button>' ;
+                            $memstr .= '<button type="button" class="layui-btn layui-btn-normal memberbtn" style="margin: 3px">'.$member['nickname'].': '.$member['phone'].'</button>' ;
                         }
                         $res['members'][] = $memstr;
                     }
@@ -250,7 +250,7 @@ class Contingency extends Adminbase
                     foreach ($members as $member) {
                         $item = explode('-',$member);
 //                        dump($item);
-                        $memstr .= '<button type="button" class="layui-btn layui-btn-normal" style="margin: 3px">'.$item[0].': '.$item[1].'</button>' ;
+                        $memstr .= '<button type="button" class="layui-btn layui-btn-normal memberbtn" style="margin: 3px">'.$item[0].': '.$item[1].'</button>' ;
                     }
                     $res['members'][] = $memstr;
                 }
@@ -339,7 +339,7 @@ class Contingency extends Adminbase
                 ->find();
 
 //                    $res['leaders'][] = json_encode([$leader['nickname'] => $leader['phone']],JSON_UNESCAPED_UNICODE);
-            $result['leaders'][] =  '<button type="button" class="layui-btn" style="margin: 3px">'.$leader['nickname'].': '.$leader['phone'].'</button>' ;
+            $result['leaders'][] =  '<button type="button" class="layui-btn leaderbtn" style="margin: 3px">'.$leader['nickname'].': '.$leader['phone'].'</button>' ;
 
             $members = Db('admin')
                 ->field('nickname,phone')
@@ -350,7 +350,7 @@ class Contingency extends Adminbase
             if($members){
 //
                 foreach ($members as $member) {
-                    $memstr .= '<button type="button" class="layui-btn layui-btn-normal member" style="margin: 3px">'.$member['nickname'].': '.$member['phone'].'</button>' ;
+                    $memstr .= '<button type="button" class="layui-btn layui-btn-normal memberbtn" style="margin: 3px">'.$member['nickname'].': '.$member['phone'].'</button>' ;
                 }
                 $result['members'][] = $memstr;
             }
@@ -362,7 +362,7 @@ class Contingency extends Adminbase
             foreach ($members as $member) {
                 $item = explode('-',$member);
 //                        dump($item);
-                $memstr .= '<button type="button" class="layui-btn layui-btn-normal member" style="margin: 3px">'.$item[0].': '.$item[1].'</button>' ;
+                $memstr .= '<button type="button" class="layui-btn layui-btn-normal memberbtn" style="margin: 3px">'.$item[0].': '.$item[1].'</button>' ;
             }
             $result['leaders'][] = '';
             $result['members'][] = $memstr;
