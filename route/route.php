@@ -72,6 +72,7 @@ Route::get('bigdata/enter_details', 'api/bigdata/enter_details')->allowCrossDoma
 Route::post('bigdata/send_ws', 'api/bigdata/send_ws')->allowCrossDomain();
 Route::get('bigdata/alarms_list', 'api/bigdata/alarms_list')->allowCrossDomain();
 Route::get('bigdata/alarms_chart', 'api/bigdata/alarms_chart')->allowCrossDomain();
+Route::get('bigdata/get_apk_v', 'api/bigdata/get_apk_v')->allowCrossDomain();
 
 Route::any('bigdata/real_alarm', 'api/bigdata/real_alarm')->allowCrossDomain();
 

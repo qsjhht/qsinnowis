@@ -136,6 +136,8 @@ class Common extends Controller
             ),
             'alarms_chart' => array(
             ),
+            'get_apk_v' => array(
+            ),
         ),
 
     );

@@ -379,6 +379,18 @@ class Bigdata extends Common
         $this->return_msg(200,'报警图表数据获取成功！',$alarmnum);
     }
 
+    //直接提供apk版本号
+      /*
+      版本格式：主版本号.次版本号.修订号，版本号递增规则如下：
+        主版本号：当你做了不兼容的 API 修改，
+        次版本号：当你做了向下兼容的功能性新增，
+        修订号：当你做了向下兼容的问题修正。*/
+    public function get_apk_v()
+    {
+        $version = ['version'=>'1.0.0'];
+        $this->return_msg(200,'apk版本号获取成功！',$version);
+    }
+
     public function send_ws($content){
 
         // 返回信息并终止脚本
