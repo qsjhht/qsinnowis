@@ -147,7 +147,7 @@ a{
     margin-bottom:1vh;
 }
 .middleLeft{
-    width:28.7vw;
+    width:30vw;
 }
 .middleMid{
     width:39vw;
@@ -163,7 +163,7 @@ a{
     justify-content : space-between;
 }
 .bottomLeft{
-    width:28.7vw;
+    width:30vw;
 }
 .bottomMid{
     width:19vw;
@@ -179,8 +179,7 @@ a{
     height:20vh;
 }
 .contentBottom{
-
-    height:31.1vh;
+    height:32.1vh;
     width:99.5%;
 }
 .marginTop{
