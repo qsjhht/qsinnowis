@@ -42,7 +42,7 @@ map.addLayer(layer);
 
 var xunJianData;
 
-var socket = io('192.168.10.18:2120');
+var socket = io('192.168.5.100:2120');
 // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
 uid = 222;        
 var data,flag,data3;
@@ -243,7 +243,7 @@ socket.on('connect', function(){
     // 添加起点和终点以及线路
     // 获取数据库内巡检信息 进行后续判断
     $.ajax({
-        url:"http://192.168.10.18/patrol/get_patrol",
+        url:"http://192.168.5.100:1000/patrol/get_patrol",
         async:true,
         success:function(result){
             
@@ -293,7 +293,7 @@ socket.on('connect', function(){
 function real_time(user_id){
 
         $.ajax({
-            url:"http://192.168.10.18/patrol/get_user_position?check_user_id="+user_id,
+            url:"http://192.168.5.100:1000/patrol/get_user_position?check_user_id="+user_id,
             async:true,
             success:function(result){
                 //将 获取到的实时信息 转换成obj
