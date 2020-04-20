@@ -4,6 +4,9 @@
 <link rel="stylesheet" href="/static/css/equipment.css">
 <link rel="stylesheet" href="/static/css/eqpt.css">
 <style>
+    .members {
+        min-height: 50px;
+    }
     .wrap {
         margin: 0 auto;
         padding: 10px;
@@ -94,29 +97,20 @@
                         <div class="layui-form-inline ex_p" hidden>
                             <label class="layui-form-label">外联人员</label>
                             <div class="layui-input-inline">
-                                <div class="wrap w600">
-                                    {volist name="$Teams.members" id="vo"}
-                                    {$vo|raw}
-                                    {/volist}
-                                </div>                            </div>
+                                    <textarea name="members" disabled class="layui-textarea layui-input members w400">{$Teams.members}</textarea
+                            </div>
                         </div>
                         <div class="layui-form-inline leader" hidden>
                             <label class="layui-form-label"> 组长</label>
                             <div class="layui-input-inline">
-                                {volist name="$Teams.leaders" id="vo"}
-                                {$vo|raw}
-                                {/volist}
+                                <input type="text" name="leaders" id="leaders" placeholder="请输入" disabled value="{$Teams.leaders}" autocomplete="off" class="layui-input w400" >
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-form-inline inner" hidden  style="padding:8px 0px">
                                 <label class="layui-form-label">组员</label>
                                 <div class="layui-input-inline">
-                                    <div class="wrap w600">
-                                        {volist name="$Teams.members" id="vo"}
-                                        {$vo|raw}
-                                        {/volist}
-                                    </div>
+                                    <textarea name="members" disabled class="layui-textarea layui-input members w400">{$Teams.members}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +124,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label"> 备注 </label>
                         <div class="layui-input-block">
-                            <textarea name="t_c_remark" id="t_c_remark" disabled class="layui-textarea w600">{$Teams.t_remark}</textarea>
+                            <textarea name="t_c_remark" id="t_c_remark" disabled class="layui-textarea layui-input w600">{$Teams.t_remark}</textarea>
                         </div>
                     </div>
 

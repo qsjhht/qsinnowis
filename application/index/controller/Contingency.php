@@ -337,9 +337,9 @@ class Contingency extends Adminbase
                 ->field('nickname,phone')
                 ->where('userid',$result['leader'])
                 ->find();
-
+            $result['leaders'] = '';
 //                    $res['leaders'][] = json_encode([$leader['nickname'] => $leader['phone']],JSON_UNESCAPED_UNICODE);
-            $result['leaders'][] =  '<button type="button" class="layui-btn leaderbtn" style="margin: 3px">'.$leader['nickname'].': '.$leader['phone'].'</button>' ;
+            $result['leaders'] .=  $leader['nickname'].':'.$leader['phone'].'  ';
 
             $members = Db('admin')
                 ->field('nickname,phone')
@@ -348,11 +348,10 @@ class Contingency extends Adminbase
             $memstr  = '';
 //                    foreach ($members as $member) {
             if($members){
-//
                 foreach ($members as $member) {
-                    $memstr .= '<button type="button" class="layui-btn layui-btn-normal memberbtn" style="margin: 3px">'.$member['nickname'].': '.$member['phone'].'</button>' ;
+                    $memstr .= $member['nickname'].':'.$member['phone'].'     ';
                 }
-                $result['members'][] = $memstr;
+                $result['members'] = $memstr;
             }
 //                    $res['ex_p'] = '组长：'.$leader['nickname'].':'.$leader['phone'] .'  '.$memberstr;
 //                    dump($group);
@@ -362,10 +361,12 @@ class Contingency extends Adminbase
             foreach ($members as $member) {
                 $item = explode('-',$member);
 //                        dump($item);
-                $memstr .= '<button type="button" class="layui-btn layui-btn-normal memberbtn" style="margin: 3px">'.$item[0].': '.$item[1].'</button>' ;
+                $memstr .= $item[0].':'.$item[1].'     ';
+//                  $memstr .= '<button type="button" class="layui-btn layui-btn-normal memberbtn" style="margin: 3px">'.$item[0].': '.$item[1].'</button>' ;
             }
-            $result['leaders'][] = '';
-            $result['members'][] = $memstr;
+            $result['leaders'] = '';
+            $result['members'] = $memstr;
+//            dump($result);die;
         }
         //获取设备信息
         //注入
