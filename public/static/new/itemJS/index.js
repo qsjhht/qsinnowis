@@ -459,10 +459,6 @@ setInterval(function(){
 // 环境监测
 // 环境监测
 let borCont = echarts.init(document.getElementById('borCont'));
-// 温度
-//     console.dir(data.environ(1,21));
-//     console.dir(data.environ(1,19));
-//     console.dir(data.environ(1,17));
 res = {};
 function get_sensor(sensor) {
     $.ajax({

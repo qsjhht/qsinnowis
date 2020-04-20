@@ -208,7 +208,6 @@ contentFirm.setOption(firmOption);
         });
         console.dir(waters);
     },60000);
-
 // 环境监测
 let borCont = echarts.init(document.getElementById('borCont'));
 // 温度
