@@ -24,7 +24,7 @@ var nextDate = new Date(date.getTime() + 24*60*60*1000);
     date2.innerHTML = time.year2();
     date3.innerHTML = time.year3();
 
-let data = {
+/*let data = {
     getYear:date.getFullYear(),//年份
     getMonth:date.getMonth()-1,//月份
     getDate:date.getDate(),//日
@@ -64,7 +64,7 @@ let data = {
     environ:function(ccc,ddd){//环境
         let num = 0;// 随机数
         let arr1 = [];  // 返回数组
-	/*
+	/!*
 	for(var y = 0; y < 31 ;y++){
 	    num = ((Math.random()-0.5)*ccc+ddd).toFixed(2);
 	    if( [y + this.getDate] < 32){
@@ -74,7 +74,7 @@ let data = {
 		arr1.push([this.getYear+'/'+ this.getMonth + '/'+ [y+this.getDate-30],num])
 	    }
 
-	}*/
+	}*!/
 	for(var y = 0 ; y < 30 ;y++){
 	   num = ((Math.random()-0.5)*ccc+ddd).toFixed(2);
 	   if( [this.getDate - y] > 0 ){
@@ -86,7 +86,7 @@ let data = {
         return arr1.reverse();
     }
 };
-data.water(6,60);//水位
+data.water(6,60);//水位*/
     // console.dir(data.arr.slice(0,data.number()));
     // console.dir(data.arr.slice(0,data.number()));
 // 水位监测
@@ -103,8 +103,7 @@ data.water(6,60);//水位
             console.error('ajax请求错误 ');
         }
     });
-    console.dir(waters);
-    console.dir(waters);
+    console.dir('waters ssssssssssssssssssssssssssssssssssssss');
     console.dir(waters);
 let contentFirm = echarts.init(document.getElementById('contentFirm'));
 let firmOption = {
