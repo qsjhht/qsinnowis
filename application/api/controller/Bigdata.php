@@ -391,6 +391,20 @@ class Bigdata extends Common
         $this->return_msg(200,'apk版本号获取成功！',$version);
     }
 
+    //获取指定版本号apk
+    public function get_apk_by_v()
+    {
+        $v = $this->request->param('version');
+        //$download =  new \think\response\Download($this->apk);
+        //return $download->name('kid-ward.apk');
+        // 或者使用助手函数完成相同的功能
+        // download是系统封装的一个助手函数
+        $apk_name = '/innowis-'.$v.'.apk';
+        $this->apk = ROOT_PATH.'qrcode'.$apk_name;
+
+        return download($this->apk, $apk_name);
+    }
+
     public function send_ws($content){
 
         // 返回信息并终止脚本

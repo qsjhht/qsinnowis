@@ -138,6 +138,9 @@ class Common extends Controller
             ),
             'get_apk_v' => array(
             ),
+            'get_apk_by_v' => array(
+                'version' => 'require',  //报警位置  文字说明
+            ),
         ),
 
     );
