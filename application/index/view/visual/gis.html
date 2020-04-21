@@ -90,7 +90,7 @@
             view: new ol.View({
                 center: [114.62 , 38.14],
                 zoom: 14,
-                maxZoom:20,
+                maxZoom:22,
                 minZoom:14,
                 projection: 'EPSG:4326'
             }),
@@ -104,50 +104,104 @@
     });
     map.addLayer(layer);
 
+    var selectSysArr  = [];
+    var queryParams = [];
     var queryParam = {}; //查询条件对象
     var queryName;  //查询的图层名称
     var queryName1; //查询的系统名字
     /*******************************************************************************************调用显隐事件************************************************************************************/
 //    显示事件
+    var streetData = '园博园大街,新城大街,太行大街,迎旭路,隆兴路';
     $('#showQue').click(function () {
         $('#test,#test2').slideUp();  //数目录消失
+        for(i in selectSysArr ){
+            var queryParam = {}; //查询条件对象
+            queryParam.name = selectSysArr[i]+'_P@zdSheBei';
+            console.log(streetData.indexOf($('#section').val()));
+            queryParam.attributeFilter = "Street='"+$('#section').val()+"'";
+            if (streetData.indexOf($('#section').val())>-1){
+                console.log('000000')
+                queryParam.attributeFilter = "Street='"+$('#section').val()+"'";
+            }else{
+                console.log('111111')
+                queryParam.attributeFilter = "Section='"+$('#section').val()+"'";
+            }
+            console.log(queryParam);
+            queryParams.push(queryParam);
+            query(queryParam);   //调用查询方法
+        }
+        console.log(queryParams);
 
-        queryName = queryName1+'_P@zdSheBei';  //拼接图层名称
-        var attFil = "Section='"+$('#section').val()+"'";  //查询过滤的条件
+        console.log('打印查询的的图层和过滤的条件');
 
-        queryParam.queryName = queryName;
-        queryParam.attFil = attFil;
-        console.log('打印查询的的图层和过滤的条件'+queryParam);
 
-        query(queryParam);   //调用查询方法
 
-        $('#system,#section').val(''); //清空搜索的条件
+//        $('#system,#section').val(''); //清空搜索的条件
     });
+
 
     //    取消事件
     $('#hideQue').click(function () {
-        map.removeLayer(resultLayer);
+        location.reload();
+//        map.removeLayer(resultLayer);
         map.removeOverlay(overlay);
+        resultLayer.setVisible(false)
     });
 
     /*******************************************************************************************地图查询************************************************************************************/
-
+    // $('#showQu').click(function () {
+    //
+    //     var param = new SuperMap.QueryBySQLParameters({
+    //         queryParams: {name:'S_P@zdSheBei#1',attributeFilter: "Street='新城大街'"}
+    //     });
+    //     var src = '../../../static/images/gis-img/S.png';
+    //     console.log(src);
+    //
+    //     new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
+    //         console.log(serviceResult);
+    //
+    //         var features = (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features);
+    //         console.log(features);
+    //
+    //         //设置样式
+    //         var iconStyle = new ol.style.Style({
+    //             image: new ol.style.Icon(({
+    //                 imgSize:[200,200],
+    //                 anchor: [0.5, 0.5],
+    //                 src: src,
+    //                 scale:0.15
+    //             }))
+    //         });
+    //
+    //         for (var i = 0; i < features.length; i++) {
+    //             features[i].setStyle(iconStyle);
+    //         }
+    //
+    //         var vectorSource = new ol.source.Vector({
+    //             features: features,
+    //             wrapX: false
+    //         });
+    //         resultLayer = new ol.layer.Vector({
+    //             source: vectorSource
+    //         });
+    //         map.addLayer(resultLayer);
+    //     });
+    //
+    //
+    // })
 //    子图层条件查找事项
     function query(querData) {
-        var querData = querData;
         var param = new SuperMap.QueryBySQLParameters({
-            queryParams: {
-                name: querData.queryName,
-                attributeFilter: querData.attFil,
-//                attributeFilter: "Section='"+section+"'"
-            }
+            queryParams: querData
         });
+        var src = '../../../static/images/gis-img/'+querData.name.split('_')[0]+'.png';
+        console.log(src);
+
         new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
-            // var src = '../img/'+queryName1+'.png';
-            var src = '../../../static/images/gis-img/'+queryName1+'.png';
+            console.log(serviceResult);
+
             var features = (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features);
             console.log(features);
-            console.log('图标路径src：'+src);
 
             //设置样式
             var iconStyle = new ol.style.Style({
@@ -162,6 +216,7 @@
             for (var i = 0; i < features.length; i++) {
                 features[i].setStyle(iconStyle);
             }
+
             var vectorSource = new ol.source.Vector({
                 features: features,
                 wrapX: false
@@ -171,6 +226,49 @@
             });
             map.addLayer(resultLayer);
         });
+
+//         var querData = querData;
+// //        console.log(queryParams);
+//         for(i in queryParams){
+//             console.log(queryParams[i]);
+//             var param = new SuperMap.QueryBySQLParameters({
+//                 queryParams: queryParams[i]
+//             });
+//             var src = '../../../static/images/gis-img/'+queryParams[i].name.split('_')[0]+'.png';
+//             console.log(src);
+//
+//             new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
+//                 console.log(serviceResult);
+//
+//                 var features = (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features);
+//                 console.log(features);
+//
+//                 //设置样式
+//                 var iconStyle = new ol.style.Style({
+//                     image: new ol.style.Icon(({
+//                         imgSize:[200,200],
+//                         anchor: [0.5, 0.5],
+//                         src: src,
+//                         scale:0.15
+//                     }))
+//                 });
+//
+//                 for (var i = 0; i < features.length; i++) {
+//                     features[i].setStyle(iconStyle);
+//                 }
+//
+//                 var vectorSource = new ol.source.Vector({
+//                     features: features,
+//                     wrapX: false
+//                 });
+//                 resultLayer = new ol.layer.Vector({
+//                     source: vectorSource
+//                 });
+//                 map.addLayer(resultLayer);
+//             });
+//
+//         }
+
     }
 
 
@@ -187,7 +285,7 @@
 
         //如果选中了事件
         if (event.selected.length !==0){
-
+            console.log('smUserID::::::::::'+event.selected[0].N.SmUserID)
             //无设置SmUserID情况
             if(event.selected[0].N.SmUserID===null){
                 innerHTML = '无数据请求';
@@ -337,8 +435,8 @@
                                 {title:'感温光纤主机',id:'GXZJ'},
                                 {title:'区域报警主机',id:'QYBJ'},
                                 {title:'感温电缆监视模块',id:'MR'},
-                                {title:'烟感探测器',id:'S'},
-                                {tilte:'手动报警按钮',id:'Y'},
+                                // {title:'烟感探测器',id:'S'},
+                                // {tilte:'手动报警按钮',id:'Y'},
                                 {tilte:'声光报警器',id:'SGBJ'}]},
                         {title:'电气火灾',id:'DQHZ',children:[
                                 {title:'电气火灾监视器',id:'DQJS'},
@@ -350,7 +448,7 @@
                                 {title:'防火门磁开关',id:'MCKG'}]},
                         {title:'消防灭火',id:'XFMH',children:[
                                 {title:'超细干粉灭火器',id:'GFMH'},
-                                {title:'手提灭火器',id:'STMH'},
+                                // {title:'手提灭火器',id:'STMH'},
                                 {title:'灭火声光器',id:'MHSG'},
                                 {title:'紧急启停按钮',id:'JJQT'}]},
                         {title:'应急疏散',id:'YJSS',children:[
@@ -360,7 +458,8 @@
                                 {title:'应急疏散控制器',id:'KZJ'}]},
                         {title:'消防广播',id:'XFGB',children:[
                                 {title:'广播模块',id:'GB'},
-                                {title:'扬声器',id:'YSQ'}]}]},
+                                // {title:'扬声器',id:'YSQ'}
+                                ]}]},
                 {title:'环境控制系统',id:'HK',children:[
                         {title:'环境监测',id:'HJJC',children:[
                                 {title:'温湿度传感器',id:'WSD'},
@@ -369,25 +468,30 @@
                                 {title:'甲烷传感器',id:'CH4'},
                                 {title:'水位传感器',id:'SWJ'}]},
                         {title:'排风系统',id:'PF',children:[
-                                {title:'防火阀',id:'FHF'},
+                                {title:'防火阀S',id:'FHFS'},
+                                {title:'防火阀P',id:'FHFP'},
                                 {title:'风机',id:'FJ'}]},
                         {title:'排水系统',id:'PS',children:[
-                                {title:'水泵',id:'pump'}]},
+                                {title:'水泵',id:'PUMP'}]},
                         {title:'自控系统',id:'Zk',children:[
                                 {title:'PLC',id:'PLC'}]}]},
                 {title:'动力配电系统',id:'DLPD',children:[
-                        {title:'配电柜',id:'AP'},
+                        {title:'配电柜1',id:'AP1'},
+                        {title:'配电柜2',id:'AP2'},
                         {title:'照明配电箱',id:'Al'},
                         {title:'风机控制箱',id:'APP'},
                         {title:'水泵控制箱',id:'APT'},
                         {title:'检修控制箱',id:'APX'},
-                        {title:'消防控制箱XFP',id:'XFP'}]},
+                        {title:'UPS',id:'UPS'},
+                        // {title:'消防控制箱XFP',id:'XFP'}
+                        ]},
                 {title:'机器人系统',id:'JQR',children:[
                         {title:'机器人',id:'JQR'}
                     ]},{title:'照明系统',id:'ZM',children:[
                         {title:'智能继电器模块',id:'JDQ'},
-                        {title:'照明配电箱',id:'AL'},
-                        {title:'网络模块',id:'WLMK'}]},
+                        // {title:'照明配电箱',id:'AL'},
+                        // {title:'网络模块',id:'WLMK'}
+                        ]},
                 {title:'沉降系统',id:'CJ',children:[
                         {title:'静力水准仪',id:'JLSZ'},
                         {title:'倾角仪',id:'QJ'},
@@ -416,7 +520,23 @@
             showLine:false,
             onlyIconControl:false,
             click:function (obj) {
-                queryName1 = obj.data.id;
+                selectSysArr = [];
+                if (obj.data.children == undefined){
+                    selectSysArr.push(obj.data.id);
+                }else {
+//                    console.log(obj.data);
+//                    console.log(obj.data.children);
+                    $.each(obj.data.children,function () {
+//                        console.log(this);
+                        if(this.children == undefined){
+                            selectSysArr.push(this.id);
+                        }else {
+                            $.each(this.children,function () {
+                                selectSysArr.push(this.id);
+                            })
+                        }
+                    })
+                }
                 $('#system').val(obj.data.title);
             }
         })
