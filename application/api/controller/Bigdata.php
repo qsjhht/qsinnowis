@@ -399,8 +399,8 @@ class Bigdata extends Common
         //return $download->name('kid-ward.apk');
         // 或者使用助手函数完成相同的功能
         // download是系统封装的一个助手函数
-        $apk_name = '/innowis-'.$v.'.apk';
-        $this->apk = ROOT_PATH.'qrcode'.$apk_name;
+        $apk_name = 'innowis-'.$v.'.apk';
+        $this->apk = ROOT_PATH.'qrcode/'.$apk_name;
 
         return download($this->apk, $apk_name);
     }
