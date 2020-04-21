@@ -99,7 +99,7 @@ class Index extends Adminbase
         //return $download->name('kid-ward.apk');
         // 或者使用助手函数完成相同的功能
         // download是系统封装的一个助手函数
-        return download($this->apk, 'kid-ward.apk');
+        return download($this->apk, 'innowis.apk');
     }
     public function re_qrcode()
     {
