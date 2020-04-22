@@ -19,6 +19,8 @@
         font-size:0;
         font-weight:600;
         color:#00ffff;
+        width: 100%;
+        background:url("../../../static/image/bim-back.png") no-repeat center ;
     }
     /*ͷ������*/
     .img{
@@ -28,58 +30,20 @@
 	top:6px;
 	margin:0 0.2vw;
     }
-    .wireLeft{
-        height:7vh;
-        width:33%;
-	display:inline-block;
-	vertical-align:top;
-	position:relative;
-    }
-    .fontWire1{
-	background-color:#00ffff;
-	width:90.5%;
-	height:2px;
-	margin-top:1.5vh;
-    }
-    .wireLeft::before{
-	content:'';
-	position:absolute;
-	width:14%;
-	height:2px;
-	background:#00ffff;
-	top:4.2vh;
-	right:-0.65vw;
-	transform:rotate(45deg);
-	
-    }
+
+
     .wireContent{
         width:34%;
-	border-bottom:2px solid #00ffff;
-	display:inline-block;
-	vertical-align:top;
-	font-size:1.6rem;
-	color:#00ffff;
-	text-align:center;
-	position:relative;
-	letter-spacing:6px;
+	    display:inline-block;
+	    vertical-align:top;
+	    font-size:1.6rem;
+	    color:#00ffff;
+	    text-align:center;
+	    position:relative;
+	    letter-spacing:6px;
 
     }
-    .wireRight{
-	width:33%;	
-	display:inline-block;
-	vertical-align:top;
-	position:relative;
-    }
-    .wireRight::before{
-	content:'';
-	position:absolute;
-	left:-0.65vw;
-	top:4.2vh;
-	width:14%;
-	height:2px;
-	background-color:#00ffff;
-	transform:rotate(135deg)
-    }
+
     .fontWire2{
 	width:90.5%;
 	height:2px;
