@@ -195,7 +195,7 @@ data.water(5,30);//用电量
         },
         dataZoom:[{
             start:95,
-        end:100,
+            end:100,
         backgroundColor:'rgb(ff,ff,ff)',
         height:'15',
         bottom:'3%'
@@ -540,6 +540,27 @@ function set_option(e_y_name,e_unit) {
     };
 }
 //初始化  获取一天内温度 赋值res
+
+Date.prototype.format = function(fmt) {
+    var o = {
+        "M+" : this.getMonth()+1,                 //月份
+        "d+" : this.getDate(),                    //日
+        "h+" : this.getHours(),                   //小时
+        "m+" : this.getMinutes(),                 //分
+        "s+" : this.getSeconds(),                 //秒
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+        "S"  : this.getMilliseconds()             //毫秒
+    };
+    if(/(y+)/.test(fmt)) {
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    }
+    for(var k in o) {
+        if(new RegExp("("+ k +")").test(fmt)){
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        }
+    }
+    return fmt;
+}
 get_sensor("T");
 e_y_name = "温度";
 e_unit = "温度(℃)";
@@ -549,6 +570,7 @@ e_i_option = {
         trigger: 'axis'
     },
     legend: {
+        top:0,
         textStyle:{
             color:'#00ffff'
         },
@@ -564,10 +586,21 @@ e_i_option = {
         },
         splitLine: {
             show: false
+        },
+        axisLabel:{
+            formatter:function (value,index) {
+                var date = new Date(value);
+                return date.format("hh:mm");
+            }
         }
     },
+    grid: {
+        top: '20%',
+        bottom: '15%',
+        left: '15',
+        containLabel: true
+    },
     yAxis: {
-        name:e_unit,
         type: 'value',
         axisLine:{
             lineStyle:{
