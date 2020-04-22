@@ -25,16 +25,20 @@
 <!--地图容器-->
 <div id="map" style="height: 1000px;"></div>
 
-<!--popup弹窗-->
+<!--popup信息弹窗-->
 <div id="popup" class="ol-popup">
-    <a href="javascript:quxiao()" id="popup-closer" class="ol-popup-closer"></a>
-    <div id="popup-content" class="row h5videowrapper h5container"></div>
+    <span onclick="del()" id="popup-closer" class="ol-popup-closer"></span>
+    <div id="popup-content"></div>
+</div>
+<!--popup视频弹窗-->
+<div id="popup2" class="ol-popup">
+    <div id="popup-content2" class="row h5videowrapper h5container"></div>
 </div>
 
 <!--搜索框-->
 <div class="search">
-    <input id="system" type="text" placeholder="请选择系统" value="" onfocus="treeSiShow()">
-    <input  id="section" type="text" placeholder="请选择防火分区" value="" onfocus="treeSecShow()">
+    <div class="sleBtn" id="system" onclick="treeSiShow()">请选择系统</div>
+    <div class="sleBtn" id="section" onclick="treeSecShow()">请选择防火分区</div>
     <div class="btnGrop">
         <button id="showQue" class="shoHidBtn">显示</button><button class="shoHidBtn" id="hideQue">取消</button>
     </div>
@@ -45,6 +49,8 @@
     </div>
 </div>
 
+<!--返回BIM-->
+<button id="backBIM"></button>
 
 <script>
 
@@ -66,18 +72,35 @@
             $('#test,#test2').slideUp()
         }
     });
-    function quxiao() {
+    function del() {
         map.removeOverlay(overlay);
+        map.removeOverlay(overlay2)
     }
+    $('#backBIM').click(function () {
+        parent.changeF();
+        history.back();
+    })
 
     //获取popup的节点
     var container = document.getElementById('popup');
     var content = document.getElementById('popup-content');
     var closer = document.getElementById('popup-closer');
 
+    var container2 = document.getElementById('popup2');
+    var content2 = document.getElementById('popup-content2');
+    var closer2 = document.getElementById('popup-closer2');
+
     // 创建一个overlay, 绑定html元素container
     var overlay = new ol.Overlay(({
         element: container,
+        autoPan: true,
+        autoPanAnimation: {
+            duration: 250
+        }
+    }));
+
+    var overlay2 = new ol.Overlay(({
+        element: container2,
         autoPan: true,
         autoPanAnimation: {
             duration: 250
@@ -94,7 +117,7 @@
                 minZoom:14,
                 projection: 'EPSG:4326'
             }),
-            overlays:[overlay]
+            overlays:[overlay,overlay2]
         });
     var layer = new ol.layer.Tile({
         source: new ol.source.TileSuperMapRest({
@@ -105,10 +128,7 @@
     map.addLayer(layer);
 
     var selectSysArr  = [];
-    var queryParams = [];
-    var queryParam = {}; //查询条件对象
-    var queryName;  //查询的图层名称
-    var queryName1; //查询的系统名字
+    // var queryParams = [];
     /*******************************************************************************************调用显隐事件************************************************************************************/
 //    显示事件
     var streetData = '园博园大街,新城大街,太行大街,迎旭路,隆兴路';
@@ -117,20 +137,19 @@
         for(i in selectSysArr ){
             var queryParam = {}; //查询条件对象
             queryParam.name = selectSysArr[i]+'_P@zdSheBei';
-            console.log(streetData.indexOf($('#section').val()));
-            queryParam.attributeFilter = "Street='"+$('#section').val()+"'";
-            if (streetData.indexOf($('#section').val())>-1){
-                console.log('000000')
-                queryParam.attributeFilter = "Street='"+$('#section').val()+"'";
+            console.log(streetData.indexOf($('#section').html()));
+            queryParam.attributeFilter = "Street='"+$('#section').html()+"'";
+            if (streetData.indexOf($('#section').html())>-1){
+                // console.log('000000')
+                queryParam.attributeFilter = "Street='"+$('#section').html()+"'";
             }else{
-                console.log('111111')
-                queryParam.attributeFilter = "Section='"+$('#section').val()+"'";
+                // console.log('111111')
+                queryParam.attributeFilter = "Section='"+$('#section').html()+"'";
             }
             console.log(queryParam);
-            queryParams.push(queryParam);
+            // queryParams.push(queryParam);
             query(queryParam);   //调用查询方法
         }
-        console.log(queryParams);
 
         console.log('打印查询的的图层和过滤的条件');
 
@@ -145,56 +164,17 @@
         location.reload();
 //        map.removeLayer(resultLayer);
         map.removeOverlay(overlay);
+        map.removeOverlay(overlay2);
         resultLayer.setVisible(false)
     });
 
     /*******************************************************************************************地图查询************************************************************************************/
-    // $('#showQu').click(function () {
-    //
-    //     var param = new SuperMap.QueryBySQLParameters({
-    //         queryParams: {name:'S_P@zdSheBei#1',attributeFilter: "Street='新城大街'"}
-    //     });
-    //     var src = '../../../static/images/gis-img/S.png';
-    //     console.log(src);
-    //
-    //     new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
-    //         console.log(serviceResult);
-    //
-    //         var features = (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features);
-    //         console.log(features);
-    //
-    //         //设置样式
-    //         var iconStyle = new ol.style.Style({
-    //             image: new ol.style.Icon(({
-    //                 imgSize:[200,200],
-    //                 anchor: [0.5, 0.5],
-    //                 src: src,
-    //                 scale:0.15
-    //             }))
-    //         });
-    //
-    //         for (var i = 0; i < features.length; i++) {
-    //             features[i].setStyle(iconStyle);
-    //         }
-    //
-    //         var vectorSource = new ol.source.Vector({
-    //             features: features,
-    //             wrapX: false
-    //         });
-    //         resultLayer = new ol.layer.Vector({
-    //             source: vectorSource
-    //         });
-    //         map.addLayer(resultLayer);
-    //     });
-    //
-    //
-    // })
 //    子图层条件查找事项
     function query(querData) {
         var param = new SuperMap.QueryBySQLParameters({
             queryParams: querData
         });
-        var src = '../../../static/images/gis-img/'+querData.name.split('_')[0]+'.png';
+        var src = '../../../static/images/gis-img/' + querData.name.split('_')[0] + '.png';
         console.log(src);
 
         new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
@@ -206,10 +186,10 @@
             //设置样式
             var iconStyle = new ol.style.Style({
                 image: new ol.style.Icon(({
-                    imgSize:[200,200],
+                    imgSize: [200, 200],
                     anchor: [0.5, 0.5],
                     src: src,
-                    scale:0.15
+                    scale: 0.15
                 }))
             });
 
@@ -225,190 +205,134 @@
                 source: vectorSource
             });
             map.addLayer(resultLayer);
-        });
-
-//         var querData = querData;
-// //        console.log(queryParams);
-//         for(i in queryParams){
-//             console.log(queryParams[i]);
-//             var param = new SuperMap.QueryBySQLParameters({
-//                 queryParams: queryParams[i]
-//             });
-//             var src = '../../../static/images/gis-img/'+queryParams[i].name.split('_')[0]+'.png';
-//             console.log(src);
-//
-//             new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
-//                 console.log(serviceResult);
-//
-//                 var features = (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features);
-//                 console.log(features);
-//
-//                 //设置样式
-//                 var iconStyle = new ol.style.Style({
-//                     image: new ol.style.Icon(({
-//                         imgSize:[200,200],
-//                         anchor: [0.5, 0.5],
-//                         src: src,
-//                         scale:0.15
-//                     }))
-//                 });
-//
-//                 for (var i = 0; i < features.length; i++) {
-//                     features[i].setStyle(iconStyle);
-//                 }
-//
-//                 var vectorSource = new ol.source.Vector({
-//                     features: features,
-//                     wrapX: false
-//                 });
-//                 resultLayer = new ol.layer.Vector({
-//                     source: vectorSource
-//                 });
-//                 map.addLayer(resultLayer);
-//             });
-//
-//         }
-
+        })
     }
 
-
-
-
-    /************************************************************************************************地图feature选中事件*****************************************************************************/
-    var selectSingleClick = new ol.interaction.Select({
-    });
-    map.addInteraction(selectSingleClick);
-    // 监听选中事件，然后在事件处理函数中改变被选中的`feature`的样式
-    selectSingleClick.on('select', function(event){
+        /************************************************************************************************地图feature选中事件*****************************************************************************/
+        map.on('pointermove',function (e) {
+            var sele = false;
+            map.forEachFeatureAtPixel(e.pixel, function (feature) {
+                map.getTargetElement().style.cursor = 'pointer';
+                sele = true;
+            });
+            if (!sele){
+                map.getTargetElement().style.cursor = '';
+            }
+        })
+    var eventV;
+    map.on('click',function (e) {
+        var sele = false;
         var innerHTML;
-        console.log(event);
-
-        //如果选中了事件
-        if (event.selected.length !==0){
-            console.log('smUserID::::::::::'+event.selected[0].N.SmUserID)
+        map.forEachFeatureAtPixel(e.pixel, function (feature) {
+            eventV = e;
+            console.log(feature);
+            sele = true;
             //无设置SmUserID情况
-            if(event.selected[0].N.SmUserID===null){
-                innerHTML = '无数据请求';
-                content.innerHTML = innerHTML;
-                return;
+            if(feature.N.SmUserID=='0'){
+                innerHTML = "设备名称："+feature.N.NameZ+"<br>";
+                innerHTML +="设备系统："+ feature.N.SubSys+"<br>";
+                innerHTML +="设备子系统："+ feature.N.SunSys+"<br>";
+                innerHTML +="设备状态：--<br>";
+                innerHTML +="设备位置："+ feature.N.Street+"'/'"+feature.N.Section+"'/'"+feature.N.Cang+"<br>";
             }
-
-            //摄像头情况
-            else if (event.selected[0].N.SmUserID == '4'||event.selected[0].N.SmUserID == '2'){
-
-                innerHTML = '<video class=';
-                innerHTML += '"h5video1" id="h5sVideo1" style="width:400px" webkit-playsinline playsinline poster="./img/123.jpg">';
-                innerHTML +='</video>';
-                content.innerHTML = innerHTML;
-                videoStart();
-            }
-
             //设备情况
             else {
                 var cang;
-                if (event.selected[0].N.Cang == '电仓'){
+                if (feature.N.Cang == '电仓'){
                     cang = "D";
-                }else if(event.selected[0].N.Cang == '水仓'){
+                }else if(feature.N.Cang == '水仓'){
                     cang = "S"
                 }
-                var code = event.selected[0].N.SmUserID;
-                var section = event.selected[0].N.Section+"/"+cang;
+                var code = feature.N.SmUserID;
+                var section = feature.N.Section+"/"+cang;
                 var url = "http://192.168.5.100:1000/patrol/gis_data?zone="+section+"&cate_code="+code;
-
-
                 /******************************************************************************地图feature选中事件请求数据**********************************************************/
 //            请求设备属性数据
                 console.log('请求设备属性url：'+url);
                 $.ajax({
                     url:url,
-                    async:true,
+                    async:false,
                     success:function (data) {
                         var eqpInfo = eval('('+data+')').data;
                         if($.isEmptyObject(eqpInfo)){
-                            innerHTML = '数据为空';
+                            innerHTML = "设备名称："+feature.N.NameZ+"<br>";
+                            innerHTML +="设备系统："+ feature.N.SubSys+"<br>";
+                            innerHTML +="设备子系统："+ feature.N.SunSys+"<br>";
+                            innerHTML +="设备状态：--<br>";
+                            innerHTML +="设备位置："+ feature.N.Street+"'/'"+feature.N.Section+"'/'"+feature.N.Cang+"<br>";
+                            console.log(innerHTML);
                         }else {
+                            alert('3')
                             innerHTML = "设备名称："+eqpInfo.equipment_name+"<br>";
                             innerHTML +="设备编号："+ eqpInfo.equipment_code+"<br>";
                             innerHTML +="设备系统："+ eqpInfo.catalogue_value+"<br>";
                             innerHTML +="设备状态："+ eqpInfo.equipment_jszt+"<br>";
                             innerHTML +="设备位置："+ eqpInfo.location+"<br>";
                         }
-                        content.innerHTML = innerHTML;
+
                     }
-                });
-
+                })
             }
-            overlay.setPosition(event.mapBrowserEvent.coordinate);   //设置位置
-//            event.selected[0].setStyle(new ol.style.Style({
-//                image: new ol.style.Circle({
-//                    radius: 10,
-//                    fill: new ol.style.Fill({
-//                        color: 'blue'
-//                    })
-//                })
-//            }));
-        }
-        //取消选中的事件
-        else if (event.deselected.length !==0){
+            //摄像头情况
+            if (feature.N.SmUserID == '4'||feature.N.SmUserID == '2'){
+                innerHTML += '<div class="videoBtn" id="videoBtn" onclick="setVideo()"></div>';
+            }
+            console.log(innerHTML);
+            content.innerHTML = innerHTML;
+            overlay.setPosition(e.coordinate);   //设置位置
+            map.addOverlay(overlay)
+        });
+        if (!sele){
             map.removeOverlay(overlay);
-            selectSingleClick.getFeatures().clear();
-            console.log('000000')
+            map.removeOverlay(overlay2);
         }
-
     })
-
-    //    map.on('click',function (e) {
-    //        map.forEachFeatureAtPixel(e.pixel, function (feature) {
-    //            console.log('点击了元素');
-    //            console.log(e);
-    //            console.log(this);
-    //
-    //            vectorTileStyles.dispatchEvent({
-    //                type: 'featureSelected',
-    //                selectedId: feature.getProperties().id,
-    //                layerName: feature.getProperties().layerName
-    //            });
-    //            return true;
-    //        }, {hitTolerance: 5});
-    //        resultLayer.changed();
-
-    //    })
-    //    });
-    /***************************************************************************************视频播放方法****************************************************************************/
+        /***************************************************************************************视频播放方法****************************************************************************/
 //    视频播放方法
-    var v1;
-    var conf1 = {
-        videoid:'h5sVideo1',
-        protocol: 'http:', //'http:' or 'https:'
-        host: '192.168.5.100:8080', //'localhost:8080'
-        rootpath:'/', // '/'
-        token:'a55b',
-        hlsver:'v1', //v1 is for ts, v2 is for fmp4
-        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
-    };
-    function videoStart() {
-        if(conf1.token == ''){
-            alert('请选择设备');
-            return false;
-        }else{
-            if(v1 != null)
-            {
-                v1.disconnect();
-                delete v1;
-                v1 = null;
-            }
-            if (H5siOS() === true)
-            {
-                console.log('H5siOS() === true');
-                v1 = new H5sPlayerRTC(conf1);
-            }else
-            {
-                console.log('H5siOS() === true else');
-                v1 = new H5sPlayerWS(conf1);
-            }
-            v1.connect();
+        function setVideo() {
+            map.removeOverlay(overlay);
+            var innerHTML;
+            innerHTML = '<video class=';
+            innerHTML += '"h5video1" id="h5sVideo1" style="width:600px" webkit-playsinline playsinline>';
+            innerHTML += '</video>';
+
+            content2.innerHTML = innerHTML;
+            overlay2.setPosition(eventV.coordinate);
+            map.addOverlay(overlay2);
+            videoStart()
         }
-    }
+
+        var v1;
+        var conf1 = {
+            videoid: 'h5sVideo1',
+            protocol: 'http:', //'http:' or 'https:'
+            host: '192.168.5.100:8080', //'localhost:8080'
+            rootpath: '/', // '/'
+            token: 'a55b',
+            hlsver: 'v1', //v1 is for ts, v2 is for fmp4
+            session: 'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+        };
+
+        function videoStart() {
+            if (conf1.token == '') {
+                // alert('请选择设备');
+                return false;
+            } else {
+                if (v1 != null) {
+                    v1.disconnect();
+                    delete v1;
+                    v1 = null;
+                }
+                if (H5siOS() === true) {
+                    // console.log('H5siOS() === true');
+                    v1 = new H5sPlayerRTC(conf1);
+                } else {
+                    // console.log('H5siOS() === true else');
+                    v1 = new H5sPlayerWS(conf1);
+                }
+                v1.connect();
+            }
+        }
 </script>
 
 <script>
@@ -448,7 +372,7 @@
                                 {title:'防火门磁开关',id:'MCKG'}]},
                         {title:'消防灭火',id:'XFMH',children:[
                                 {title:'超细干粉灭火器',id:'GFMH'},
-                                // {title:'手提灭火器',id:'STMH'},
+                                // {titFle:'手提灭火器',id:'STMH'},
                                 {title:'灭火声光器',id:'MHSG'},
                                 {title:'紧急启停按钮',id:'JJQT'}]},
                         {title:'应急疏散',id:'YJSS',children:[
@@ -537,7 +461,7 @@
                         }
                     })
                 }
-                $('#system').val(obj.data.title);
+                $('#system').html(obj.data.title);
             }
         })
         tree.render({
@@ -548,7 +472,7 @@
             showLine:false,
             onlyIconControl:false,
             click:function (obj) {
-                $('#section').val(obj.data.title);
+                $('#section').html(obj.data.title);
             }
         })
     })
