@@ -505,7 +505,6 @@ function set_option(e_y_name,e_unit) {
         },
 
         yAxis: {
-            name:e_unit,
             type: 'value',
             axisLine:{
                 lineStyle:{
