@@ -463,7 +463,7 @@ class Real extends Common
             $from_name = '调度台2';
         }
 
-        if ($type == '调度组呼'){
+        if ($type == '调度群呼'){
             $num_or_g = '分组';
         }else if($type == '调度单呼'){
             $num_or_g = '号码';

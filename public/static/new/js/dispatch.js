@@ -19,7 +19,7 @@ function ajax(){
     // 获取content 数据
     let num,S,D   // 数 ， 获取的数据 ， 水仓数据 ，电仓数据
     $.ajax({
-        url:'http://192.168.5.100:1000/real/get_phone',
+        url:'http://192.168.10.18/real/get_phone',
         type:'get',
         async:false,
         success:(data) => {
@@ -104,7 +104,7 @@ function dispatchClickItem(a){
             if(switchValue == '8001' || switchValue == '8002'){
                 if(showHide){
                     $.ajax({
-                        url:`http://192.168.5.100:1000/real/call_phone?type=调度单呼&from_num=${switchValue}&call=${itemData[e]["分机号码"]}`,
+                        url:`http://192.168.10.18/real/call_phone?type=调度单呼&from_num=${switchValue}&call=${itemData[e]["分机号码"]}`,
                         type:'get',
                         success:(res) => {
                             console.log(res)
@@ -127,7 +127,7 @@ $('.dispatchImg1').click(()=>{
     if(switchValue == 8001 || switchValue == 8002){
         if(showHide){
             $.ajax({
-                url:`http://192.168.5.100:1000/real/call_phone?type=调度组呼&from_num=${switchValue}&call=${dispatchArray[b]}`,
+                url:`http://192.168.10.18/real/call_phone?type=调度群呼&from_num=${switchValue}&call=${dispatchArray[b]}`,
                 type:'get',
                 success:(data) => {
                     console.log(data)
@@ -143,17 +143,22 @@ $('.dispatchImg1').click(()=>{
 })
 
 // WebSocket
-var socket = io('http://192.168.5.100:2120')
+var socket = io('http://192.168.10.18:2120');
 socket.emit('login',33333)
 socket.on('new_msg',(data) => {
-    c = eval("("+data+")")
+    c = eval("("+data+")");
+    console.dir('aaaaaaaaaaaaaa');
+    console.dir(c);
     if(c.category == '号码更新'){
-        ajax()
+        ajax();
     }else if(c.category == '分机状态'){
+        console.dir('ccccccccccccccccccccc');
+        console.dir(c['号码']);
+
         if(c['号码'] == 8001){
             if(c['状态'] == "空闲"){
-                showHide = false
-                switchValue = ''
+                showHide = false;
+                switchValue = '';
                 $('#display1').css('backgroundColor','#00FFFF')
             }else if(c['状态'] == "摘机"){
                 showHide = true
@@ -163,16 +168,21 @@ socket.on('new_msg',(data) => {
                 layer.msg('未找到该状态')
             }
         }else if(c['号码'] == 8002){
+            console.dir('dddddddddddddddddd');
+            console.dir(c['号码']);
+            console.dir(c['状态']);
             if(c['状态'] == '空闲'){
-                showHide = false
-                switchValue = ''
+                showHide = false;
+                switchValue = '';
                 $('#display2').css('backgroundColor','#00FFFF')
             }else if(c['状态'] == '摘机'){
-                showHide = true
-                switchValue = c['号码']
+                console.dir('eeeeeeeeeee');
+                console.dir(c['状态']);
+                showHide = true;
+                switchValue = c['号码'];
                 $('#display2').css('backgroundColor','#1ac036')
             }else{
-                console.log('未找到该状态')
+                console.log('未找到该状态');
             }
         }else{
             for(let i in dispatch){
